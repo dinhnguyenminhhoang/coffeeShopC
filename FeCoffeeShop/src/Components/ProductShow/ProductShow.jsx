@@ -78,22 +78,25 @@ const ProductShowData = [
 
 const ProductShow = () => {
     return (
-        <div className="py-14 mb-10 bg-gray-100">
-            <div className="container mx-auto">
-                <div className="text-center mb-10" data-aos="fade-up">
-                    <h1 className="text-4xl font-bold text-gray-800">
-                        Đặt món ngay
-                    </h1>
+        <>
+            <span id="ProductShow"></span>
+            <div className="py-14 mb-10 bg-gray-100">
+                <div className="container mx-auto">
+                    <div className="text-center mb-10" data-aos="fade-up">
+                        <h1 className="text-4xl font-bold text-gray-800">
+                            Đặt món ngay
+                        </h1>
+                    </div>
+                    <Row gutter={[16, 16]} data-aos="zoom-in" className="px-20">
+                        {ProductShowData.map((product) => (
+                            <Col key={product.id} xs={24} sm={12} md={8} lg={6}>
+                                <ProductCard product={product} />
+                            </Col>
+                        ))}
+                    </Row>
                 </div>
-                <Row gutter={[16, 16]} data-aos="zoom-in" className="px-20">
-                    {ProductShowData.map((product) => (
-                        <Col key={product.id} xs={24} sm={12} md={8} lg={6}>
-                            <ProductCard product={product} />
-                        </Col>
-                    ))}
-                </Row>
             </div>
-        </div>
+        </>
     );
 };
 

@@ -21,13 +21,11 @@ const HomePage = () => {
     });
     return (
         <div className="overflow-x-hidden">
-            <Navbar />
             <Introduce />
             <Services />
             <ProductShow />
             <Banner />
             <Testimonial />
-            <Footer />
         </div>
     );
 };
