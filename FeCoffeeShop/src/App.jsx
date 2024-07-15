@@ -13,6 +13,7 @@ import Register from "./Pages/Auth/Register/Register";
 import DetailProduct from "./Pages/DetailProduct/DetailProduct";
 import DefautLayout from "./Layout/DefautLayout";
 import CartPage from "./Pages/CartPage/CartPage";
+import Branches from "./Pages/Branches/Branches";
 
 const App = () => {
     const router = createBrowserRouter(
@@ -25,6 +26,7 @@ const App = () => {
                     <Route path="/product/:id" element={<DetailProduct />} />
                     <Route index element={<HomePage />} />
                     <Route path="/cart" element={<CartPage />} />
+                    <Route path="/branches" element={<Branches />} />
                 </Route>
                 <Route path="*" element={<PageNotFound />} />
             </Route>
