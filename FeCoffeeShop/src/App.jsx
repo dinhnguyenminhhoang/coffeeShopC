@@ -5,14 +5,14 @@ import {
     Route,
     RouterProvider,
 } from "react-router-dom";
-import Home from "./Pages/Home/Home";
 import PageNotFound from "./Pages/PageNotFound/PageNotFound";
+import HomePage from "./Pages/HomePage/HomePage";
 
 const App = () => {
     const router = createBrowserRouter(
         createRoutesFromElements(
             <Route path="/">
-                <Route index element={<Home />} />
+                <Route index element={<HomePage />} />
                 <Route path="*" element={<PageNotFound />} />
             </Route>
         )
