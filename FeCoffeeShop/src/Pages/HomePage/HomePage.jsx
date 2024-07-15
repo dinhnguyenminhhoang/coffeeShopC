@@ -8,6 +8,7 @@ import Introduce from "@/Components/Introduce/Introduce";
 import Navbar from "@/Components/Navbar/Navbar";
 import Services from "@/Components/Services/Services";
 import Testimonial from "@/Components/Testimonial/Testimonial";
+import ProductShow from "../../Components/ProductShow/ProductShow";
 
 const HomePage = () => {
     useEffect(() => {
@@ -23,6 +24,7 @@ const HomePage = () => {
             <Navbar />
             <Introduce />
             <Services />
+            <ProductShow />
             <Banner />
             <Testimonial />
             <Footer />
