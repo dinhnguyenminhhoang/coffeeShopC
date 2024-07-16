@@ -1,0 +1,17 @@
+CREATE DATABASE CoffeManagement;
+
+CREATE TABLE [Drinks] (
+  [Id] INT IDENTITY(1, 1) PRIMARY KEY,
+  [Name] NVARCHAR(255) NOT NULL,
+  [Image] VARCHAR(255) NOT NULL,
+  [Description] NVARCHAR(MAX) NOT NULL,
+);
+
+CREATE TABLE [DrinksSizes] (
+  [Id] INT IDENTITY(1, 1) PRIMARY KEY,
+  [DrinkId] INT NOT NULL,
+  [Size] NVARCHAR(255) NOT NULL,
+  [Ratio] FLOAT NOT NULL,
+  [Price] FLOAT NOT NULL),
+  CONSTRAINT FK_DrinksSizes_Drinks FOREIGN KEY ([DrinkId]) REFERENCES [Drinks] ([Id])
+);
