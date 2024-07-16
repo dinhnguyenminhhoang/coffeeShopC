@@ -1,55 +1,51 @@
 import React, { useState, useEffect } from "react";
 import { Table, Button, Modal } from "antd";
 import axios from "axios";
-import DrinksSizeForm from "../../Components/FormManager/DrinksSizeForm";
+import IngredientForm from "../components/Ingredients/IngredientForm";
 
-const DrinksSizePage = () => {
-    const [drinksSizes, setDrinksSizes] = useState([]);
+const IngredientsPage = () => {
+    const [ingredients, setIngredients] = useState([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
-    const [editingDrinksSize, setEditingDrinksSize] = useState(null);
+    const [editingIngredient, setEditingIngredient] = useState(null);
 
     useEffect(() => {
-        fetchDrinksSizes();
+        fetchIngredients();
     }, []);
 
-    const fetchDrinksSizes = async () => {
-        const response = await axios.get("/api/drinks-sizes");
-        setDrinksSizes(response.data);
+    const fetchIngredients = async () => {
+        const response = await axios.get("/api/ingredients");
+        setIngredients(response.data);
     };
 
     const handleAdd = () => {
-        setEditingDrinksSize(null);
+        setEditingIngredient(null);
         setIsModalVisible(true);
     };
 
-    const handleEdit = (drinksSize) => {
-        setEditingDrinksSize(drinksSize);
+    const handleEdit = (ingredient) => {
+        setEditingIngredient(ingredient);
         setIsModalVisible(true);
     };
 
-    const handleDelete = async (drinksSizeId) => {
-        await axios.delete(`/api/drinks-sizes/${drinksSizeId}`);
-        fetchDrinksSizes();
+    const handleDelete = async (ingredientId) => {
+        await axios.delete(`/api/ingredients/${ingredientId}`);
+        fetchIngredients();
     };
 
     const handleSave = async (values) => {
-        if (editingDrinksSize) {
-            await axios.put(
-                `/api/drinks-sizes/${editingDrinksSize.id}`,
-                values
-            );
+        if (editingIngredient) {
+            await axios.put(`/api/ingredients/${editingIngredient.id}`, values);
         } else {
-            await axios.post("/api/drinks-sizes", values);
+            await axios.post("/api/ingredients", values);
         }
-        fetchDrinksSizes();
+        fetchIngredients();
         setIsModalVisible(false);
     };
 
     const columns = [
         { title: "ID", dataIndex: "id", key: "id" },
         { title: "Name", dataIndex: "name", key: "name" },
-        { title: "Size", dataIndex: "size", key: "size" },
-        { title: "Price", dataIndex: "price", key: "price" },
+        { title: "Type", dataIndex: "type", key: "type" },
         {
             title: "Actions",
             key: "actions",
@@ -67,19 +63,17 @@ const DrinksSizePage = () => {
     return (
         <div className="container mx-auto p-6">
             <Button type="primary" onClick={handleAdd} className="mb-4">
-                Add Drinks Size
+                Add Ingredient
             </Button>
-            <Table columns={columns} dataSource={drinksSizes} rowKey="id" />
+            <Table columns={columns} dataSource={ingredients} rowKey="id" />
             <Modal
-                title={
-                    editingDrinksSize ? "Edit Drinks Size" : "Add Drinks Size"
-                }
+                title={editingIngredient ? "Edit Ingredient" : "Add Ingredient"}
                 visible={isModalVisible}
                 footer={null}
                 onCancel={() => setIsModalVisible(false)}
             >
-                <DrinksSizeForm
-                    initialValues={editingDrinksSize}
+                <IngredientForm
+                    initialValues={editingIngredient}
                     onSave={handleSave}
                     onCancel={() => setIsModalVisible(false)}
                 />
@@ -88,4 +82,4 @@ const DrinksSizePage = () => {
     );
 };
 
-export default DrinksSizePage;
+export default IngredientsPage;
