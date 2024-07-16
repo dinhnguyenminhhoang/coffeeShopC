@@ -20,6 +20,7 @@ import DrinkMenuDetailsPage from "./Pages/DrinkMenuDetailsPage/DrinkMenuDetailsP
 import DrinksSizePage from "./Pages/DrinksSizePage/DrinksSizePage";
 import OrderDrinkDetailsPage from "./Pages/OrderDrinkDetails/OrderDrinkDetails";
 import PaymentDetailsPage from "./Pages/PaymentDetails/PaymentDetails";
+import RecipeDetailsPage from "./Pages/RecipeDetails/RecipeDetails";
 
 const App = () => {
     const router = createBrowserRouter(
@@ -56,6 +57,11 @@ const App = () => {
                     <Route
                         path="/payment-detail"
                         element={<PaymentDetailsPage />}
+                    />
+                    {/* Recipe */}
+                    <Route
+                        path="/recipe-detail"
+                        element={<RecipeDetailsPage />}
                     />
                 </Route>
                 <Route path="*" element={<PageNotFound />} />
