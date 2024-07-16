@@ -1,8 +1,34 @@
 import React, { useState, useEffect } from "react";
-import { Table, Button, Modal } from "antd";
+import { Table, Button, Modal, Space } from "antd";
 import axios from "axios";
 import DrinkMenuDetailForm from "../../Components/FormManager/DrinkMenuDetailForm";
-
+const mockDrinkMenuDetails = [
+    {
+        id: 1,
+        drinkId: 101,
+        menuId: 201,
+    },
+    {
+        id: 2,
+        drinkId: 102,
+        menuId: 202,
+    },
+    {
+        id: 3,
+        drinkId: 103,
+        menuId: 203,
+    },
+    {
+        id: 4,
+        drinkId: 104,
+        menuId: 204,
+    },
+    {
+        id: 5,
+        drinkId: 105,
+        menuId: 205,
+    },
+];
 const DrinkMenuDetailsPage = () => {
     const [drinkMenuDetails, setDrinkMenuDetails] = useState([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -14,7 +40,9 @@ const DrinkMenuDetailsPage = () => {
 
     const fetchDrinkMenuDetails = async () => {
         const response = await axios.get("/api/drink-menu-details");
-        setDrinkMenuDetails(response.data);
+        if (response.data.id) {
+            setDrinkMenuDetails(response.data);
+        } else setDrinkMenuDetails(mockDrinkMenuDetails);
     };
 
     const handleAdd = () => {
@@ -53,12 +81,12 @@ const DrinkMenuDetailsPage = () => {
             title: "Actions",
             key: "actions",
             render: (text, record) => (
-                <>
+                <Space>
                     <Button onClick={() => handleEdit(record)}>Edit</Button>
                     <Button danger onClick={() => handleDelete(record.id)}>
                         Delete
                     </Button>
-                </>
+                </Space>
             ),
         },
     ];

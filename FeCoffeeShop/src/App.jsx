@@ -16,6 +16,8 @@ import OrdersPage from "./Pages/staff/OrdersPage/OrdersPage";
 import PageNotFound from "./Pages/PageNotFound/PageNotFound";
 import OrderDetailsPage from "./Pages/staff/OrderDetailsPage/OrderDetailsPage";
 import DrinkRatingsPage from "./Pages/DrinkRatings/DrinkRatings";
+import DrinkMenuDetailsPage from "./Pages/DrinkMenuDetailsPage/DrinkMenuDetailsPage";
+import DrinksSizePage from "./Pages/DrinksSizePage/DrinksSizePage";
 
 const App = () => {
     const router = createBrowserRouter(
@@ -29,10 +31,16 @@ const App = () => {
                     <Route path="/cart" element={<CartPage />} />
                     <Route path="/branches" element={<Branches />} />
                     <Route path="/orders" element={<OrdersPage />} />
+                    {/* drink */}
                     <Route
                         path="/drink-rating"
                         element={<DrinkRatingsPage />}
                     />
+                    <Route
+                        path="/drink-menu-detail"
+                        element={<DrinkMenuDetailsPage />}
+                    />{" "}
+                    <Route path="/drink-size" element={<DrinksSizePage />} />
                     <Route
                         path="/order-detail/:id"
                         element={<OrderDetailsPage />}

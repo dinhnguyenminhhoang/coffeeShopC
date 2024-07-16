@@ -1,8 +1,46 @@
 import React, { useState, useEffect } from "react";
-import { Table, Button, Modal } from "antd";
+import { Table, Button, Modal, Space } from "antd";
 import axios from "axios";
 import DrinksSizeForm from "../../Components/FormManager/DrinksSizeForm";
 
+const mockDrinksSizes = [
+    {
+        id: 1,
+        name: "Small Coffee",
+        size: "Small",
+        price: 2.5,
+    },
+    {
+        id: 2,
+        name: "Medium Coffee",
+        size: "Medium",
+        price: 3.0,
+    },
+    {
+        id: 3,
+        name: "Large Coffee",
+        size: "Large",
+        price: 3.5,
+    },
+    {
+        id: 4,
+        name: "Small Latte",
+        size: "Small",
+        price: 3.0,
+    },
+    {
+        id: 5,
+        name: "Medium Latte",
+        size: "Medium",
+        price: 3.5,
+    },
+    {
+        id: 6,
+        name: "Large Latte",
+        size: "Large",
+        price: 4.0,
+    },
+];
 const DrinksSizePage = () => {
     const [drinksSizes, setDrinksSizes] = useState([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -14,7 +52,9 @@ const DrinksSizePage = () => {
 
     const fetchDrinksSizes = async () => {
         const response = await axios.get("/api/drinks-sizes");
-        setDrinksSizes(response.data);
+        if (response.data.id) {
+            setDrinksSizes(response.data);
+        } else setDrinksSizes(mockDrinksSizes);
     };
 
     const handleAdd = () => {
@@ -54,12 +94,12 @@ const DrinksSizePage = () => {
             title: "Actions",
             key: "actions",
             render: (text, record) => (
-                <>
+                <Space>
                     <Button onClick={() => handleEdit(record)}>Edit</Button>
                     <Button danger onClick={() => handleDelete(record.id)}>
                         Delete
                     </Button>
-                </>
+                </Space>
             ),
         },
     ];
