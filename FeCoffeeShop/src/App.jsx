@@ -5,21 +5,21 @@ import {
     Route,
     RouterProvider,
 } from "react-router-dom";
-import PageNotFound from "./Pages/PageNotFound/PageNotFound";
-import HomePage from "./Pages/HomePage/HomePage";
-import Order from "./Pages/Order/Order";
+import DefautLayout from "./Layout/DefautLayout";
 import Login from "./Pages/Auth/Login/Login";
 import Register from "./Pages/Auth/Register/Register";
-import DetailProduct from "./Pages/DetailProduct/DetailProduct";
-import DefautLayout from "./Layout/DefautLayout";
-import CartPage from "./Pages/CartPage/CartPage";
 import Branches from "./Pages/Branches/Branches";
+import CartPage from "./Pages/CartPage/CartPage";
+import DetailProduct from "./Pages/DetailProduct/DetailProduct";
+import HomePage from "./Pages/HomePage/HomePage";
+import OrdersPage from "./Pages/OrdersPage/OrdersPage";
+import PageNotFound from "./Pages/PageNotFound/PageNotFound";
 
 const App = () => {
     const router = createBrowserRouter(
         createRoutesFromElements(
             <Route path="/">
-                <Route path="/order" element={<Order />} />
+                <Route path="/order" element={<OrdersPage />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route element={<DefautLayout />}>
