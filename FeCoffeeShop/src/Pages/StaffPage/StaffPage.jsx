@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Table, Button, Modal } from "antd";
 import axios from "axios";
-import StaffForm from "../components/Staff/StaffForm";
+import StaffForm from "@/Components/FormManager/StaffForm";
 
 const StaffPage = () => {
     const [staff, setStaff] = useState([]);

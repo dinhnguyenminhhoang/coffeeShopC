@@ -1,44 +1,44 @@
 import React, { useState, useEffect } from "react";
 import { Table, Button, Modal } from "antd";
 import axios from "axios";
-import VoucherForm from "@/Components/FormManager/VoucherForm";
+import CategoryForm from "@/Components/FormManager/CategoryForm";
 
-const VouchersPage = () => {
-    const [vouchers, setVouchers] = useState([]);
+const CategoriesPage = () => {
+    const [categories, setCategories] = useState([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
-    const [editingVoucher, setEditingVoucher] = useState(null);
+    const [editingCategory, setEditingCategory] = useState(null);
 
     useEffect(() => {
-        fetchVouchers();
+        fetchCategories();
     }, []);
 
-    const fetchVouchers = async () => {
-        const response = await axios.get("/api/vouchers");
-        setVouchers(response.data);
+    const fetchCategories = async () => {
+        const response = await axios.get("/api/categories");
+        setCategories(response.data);
     };
 
     const handleAdd = () => {
-        setEditingVoucher(null);
+        setEditingCategory(null);
         setIsModalVisible(true);
     };
 
-    const handleEdit = (voucher) => {
-        setEditingVoucher(voucher);
+    const handleEdit = (category) => {
+        setEditingCategory(category);
         setIsModalVisible(true);
     };
 
-    const handleDelete = async (voucherId) => {
-        await axios.delete(`/api/vouchers/${voucherId}`);
-        fetchVouchers();
+    const handleDelete = async (categoryId) => {
+        await axios.delete(`/api/categories/${categoryId}`);
+        fetchCategories();
     };
 
     const handleSave = async (values) => {
-        if (editingVoucher) {
-            await axios.put(`/api/vouchers/${editingVoucher.id}`, values);
+        if (editingCategory) {
+            await axios.put(`/api/categories/${editingCategory.id}`, values);
         } else {
-            await axios.post("/api/vouchers", values);
+            await axios.post("/api/categories", values);
         }
-        fetchVouchers();
+        fetchCategories();
         setIsModalVisible(false);
     };
 
@@ -63,17 +63,17 @@ const VouchersPage = () => {
     return (
         <div className="container mx-auto p-6">
             <Button type="primary" onClick={handleAdd} className="mb-4">
-                Add Voucher
+                Add Category
             </Button>
-            <Table columns={columns} dataSource={vouchers} rowKey="id" />
+            <Table columns={columns} dataSource={categories} rowKey="id" />
             <Modal
-                title={editingVoucher ? "Edit Voucher" : "Add Voucher"}
+                title={editingCategory ? "Edit Category" : "Add Category"}
                 visible={isModalVisible}
                 footer={null}
                 onCancel={() => setIsModalVisible(false)}
             >
-                <VoucherForm
-                    initialValues={editingVoucher}
+                <CategoryForm
+                    initialValues={editingCategory}
                     onSave={handleSave}
                     onCancel={() => setIsModalVisible(false)}
                 />
@@ -82,4 +82,4 @@ const VouchersPage = () => {
     );
 };
 
-export default VouchersPage;
+export default CategoriesPage;
