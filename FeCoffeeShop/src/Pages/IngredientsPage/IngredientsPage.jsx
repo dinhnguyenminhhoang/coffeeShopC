@@ -1,7 +1,29 @@
 import React, { useState, useEffect } from "react";
-import { Table, Button, Modal } from "antd";
+import { Table, Button, Modal, Space } from "antd";
 import axios from "axios";
-import IngredientForm from "../components/Ingredients/IngredientForm";
+import IngredientForm from "../../Components/FormManager/IngredientForm";
+const mockIngredients = [
+    {
+        id: 1,
+        name: "Flour",
+        type: "Baking",
+    },
+    {
+        id: 2,
+        name: "Sugar",
+        type: "Sweetener",
+    },
+    {
+        id: 3,
+        name: "Milk",
+        type: "Dairy",
+    },
+    {
+        id: 4,
+        name: "Eggs",
+        type: "Protein",
+    },
+];
 
 const IngredientsPage = () => {
     const [ingredients, setIngredients] = useState([]);
@@ -14,7 +36,9 @@ const IngredientsPage = () => {
 
     const fetchIngredients = async () => {
         const response = await axios.get("/api/ingredients");
-        setIngredients(response.data);
+        if (response.data.id) {
+            setIngredients(response.data);
+        } else setIngredients(mockIngredients);
     };
 
     const handleAdd = () => {
@@ -50,12 +74,12 @@ const IngredientsPage = () => {
             title: "Actions",
             key: "actions",
             render: (text, record) => (
-                <>
+                <Space>
                     <Button onClick={() => handleEdit(record)}>Edit</Button>
                     <Button danger onClick={() => handleDelete(record.id)}>
                         Delete
                     </Button>
-                </>
+                </Space>
             ),
         },
     ];
