@@ -1,0 +1,14 @@
+﻿using AutoMapper;
+
+namespace CoffeManagement.Extensions.AutoMapper
+{
+    public partial class AutoMapperProfile : Profile
+    {
+
+        public AutoMapperProfile()
+        {
+            LoadDrinksMapperProfile();
+
+        }
+    }
+}
