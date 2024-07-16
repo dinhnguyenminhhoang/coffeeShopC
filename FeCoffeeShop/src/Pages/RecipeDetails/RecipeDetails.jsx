@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Table, Button, Modal } from "antd";
 import axios from "axios";
-import RecipeDetailForm from "../components/RecipeDetails/RecipeDetailForm";
+import RecipeDetailForm from "../../Components/FormManager/RecipeDetailForm";
 
 const RecipeDetailsPage = () => {
     const [recipeDetails, setRecipeDetails] = useState([]);
