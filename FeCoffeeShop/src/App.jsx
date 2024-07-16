@@ -24,6 +24,7 @@ import RecipeDetailsPage from "./Pages/RecipeDetails/RecipeDetails";
 import RecipesPage from "./Pages/RecipesPage/RecipesPage";
 import ServiceRatingsPage from "./Pages/ServiceRatingsPage/ServiceRatingsPage";
 import StaffPage from "./Pages/admin/StaffPage/StaffPage";
+import VouchersPage from "./Pages/admin/VouchersPage/VouchersPage";
 
 const App = () => {
     const router = createBrowserRouter(
@@ -74,6 +75,11 @@ const App = () => {
                     />
                     {/* staff */}
                     <Route path="/manager-staff" element={<StaffPage />} />
+                    {/* voucher */}
+                    <Route
+                        path="/manager-vouchers"
+                        element={<VouchersPage />}
+                    />
                 </Route>
                 <Route path="*" element={<PageNotFound />} />
             </Route>
