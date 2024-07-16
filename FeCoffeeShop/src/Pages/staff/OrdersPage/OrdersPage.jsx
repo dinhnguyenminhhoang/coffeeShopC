@@ -1,8 +1,44 @@
 import React, { useState, useEffect } from "react";
-import { Table, Button, Modal } from "antd";
+import { Table, Button, Modal, Space } from "antd";
 import axios from "axios";
-import OrderForm from "../../Components/FormManager/OrderForm";
-
+import OrderForm from "../../../Components/FormManager/OrderForm";
+const mockOrders = [
+    {
+        id: 1,
+        orderDate: "2024-07-01",
+        totalAmount: 150.0,
+        staffId: "S001",
+        status: "Completed",
+    },
+    {
+        id: 2,
+        orderDate: "2024-07-02",
+        totalAmount: 200.0,
+        staffId: "S002",
+        status: "Pending",
+    },
+    {
+        id: 3,
+        orderDate: "2024-07-03",
+        totalAmount: 300.0,
+        staffId: "S003",
+        status: "Cancelled",
+    },
+    {
+        id: 4,
+        orderDate: "2024-07-04",
+        totalAmount: 250.0,
+        staffId: "S004",
+        status: "Completed",
+    },
+    {
+        id: 5,
+        orderDate: "2024-07-05",
+        totalAmount: 350.0,
+        staffId: "S005",
+        status: "Processing",
+    },
+];
 const OrdersPage = () => {
     const [orders, setOrders] = useState([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -14,7 +50,9 @@ const OrdersPage = () => {
 
     const fetchOrders = async () => {
         const response = await axios.get("/api/orders");
-        setOrders(response.data);
+        if (response.data.id) {
+            setOrders(response.data);
+        } else setOrders(mockOrders);
     };
 
     const handleAdd = () => {
@@ -52,12 +90,12 @@ const OrdersPage = () => {
             title: "Actions",
             key: "actions",
             render: (text, record) => (
-                <>
+                <Space>
                     <Button onClick={() => handleEdit(record)}>Edit</Button>
                     <Button danger onClick={() => handleDelete(record.id)}>
                         Delete
                     </Button>
-                </>
+                </Space>
             ),
         },
     ];

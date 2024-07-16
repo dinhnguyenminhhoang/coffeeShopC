@@ -1,8 +1,44 @@
 import React, { useState, useEffect } from "react";
-import { Table, Button, Modal } from "antd";
+import { Table, Button, Modal, Space } from "antd";
 import axios from "axios";
 import DrinkRatingForm from "../../Components/FormManager/DrinkRatingForm";
-
+const mockDrinkRatings = [
+    {
+        id: 1,
+        drinkId: 101,
+        rating: 4.5,
+        comment: "Great taste!",
+        creationDate: "2024-07-01",
+    },
+    {
+        id: 2,
+        drinkId: 102,
+        rating: 3.0,
+        comment: "Average drink.",
+        creationDate: "2024-07-02",
+    },
+    {
+        id: 3,
+        drinkId: 103,
+        rating: 5.0,
+        comment: "Excellent!",
+        creationDate: "2024-07-03",
+    },
+    {
+        id: 4,
+        drinkId: 104,
+        rating: 2.5,
+        comment: "Not my favorite.",
+        creationDate: "2024-07-04",
+    },
+    {
+        id: 5,
+        drinkId: 105,
+        rating: 4.0,
+        comment: "Pretty good.",
+        creationDate: "2024-07-05",
+    },
+];
 const DrinkRatingsPage = () => {
     const [drinkRatings, setDrinkRatings] = useState([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -14,7 +50,9 @@ const DrinkRatingsPage = () => {
 
     const fetchDrinkRatings = async () => {
         const response = await axios.get("/api/drink-ratings");
-        setDrinkRatings(response.data);
+        if (response.data.id) {
+            setDrinkRatings(response.data);
+        } else setDrinkRatings(mockDrinkRatings);
     };
 
     const handleAdd = () => {
@@ -59,12 +97,12 @@ const DrinkRatingsPage = () => {
             title: "Actions",
             key: "actions",
             render: (text, record) => (
-                <>
+                <Space>
                     <Button onClick={() => handleEdit(record)}>Edit</Button>
                     <Button danger onClick={() => handleDelete(record.id)}>
                         Delete
                     </Button>
-                </>
+                </Space>
             ),
         },
     ];

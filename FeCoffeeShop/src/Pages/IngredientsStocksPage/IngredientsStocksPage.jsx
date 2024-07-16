@@ -1,8 +1,33 @@
 import React, { useState, useEffect } from "react";
-import { Table, Button, Modal } from "antd";
+import { Table, Button, Modal, Space } from "antd";
 import axios from "axios";
 import IngredientStockForm from "../../Components/FormManager/IngredientStockForm";
-
+const mockIngredientsStocks = [
+    {
+        id: 1,
+        ingredientId: "I001",
+        quantity: 100,
+        expiryDate: "2024-12-31",
+    },
+    {
+        id: 2,
+        ingredientId: "I002",
+        quantity: 50,
+        expiryDate: "2024-08-15",
+    },
+    {
+        id: 3,
+        ingredientId: "I003",
+        quantity: 200,
+        expiryDate: "2025-02-28",
+    },
+    {
+        id: 4,
+        ingredientId: "I004",
+        quantity: 75,
+        expiryDate: "2024-09-30",
+    },
+];
 const IngredientsStocksPage = () => {
     const [ingredientsStocks, setIngredientsStocks] = useState([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -14,7 +39,9 @@ const IngredientsStocksPage = () => {
 
     const fetchIngredientsStocks = async () => {
         const response = await axios.get("/api/ingredients-stocks");
-        setIngredientsStocks(response.data);
+        if (response.data.id) {
+            setIngredientsStocks(response.data);
+        } else setIngredientsStocks(mockIngredientsStocks);
     };
 
     const handleAdd = () => {
@@ -58,12 +85,12 @@ const IngredientsStocksPage = () => {
             title: "Actions",
             key: "actions",
             render: (text, record) => (
-                <>
+                <Space>
                     <Button onClick={() => handleEdit(record)}>Edit</Button>
                     <Button danger onClick={() => handleDelete(record.id)}>
                         Delete
                     </Button>
-                </>
+                </Space>
             ),
         },
     ];

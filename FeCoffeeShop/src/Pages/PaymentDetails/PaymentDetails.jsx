@@ -1,8 +1,30 @@
 import React, { useState, useEffect } from "react";
-import { Table, Button, Modal } from "antd";
+import { Table, Button, Modal, Space } from "antd";
 import axios from "axios";
 import PaymentDetailForm from "../../Components/FormManager/PaymentDetailForm";
-
+const mockPaymentDetails = [
+    {
+        id: 1,
+        orderId: 101,
+        amount: 200.0,
+        paymentDate: "2023-07-01",
+        paymentMethod: "Credit Card",
+    },
+    {
+        id: 2,
+        orderId: 102,
+        amount: 150.0,
+        paymentDate: "2023-07-02",
+        paymentMethod: "PayPal",
+    },
+    {
+        id: 3,
+        orderId: 103,
+        amount: 300.0,
+        paymentDate: "2023-07-03",
+        paymentMethod: "Bank Transfer",
+    },
+];
 const PaymentDetailsPage = () => {
     const [paymentDetails, setPaymentDetails] = useState([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -14,7 +36,9 @@ const PaymentDetailsPage = () => {
 
     const fetchPaymentDetails = async () => {
         const response = await axios.get("/api/payment-details");
-        setPaymentDetails(response.data);
+        if (response.data.id) {
+            setPaymentDetails(response.data);
+        } else setPaymentDetails(mockPaymentDetails);
     };
 
     const handleAdd = () => {
@@ -59,12 +83,12 @@ const PaymentDetailsPage = () => {
             title: "Actions",
             key: "actions",
             render: (text, record) => (
-                <>
+                <Space>
                     <Button onClick={() => handleEdit(record)}>Edit</Button>
                     <Button danger onClick={() => handleDelete(record.id)}>
                         Delete
                     </Button>
-                </>
+                </Space>
             ),
         },
     ];

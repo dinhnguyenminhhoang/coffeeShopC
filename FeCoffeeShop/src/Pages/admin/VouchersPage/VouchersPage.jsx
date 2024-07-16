@@ -1,8 +1,29 @@
 import React, { useState, useEffect } from "react";
-import { Table, Button, Modal } from "antd";
+import { Table, Button, Modal, Space } from "antd";
 import axios from "axios";
 import VoucherForm from "@/Components/FormManager/VoucherForm";
-
+const mockVouchers = [
+    {
+        id: 1,
+        name: "Summer Sale Voucher",
+        description: "Get 20% off on all summer products.",
+    },
+    {
+        id: 2,
+        name: "Holiday Special Voucher",
+        description: "Enjoy a discount of $50 on holiday bookings.",
+    },
+    {
+        id: 3,
+        name: "Birthday Gift Voucher",
+        description: "Receive a free gift on your birthday.",
+    },
+    {
+        id: 4,
+        name: "New User Welcome Voucher",
+        description: "New users get a $10 discount on their first purchase.",
+    },
+];
 const VouchersPage = () => {
     const [vouchers, setVouchers] = useState([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -14,7 +35,9 @@ const VouchersPage = () => {
 
     const fetchVouchers = async () => {
         const response = await axios.get("/api/vouchers");
-        setVouchers(response.data);
+        if (response.data.id) {
+            setVouchers(response.data);
+        } else setVouchers(mockVouchers);
     };
 
     const handleAdd = () => {
@@ -50,12 +73,12 @@ const VouchersPage = () => {
             title: "Actions",
             key: "actions",
             render: (text, record) => (
-                <>
+                <Space>
                     <Button onClick={() => handleEdit(record)}>Edit</Button>
                     <Button danger onClick={() => handleDelete(record.id)}>
                         Delete
                     </Button>
-                </>
+                </Space>
             ),
         },
     ];

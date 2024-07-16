@@ -1,7 +1,44 @@
 import React, { useState, useEffect } from "react";
-import { Table, Button, Modal } from "antd";
+import { Table, Button, Modal, Space } from "antd";
 import axios from "axios";
-
+import OrderDetailForm from "@/Components/FormManager/OrderDetailForm";
+const mockOrderDetails = [
+    {
+        id: 1,
+        orderId: 101,
+        product: "Product A",
+        quantity: 2,
+        price: 50.0,
+    },
+    {
+        id: 2,
+        orderId: 102,
+        product: "Product B",
+        quantity: 1,
+        price: 100.0,
+    },
+    {
+        id: 3,
+        orderId: 103,
+        product: "Product C",
+        quantity: 3,
+        price: 30.0,
+    },
+    {
+        id: 4,
+        orderId: 104,
+        product: "Product D",
+        quantity: 4,
+        price: 25.0,
+    },
+    {
+        id: 5,
+        orderId: 105,
+        product: "Product E",
+        quantity: 5,
+        price: 20.0,
+    },
+];
 const OrderDetailsPage = () => {
     const [orderDetails, setOrderDetails] = useState([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -13,7 +50,9 @@ const OrderDetailsPage = () => {
 
     const fetchOrderDetails = async () => {
         const response = await axios.get("/api/orderdetails");
-        setOrderDetails(response.data);
+        if (response.data.id) {
+            setOrderDetails(response.data);
+        } else setOrderDetails(mockOrderDetails);
     };
 
     const handleAdd = () => {
@@ -54,12 +93,12 @@ const OrderDetailsPage = () => {
             title: "Actions",
             key: "actions",
             render: (text, record) => (
-                <>
+                <Space>
                     <Button onClick={() => handleEdit(record)}>Edit</Button>
                     <Button danger onClick={() => handleDelete(record.id)}>
                         Delete
                     </Button>
-                </>
+                </Space>
             ),
         },
     ];
