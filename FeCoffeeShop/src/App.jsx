@@ -12,15 +12,15 @@ import Branches from "./Pages/Branches/Branches";
 import CartPage from "./Pages/CartPage/CartPage";
 import DetailProduct from "./Pages/DetailProduct/DetailProduct";
 import HomePage from "./Pages/HomePage/HomePage";
-import OrdersPage from "./Pages/admin/OrdersPage/OrdersPage";
+import OrdersPage from "./Pages/staff/OrdersPage/OrdersPage";
 import PageNotFound from "./Pages/PageNotFound/PageNotFound";
-import OrderDetailsPage from "./Pages/OrderDetailsPage/OrderDetailsPage";
+import OrderDetailsPage from "./Pages/staff/OrderDetailsPage/OrderDetailsPage";
+import DrinkRatingsPage from "./Pages/DrinkRatings/DrinkRatings";
 
 const App = () => {
     const router = createBrowserRouter(
         createRoutesFromElements(
             <Route path="/">
-                <Route path="/order" element={<OrdersPage />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route element={<DefautLayout />}>
@@ -29,6 +29,10 @@ const App = () => {
                     <Route path="/cart" element={<CartPage />} />
                     <Route path="/branches" element={<Branches />} />
                     <Route path="/orders" element={<OrdersPage />} />
+                    <Route
+                        path="/drink-rating"
+                        element={<DrinkRatingsPage />}
+                    />
                     <Route
                         path="/order-detail/:id"
                         element={<OrderDetailsPage />}
