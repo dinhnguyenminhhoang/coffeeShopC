@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Table, Button, Modal } from "antd";
 import axios from "axios";
-import OrderForm from "@/Components/FormManager/OrderForm";
+import OrderForm from "../../Components/FormManager/OrderForm";
 
 const OrdersPage = () => {
     const [orders, setOrders] = useState([]);
@@ -44,8 +44,10 @@ const OrdersPage = () => {
 
     const columns = [
         { title: "ID", dataIndex: "id", key: "id" },
-        { title: "Date", dataIndex: "date", key: "date" },
-        { title: "Total", dataIndex: "total", key: "total" },
+        { title: "Order Date", dataIndex: "orderDate", key: "orderDate" },
+        { title: "Total Amount", dataIndex: "totalAmount", key: "totalAmount" },
+        { title: "Staff ID", dataIndex: "staffId", key: "staffId" },
+        { title: "Status", dataIndex: "status", key: "status" },
         {
             title: "Actions",
             key: "actions",
