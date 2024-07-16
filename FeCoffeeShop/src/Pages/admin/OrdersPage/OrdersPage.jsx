@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Table, Button, Modal, Space } from "antd";
 import axios from "axios";
-import OrderForm from "../../Components/FormManager/OrderForm";
+import OrderForm from "../../../Components/FormManager/OrderForm";
 const mockOrders = [
     {
         id: 1,

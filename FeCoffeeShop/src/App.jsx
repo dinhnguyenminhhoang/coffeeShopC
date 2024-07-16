@@ -12,8 +12,9 @@ import Branches from "./Pages/Branches/Branches";
 import CartPage from "./Pages/CartPage/CartPage";
 import DetailProduct from "./Pages/DetailProduct/DetailProduct";
 import HomePage from "./Pages/HomePage/HomePage";
-import OrdersPage from "./Pages/OrdersPage/OrdersPage";
+import OrdersPage from "./Pages/admin/OrdersPage/OrdersPage";
 import PageNotFound from "./Pages/PageNotFound/PageNotFound";
+import OrderDetailsPage from "./Pages/OrderDetailsPage/OrderDetailsPage";
 
 const App = () => {
     const router = createBrowserRouter(
@@ -28,6 +29,10 @@ const App = () => {
                     <Route path="/cart" element={<CartPage />} />
                     <Route path="/branches" element={<Branches />} />
                     <Route path="/orders" element={<OrdersPage />} />
+                    <Route
+                        path="/order-detail/:id"
+                        element={<OrderDetailsPage />}
+                    />
                 </Route>
                 <Route path="*" element={<PageNotFound />} />
             </Route>
