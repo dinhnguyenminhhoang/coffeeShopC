@@ -27,6 +27,7 @@ const App = () => {
                     <Route index element={<HomePage />} />
                     <Route path="/cart" element={<CartPage />} />
                     <Route path="/branches" element={<Branches />} />
+                    <Route path="/orders" element={<OrdersPage />} />
                 </Route>
                 <Route path="*" element={<PageNotFound />} />
             </Route>
