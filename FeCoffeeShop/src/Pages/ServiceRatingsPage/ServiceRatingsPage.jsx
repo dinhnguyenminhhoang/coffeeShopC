@@ -1,8 +1,44 @@
 import React, { useState, useEffect } from "react";
-import { Table, Button, Modal } from "antd";
+import { Table, Button, Modal, Space } from "antd";
 import axios from "axios";
 import ServiceRatingForm from "../../Components/FormManager/ServiceRatingForm";
-
+const mockServiceRatings = [
+    {
+        id: 1,
+        staffId: "S001",
+        rating: 4.5,
+        comment: "Great service!",
+        creationDate: "2024-07-16",
+    },
+    {
+        id: 2,
+        staffId: "S002",
+        rating: 3.8,
+        comment: "Could improve on communication.",
+        creationDate: "2024-07-15",
+    },
+    {
+        id: 3,
+        staffId: "S003",
+        rating: 5.0,
+        comment: "Excellent experience!",
+        creationDate: "2024-07-14",
+    },
+    {
+        id: 4,
+        staffId: "S004",
+        rating: 4.2,
+        comment: "Prompt and professional.",
+        creationDate: "2024-07-13",
+    },
+    {
+        id: 5,
+        staffId: "S005",
+        rating: 4.7,
+        comment: "Very satisfied with the service.",
+        creationDate: "2024-07-12",
+    },
+];
 const ServiceRatingsPage = () => {
     const [serviceRatings, setServiceRatings] = useState([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -14,7 +50,9 @@ const ServiceRatingsPage = () => {
 
     const fetchServiceRatings = async () => {
         const response = await axios.get("/api/service-ratings");
-        setServiceRatings(response.data);
+        if (response.data.id) {
+            setServiceRatings(response.data);
+        } else setServiceRatings(mockServiceRatings);
     };
 
     const handleAdd = () => {
@@ -59,12 +97,12 @@ const ServiceRatingsPage = () => {
             title: "Actions",
             key: "actions",
             render: (text, record) => (
-                <>
+                <Space>
                     <Button onClick={() => handleEdit(record)}>Edit</Button>
                     <Button danger onClick={() => handleDelete(record.id)}>
                         Delete
                     </Button>
-                </>
+                </Space>
             ),
         },
     ];
