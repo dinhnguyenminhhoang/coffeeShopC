@@ -21,6 +21,7 @@ import DrinksSizePage from "./Pages/DrinksSizePage/DrinksSizePage";
 import OrderDrinkDetailsPage from "./Pages/OrderDrinkDetails/OrderDrinkDetails";
 import PaymentDetailsPage from "./Pages/PaymentDetails/PaymentDetails";
 import RecipeDetailsPage from "./Pages/RecipeDetails/RecipeDetails";
+import RecipesPage from "./Pages/RecipesPage/RecipesPage";
 
 const App = () => {
     const router = createBrowserRouter(
@@ -63,6 +64,7 @@ const App = () => {
                         path="/recipe-detail"
                         element={<RecipeDetailsPage />}
                     />
+                    <Route path="/recipe" element={<RecipesPage />} />
                 </Route>
                 <Route path="*" element={<PageNotFound />} />
             </Route>
