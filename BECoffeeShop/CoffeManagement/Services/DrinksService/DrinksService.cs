@@ -26,6 +26,7 @@ namespace CoffeManagement.Services.DrinksService
         {
             var drinkQueryable = _drinkRepository.GetQueryable();
 
+            var pagingList = new PagingListModel<Drinks>(drinkQueryable, pagingDto.PageIndex, pagingDto.PageSize);
 
             var result = _mapper.Map<PagingListModel<DrinksResponse>>(pagingList);
 
