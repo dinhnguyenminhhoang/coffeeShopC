@@ -6,3 +6,5 @@
 **/[Oo]bj/*
 **/*.csproj.user
 **/logs
+/BECoffeeShop/.vs/CoffeManagement/v17/DocumentLayout.json
+/BECoffeeShop/.vs/CoffeManagement/v17/.suo
