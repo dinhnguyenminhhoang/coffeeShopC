@@ -1,7 +1,7 @@
 ﻿using CoffeManagement.Data;
 using CoffeManagement.DTO.Drinks.Request;
 using CoffeManagement.DTO.Drinks.Response;
-using CoffeManagement.DTO.Pagging;
+using CoffeManagement.DTO.Paging;
 using CoffeManagement.Services.DrinksService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;

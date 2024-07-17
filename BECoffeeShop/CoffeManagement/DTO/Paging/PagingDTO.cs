@@ -1,15 +1,15 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace CoffeManagement.DTO.Pagging
+namespace CoffeManagement.DTO.Paging
 {
     public class PagingDTO
     {
         [Required]
         [Range(minimum: 1, maximum: int.MaxValue)]
-        public int pageIndex { get; set; }
+        public int PageIndex { get; set; }
 
         [Required]
         [Range(minimum: 1, maximum: int.MaxValue)]
-        public int pageSize { get; set; }
+        public int PageSize { get; set; }
     }
 }

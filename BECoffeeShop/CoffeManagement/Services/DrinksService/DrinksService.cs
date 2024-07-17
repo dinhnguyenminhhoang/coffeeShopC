@@ -2,7 +2,7 @@
 using CoffeManagement.Common.Pagging;
 using CoffeManagement.DTO.Drinks.Request;
 using CoffeManagement.DTO.Drinks.Response;
-using CoffeManagement.DTO.Pagging;
+using CoffeManagement.DTO.Paging;
 using CoffeManagement.Models;
 using CoffeManagement.Repositories.DrinksRepo;
 using Microsoft.AspNetCore.Mvc;
@@ -26,7 +26,7 @@ namespace CoffeManagement.Services.DrinksService
         {
             var drinkQueryable = _drinkRepository.GetQueryable();
 
-            var pagingList =  new PagingListModel<Drinks>(drinkQueryable, pagingDto.pageIndex, pagingDto.pageSize);
+            var pagingList =  new PagingListModel<Drinks>(drinkQueryable, pagingDto.PageIndex, pagingDto.PageSize);
 
             var result = _mapper.Map<PagingListModel<DrinksResponse>>(pagingList);
 
