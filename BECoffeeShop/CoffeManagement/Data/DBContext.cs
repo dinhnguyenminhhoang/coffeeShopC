@@ -16,6 +16,8 @@ public partial class DBContext : DbContext
 
     public virtual DbSet<Account> Accounts { get; set; }
 
+    public virtual DbSet<Branch> Branchs { get; set; }
+
     public virtual DbSet<Customer> Customers { get; set; }
 
     public virtual DbSet<Drinks> Drinks { get; set; }
@@ -48,6 +50,28 @@ public partial class DBContext : DbContext
             entity.Property(e => e.Username)
                 .IsRequired()
                 .HasMaxLength(50);
+        });
+
+        modelBuilder.Entity<Branch>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__Branchs__3214EC077DFCDE54");
+
+            entity.ToTable(tb => tb.HasTrigger("TRG_UpdateUpdatedAtOfBranchsTable"));
+
+            entity.HasIndex(e => e.Name, "UQ__Branchs__737584F6506FFCA2").IsUnique();
+
+            entity.Property(e => e.Address)
+                .IsRequired()
+                .HasMaxLength(1255);
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.Name)
+                .IsRequired()
+                .HasMaxLength(255);
+            entity.Property(e => e.UpdatedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
         });
 
         modelBuilder.Entity<Customer>(entity =>
@@ -137,6 +161,11 @@ public partial class DBContext : DbContext
             entity.HasOne(d => d.Account).WithMany(p => p.Staff)
                 .HasForeignKey(d => d.AccountId)
                 .HasConstraintName("FK_Staffs_Accounts");
+
+            entity.HasOne(d => d.Branch).WithMany(p => p.Staff)
+                .HasForeignKey(d => d.BranchId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Staffs_Branchs");
         });
 
         OnModelCreatingPartial(modelBuilder);

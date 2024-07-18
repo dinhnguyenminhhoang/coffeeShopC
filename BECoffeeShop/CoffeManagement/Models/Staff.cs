@@ -40,4 +40,6 @@ public partial class Staff
     public DateTime? UpdatedAt { get; set; }
 
     public virtual Account Account { get; set; }
+
+    public virtual Branch Branch { get; set; }
 }

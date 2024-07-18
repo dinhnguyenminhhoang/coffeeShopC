@@ -36,7 +36,8 @@ CREATE TABLE [Staffs] (
   [AccountId] INT,
   [CreatedAt] DateTime DEFAULT(GETDATE()),
   [UpdatedAt] DateTime DEFAULT(GETDATE()),
-  CONSTRAINT FK_Staffs_Accounts FOREIGN KEY ([AccountId]) REFERENCES [Accounts] ([Id])
+  CONSTRAINT FK_Staffs_Accounts FOREIGN KEY ([AccountId]) REFERENCES [Accounts] ([Id]),
+  CONSTRAINT FK_Staffs_Branchs FOREIGN KEY ([BranchId]) REFERENCES [Branchs] ([Id])
 );
 
 DROP TABLE IF EXISTS [Customers];
@@ -57,6 +58,15 @@ CREATE TABLE [Accounts] (
   [Username] NVARCHAR(50) NOT NULL UNIQUE,
   [HashedPassword] NVARCHAR(100) NOT NULL,
   [Type] VARCHAR(10) DEFAULT('ACC_CUS'),
+  [CreatedAt] DateTime DEFAULT(GETDATE()),
+  [UpdatedAt] DateTime DEFAULT(GETDATE()),
+);
+
+DROP TABLE IF EXISTS [Branchs];
+CREATE TABLE [Branchs] (
+  [Id] INT IDENTITY(1, 1) PRIMARY KEY,
+  [Name] NVARCHAR(255) NOT NULL UNIQUE,
+  [Address] NVARCHAR(1255) NOT NULL,
   [CreatedAt] DateTime DEFAULT(GETDATE()),
   [UpdatedAt] DateTime DEFAULT(GETDATE()),
 );
@@ -103,3 +113,15 @@ BEGIN
     INNER JOIN inserted ON Accounts.Id = inserted.Id;
 END;
 
+CREATE TRIGGER TRG_UpdateUpdatedAtOfBranchsTable
+ON Branchs
+AFTER UPDATE
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    UPDATE Branchs
+    SET UpdatedAt = SYSDATETIME()
+    FROM Branchs
+    INNER JOIN inserted ON Branchs.Id = inserted.Id;
+END;
