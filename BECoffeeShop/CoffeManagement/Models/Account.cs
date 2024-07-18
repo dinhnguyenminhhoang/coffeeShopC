@@ -13,9 +13,11 @@ public partial class Account
 
     public string HashedPassword { get; set; }
 
-    public DateTime CreatedAt { get; set; }
+    public string Type { get; set; }
 
-    public DateTime UpdatedAt { get; set; }
+    public DateTime? CreatedAt { get; set; }
+
+    public DateTime? UpdatedAt { get; set; }
 
     public virtual ICollection<Customer> Customers { get; set; } = new List<Customer>();
 

@@ -33,7 +33,7 @@ namespace CoffeManagement.Services.AccountService
         {
             // Check login info
 
-            var account = await _accountRepository.GetByUsername(loginRequest.Username);
+            var account = await _accountRepository.GetAccountCustomerByUsername(loginRequest.Username);
 
             if (account == null)
                 throw new UnauthorizedException("Login info incorrect");
@@ -59,7 +59,7 @@ namespace CoffeManagement.Services.AccountService
         public async Task<int> CustomerRegister(CustomerRegisterRequest customerRegisterRequest)
         {
             // Check username or phone number already used?
-            var accountExits = await _accountRepository.GetByUsername(customerRegisterRequest.Username);
+            var accountExits = await _accountRepository.GetAccountCustomerByUsername(customerRegisterRequest.Username);
             if (accountExits != null) throw new ConflictException("This username already used, please use another username.");
 
             var customerExits = await _customerRepository.GetByPhone(customerRegisterRequest.Phone);
@@ -87,7 +87,7 @@ namespace CoffeManagement.Services.AccountService
         {
             // Check login info
 
-            var account = await _accountRepository.GetByUsername(loginRequest.Username);
+            var account = await _accountRepository.GetAccountStaffByUsername(loginRequest.Username);
 
             if (account == null)
                 throw new UnauthorizedException("Login info incorrect!");

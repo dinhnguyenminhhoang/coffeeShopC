@@ -56,7 +56,7 @@ CREATE TABLE [Accounts] (
   [Id] INT IDENTITY(1, 1) PRIMARY KEY,
   [Username] NVARCHAR(50) NOT NULL UNIQUE,
   [HashedPassword] NVARCHAR(100) NOT NULL,
-  [Type] VARCHAR(10) NOT NULL,
+  [Type] VARCHAR(10) DEFAULT('ACC_CUS'),
   [CreatedAt] DateTime DEFAULT(GETDATE()),
   [UpdatedAt] DateTime DEFAULT(GETDATE()),
 );

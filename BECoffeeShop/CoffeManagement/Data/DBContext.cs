@@ -28,11 +28,9 @@ public partial class DBContext : DbContext
     {
         modelBuilder.Entity<Account>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Accounts__3214EC07E3378DFE");
+            entity.HasKey(e => e.Id).HasName("PK__Accounts__3214EC07C715FC2C");
 
-            entity.ToTable(tb => tb.HasTrigger("TRG_UpdateUpdatedAtOfAccountsTable"));
-
-            entity.HasIndex(e => e.Username, "UQ__Accounts__536C85E40904D4CC").IsUnique();
+            entity.HasIndex(e => e.Username, "UQ__Accounts__536C85E47A93EB48").IsUnique();
 
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("(getdate())")
@@ -40,6 +38,10 @@ public partial class DBContext : DbContext
             entity.Property(e => e.HashedPassword)
                 .IsRequired()
                 .HasMaxLength(100);
+            entity.Property(e => e.Type)
+                .HasMaxLength(10)
+                .IsUnicode(false)
+                .HasDefaultValue("ACC_CUS");
             entity.Property(e => e.UpdatedAt)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
@@ -50,7 +52,7 @@ public partial class DBContext : DbContext
 
         modelBuilder.Entity<Customer>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Customer__3214EC07C30DA4FC");
+            entity.HasKey(e => e.Id).HasName("PK__Customer__3214EC0712869329");
 
             entity.Property(e => e.Address)
                 .IsRequired()
@@ -99,7 +101,7 @@ public partial class DBContext : DbContext
 
         modelBuilder.Entity<Staff>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Staffs__3214EC07E6017B28");
+            entity.HasKey(e => e.Id).HasName("PK__Staffs__3214EC07925A4A59");
 
             entity.Property(e => e.Address)
                 .IsRequired()
