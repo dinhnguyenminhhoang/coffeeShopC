@@ -6,3 +6,5 @@
 **/[Oo]bj/*
 **/*.csproj.user
 **/logs
+/BECoffeeShop/CoffeManagement/Controllers/TestController.cs
+/BECoffeeShop/CoffeManagement/efpt.config.json
