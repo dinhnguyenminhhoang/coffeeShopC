@@ -7,5 +7,7 @@ const getInitials = (name) => {
         .toUpperCase();
     return initials.slice(0, 2);
 };
-
-export { getInitials };
+const isValidImageUrl = (url) => {
+    return url && /\.(jpg|jpeg|png|webp|avif|gif|svg)$/.test(url);
+};
+export { getInitials, isValidImageUrl };
