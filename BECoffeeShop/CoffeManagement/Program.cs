@@ -1,5 +1,6 @@
 ﻿
 using CoffeManagement.Data;
+using CoffeManagement.Extensions.CORS;
 using CoffeManagement.Extensions.Jwt;
 using CoffeManagement.Infrastructure.Jwt;
 using CoffeManagement.Middlewares;
@@ -85,6 +86,8 @@ namespace CoffeManagement
             app.UseMiddleware<ErrorHandlingMiddleware>();
 
             app.UseHttpsRedirection();
+
+            app.UseCustomCors(builder.Configuration);
 
             app.UseAuthentication();
             app.UseAuthorization();
