@@ -1,11 +1,19 @@
-import React from "react";
-import Logo from "../../assets/website/coffee_logo.png";
+import React, { useEffect, useState } from "react";
+import Logo from "@/assets/website/coffee_logo.png";
 import { FaCoffee, FaUserAlt } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
-import { BiRegistered, BiSolidRegistered } from "react-icons/bi";
-import { Divider, Flex } from "antd";
+import {
+    BiLogOut,
+    BiRegistered,
+    BiSolidRegistered,
+    BiUser,
+} from "react-icons/bi";
+import { Button, Divider, Dropdown, Flex, Menu } from "antd";
 import { PiCashRegister } from "react-icons/pi";
-
+import Cookies from "js-cookie";
+import { jwtDecode } from "jwt-decode";
+import { getInitials } from "@/utils/resuableFuc";
+import useNotification from "../../hooks/NotiHook";
 const Menus = [
     {
         id: 1,
@@ -20,7 +28,47 @@ const Menus = [
 ];
 
 const Navbar = () => {
+    const [userData, setUserData] = useState();
+    const [isLogger, setisLogger] = useState(false);
+    const openNotification = useNotification();
     const navigator = useNavigate();
+    useEffect(() => {
+        const token = Cookies.get("AccessToken");
+        if (token) {
+            const data = jwtDecode(token);
+            setUserData({
+                fullname: data.fullname,
+                phone: data.phone.trim(),
+                username: data.username,
+            });
+            localStorage.setItem("isLogger", true);
+
+            setisLogger(true);
+        } else {
+            localStorage.setItem("isLogger", false);
+            setisLogger(false);
+        }
+    }, []);
+    const handleLogout = () => {
+        Cookies.remove("AccessToken");
+        localStorage.clear();
+        setisLogger(false);
+        openNotification({ type: "info", description: "Đăng xuất thành công" });
+    };
+    const menu = (
+        <Menu>
+            <Menu.Item
+                key="profile"
+                icon={<BiUser />}
+                // onClick={() => navigate(`profile/${userData.id}`)}
+            >
+                Profile
+            </Menu.Item>
+            <Menu.Item key="logout" icon={<BiLogOut />} onClick={handleLogout}>
+                Logout
+            </Menu.Item>
+        </Menu>
+    );
     return (
         <div className="bg-gradient-to-r from-secondary to-secondary/90 text-white">
             <div className="container py-2">
@@ -54,29 +102,49 @@ const Navbar = () => {
                             Order
                             <FaCoffee className="text-xl cursor-pointer" />
                         </button>
-                        <Flex align="center" gap={2}>
-                            <button
-                                className="hover:scale-105 duration-200 flex items-center gap-2"
-                                onClick={() => navigator("/login")}
+                        {isLogger ? (
+                            <Dropdown
+                                overlay={menu}
+                                placement="bottomRight"
+                                arrow
                             >
-                                Login
-                                <FaUserAlt
-                                    className="cursor-pointer"
-                                    size={16}
-                                />
-                            </button>
-                            <Divider type="vertical" className="bg-white" />
-                            <button
-                                className="hover:scale-105 duration-200 flex items-center gap-2"
-                                onClick={() => navigator("/register")}
-                            >
-                                Register
-                                <PiCashRegister
-                                    className="cursor-pointer"
-                                    size={16}
-                                />
-                            </button>
-                        </Flex>
+                                <Button
+                                    shape="circle"
+                                    style={{
+                                        fontWeight: "700",
+                                        fontSize: "20px",
+                                        padding: "22px 16px",
+                                    }}
+                                    className="bg-primary text-white border border-secondary"
+                                >
+                                    {getInitials(userData?.username)}
+                                </Button>
+                            </Dropdown>
+                        ) : (
+                            <Flex align="center" gap={2}>
+                                <button
+                                    className="hover:scale-105 duration-200 flex items-center gap-2"
+                                    onClick={() => navigator("/login")}
+                                >
+                                    Login
+                                    <FaUserAlt
+                                        className="cursor-pointer"
+                                        size={16}
+                                    />
+                                </button>
+                                <Divider type="vertical" className="bg-white" />
+                                <button
+                                    className="hover:scale-105 duration-200 flex items-center gap-2"
+                                    onClick={() => navigator("/register")}
+                                >
+                                    Register
+                                    <PiCashRegister
+                                        className="cursor-pointer"
+                                        size={16}
+                                    />
+                                </button>
+                            </Flex>
+                        )}
                     </div>
                 </div>
             </div>
