@@ -1,23 +1,28 @@
 ﻿namespace CoffeManagement.DTO.Drinks
 {
-    public class CreateDrinksRequest
+    public class DrinksDetailResponse
     {
+
+        public int Id { get; set; }
+
         public string Name { get; set; }
 
         public string Image { get; set; }
 
         public string Description { get; set; }
 
-        public IEnumerable<DrinksSizeCreate> DrinksSizes { get; set; } = Enumerable.Empty<DrinksSizeCreate>();
+        public IEnumerable<DrinksSize> DrinksSizes { get; set; } = Enumerable.Empty<DrinksSize>();
     }
 
-
-    public class DrinksSizeCreate
+    public class DrinksSize
     {
+        public int Id { get; set; }
+
         public string Size { get; set; }
 
         public double Ratio { get; set; }
 
         public double Price { get; set; }
     }
+
 }

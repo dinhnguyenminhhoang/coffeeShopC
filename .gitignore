@@ -8,3 +8,5 @@
 **/logs
 /BECoffeeShop/CoffeManagement/Controllers/TestController.cs
 /BECoffeeShop/CoffeManagement/efpt.config.json
+/BECoffeeShop/CoffeManagement/efpt.config.json.user
+/BECoffeeShop/.vs/*

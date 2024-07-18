@@ -31,6 +31,8 @@ namespace CoffeManagement
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "CoffeeManagement API", Version = "v1" });
 
+                c.EnableAnnotations();
+
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Name = "Authorization",
@@ -70,6 +72,7 @@ namespace CoffeManagement
             builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
             builder.Services.AddScoped<IDrinksService, DrinksService>();
             builder.Services.AddScoped<IDrinkRepository, DrinkRepository>();
+            builder.Services.AddScoped<IDrinksSizeRepository, DrinksSizeRepository>();
             builder.Services.AddScoped<IAccountRepository, AccountRepository>();
             builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 
