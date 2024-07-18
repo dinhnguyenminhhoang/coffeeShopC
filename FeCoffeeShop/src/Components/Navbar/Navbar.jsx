@@ -1,7 +1,7 @@
 import React from "react";
 import Logo from "../../assets/website/coffee_logo.png";
 import { FaCoffee, FaUserAlt } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { BiRegistered, BiSolidRegistered } from "react-icons/bi";
 import { Divider, Flex } from "antd";
 import { PiCashRegister } from "react-icons/pi";
@@ -26,13 +26,13 @@ const Navbar = () => {
             <div className="container py-2">
                 <div className="flex justify-between items-center gap-4">
                     <div>
-                        <a
-                            href="#"
+                        <Link
+                            to="/"
                             className="font-bold text-2xl sm:text-3xl flex justify-center items-center gap-2 tracking-wider font-cursive"
                         >
                             <img src={Logo} alt="Logo" className="w-14" />
                             COFFEE HOUSE
-                        </a>
+                        </Link>
                     </div>
                     <div className="flex justify-between items-center gap-4">
                         <ul className="hidden sm:flex items-center gap-4">
