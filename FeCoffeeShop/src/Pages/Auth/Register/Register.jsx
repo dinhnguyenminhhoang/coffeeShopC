@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Form, Input, Button, Typography, Divider } from "antd";
 import {
     LockOutlined,
@@ -15,7 +15,10 @@ const { Title, Text } = Typography;
 const Register = () => {
     const navigate = useNavigate();
     const openNotification = useNotification();
+    const [loading, setLoading] = useState(false);
+
     const onFinish = async (values) => {
+        setLoading(true);
         try {
             const response = await customerRegister({ formData: values });
             if (response.data?.Success) {
@@ -36,10 +39,10 @@ const Register = () => {
             openNotification({
                 type: "error",
                 message: "Thông báo",
-                description: error?.response?.data?.Message
-                    ? error?.response.data?.Message
-                    : "Đăng kí thất bại",
+                error: error,
             });
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -181,6 +184,8 @@ const Register = () => {
                             type="primary"
                             htmlType="submit"
                             className="w-full py-5"
+                            loading={loading}
+                            disabled={loading}
                         >
                             Đăng Ký
                         </Button>
