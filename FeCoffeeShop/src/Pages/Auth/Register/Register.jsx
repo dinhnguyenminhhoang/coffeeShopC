@@ -1,18 +1,57 @@
-import React from "react";
+import React, { useState } from "react";
 import { Form, Input, Button, Typography, Divider } from "antd";
-import { LockOutlined, UserOutlined, MailOutlined } from "@ant-design/icons";
+import {
+    LockOutlined,
+    UserOutlined,
+    PhoneOutlined,
+    HomeOutlined,
+} from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
+import useNotification from "@/hooks/NotiHook";
+import { customerRegister } from "../../../service/auth";
 
 const { Title, Text } = Typography;
 
 const Register = () => {
-    const navigator = useNavigate();
-    const onFinish = (values) => {
-        console.log("Success:", values);
+    const navigate = useNavigate();
+    const openNotification = useNotification();
+    const [loading, setLoading] = useState(false);
+
+    const onFinish = async (values) => {
+        setLoading(true);
+        try {
+            const response = await customerRegister({ formData: values });
+            if (response.data?.Success) {
+                openNotification({
+                    type: "success",
+                    message: "Thông báo",
+                    description: "Đăng kí thành công",
+                });
+                navigate("/login");
+            } else {
+                openNotification({
+                    type: "error",
+                    message: "Thông báo",
+                    description: "Đăng kí thất bại",
+                });
+            }
+        } catch (error) {
+            openNotification({
+                type: "error",
+                message: "Thông báo",
+                error: error,
+            });
+        } finally {
+            setLoading(false);
+        }
     };
 
     const onFinishFailed = (errorInfo) => {
-        console.log("Failed:", errorInfo);
+        openNotification({
+            type: "info",
+            message: "Thông báo",
+            description: "Vui lòng nhập đầy đủ thông tin",
+        });
     };
 
     return (
@@ -29,11 +68,15 @@ const Register = () => {
                     layout="vertical"
                 >
                     <Form.Item
-                        name="username"
+                        name="Username"
                         rules={[
                             {
                                 required: true,
                                 message: "Vui lòng nhập tên đăng nhập của bạn!",
+                            },
+                            {
+                                min: 4,
+                                message: "Tên đăng nhập phải dài hơn 3 ký tự!",
                             },
                         ]}
                     >
@@ -45,27 +88,38 @@ const Register = () => {
                     </Form.Item>
 
                     <Form.Item
-                        name="email"
+                        name="Phone"
                         rules={[
                             {
                                 required: true,
-                                message: "Vui lòng nhập email của bạn!",
+                                message: "Vui lòng nhập số điện thoại của bạn!",
+                            },
+                            {
+                                pattern: /^(03|05|07|08|09)\d{8}$/,
+                                message:
+                                    "Số điện thoại không hợp lệ! Vui lòng nhập số điện thoại hợp lệ của Việt Nam.",
                             },
                         ]}
                     >
                         <Input
-                            prefix={<MailOutlined className="mr-2" />}
+                            prefix={<PhoneOutlined className="mr-2" />}
                             className="py-2"
-                            placeholder="Email"
+                            placeholder="Số điện thoại"
                         />
                     </Form.Item>
 
                     <Form.Item
-                        name="password"
+                        name="Password"
                         rules={[
                             {
                                 required: true,
                                 message: "Vui lòng nhập mật khẩu của bạn!",
+                            },
+                            {
+                                pattern:
+                                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+                                message:
+                                    "Mật khẩu phải bao gồm ít nhất một chữ hoa, một chữ thường, một chữ số và một ký tự đặc biệt.",
                             },
                         ]}
                     >
@@ -89,7 +143,7 @@ const Register = () => {
                                 validator(_, value) {
                                     if (
                                         !value ||
-                                        getFieldValue("password") === value
+                                        getFieldValue("Password") === value
                                     ) {
                                         return Promise.resolve();
                                     }
@@ -109,11 +163,29 @@ const Register = () => {
                         />
                     </Form.Item>
 
-                    <Form.Item>
+                    <Form.Item
+                        name="Address"
+                        rules={[
+                            {
+                                required: true,
+                                message: "Vui lòng nhập địa chỉ của bạn!",
+                            },
+                        ]}
+                    >
+                        <Input
+                            prefix={<HomeOutlined className="mr-2" />}
+                            className="py-2"
+                            placeholder="Địa chỉ"
+                        />
+                    </Form.Item>
+
+                    <Form.Item className="mt-8">
                         <Button
                             type="primary"
                             htmlType="submit"
                             className="w-full py-5"
+                            loading={loading}
+                            disabled={loading}
                         >
                             Đăng Ký
                         </Button>
@@ -123,7 +195,7 @@ const Register = () => {
                 <Text className="text-center block">
                     Đã có tài khoản?{" "}
                     <span
-                        onClick={() => navigator("/login")}
+                        onClick={() => navigate("/login")}
                         className="text-blue-500 cursor-pointer"
                     >
                         Đăng nhập

@@ -26,9 +26,9 @@
     border: 1px solid #e8e8e8;
 }
 
-.container {
+/* .container {
     max-width: 1200px;
-}
+} */
 .spin {
     animation: spin 40s linear infinite;
 }

@@ -1,20 +1,58 @@
-import React from "react";
+import React, { useState } from "react";
 import { Form, Input, Button, Typography, Divider } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
-
+import useNotification from "@/hooks/NotiHook";
+import { customerLogin } from "@/service/auth";
+import BtnLoading from "@/Components/Btn/BtnLoading/BtnLoading";
+import Cookies from "js-cookie";
+import { jwtDecode } from "jwt-decode";
 const { Title, Text } = Typography;
 
 const Login = () => {
     const navigator = useNavigate();
-    const onFinish = (values) => {
-        console.log("Success:", values);
+    const openNotification = useNotification();
+    const [loading, setLoading] = useState(false);
+    const onFinish = async (values) => {
+        setLoading(true);
+        try {
+            const response = await customerLogin({ formData: values });
+            if (response.data?.Success) {
+                openNotification({
+                    type: "success",
+                    message: "Thông báo",
+                    description: "Đăng nhập thành công",
+                });
+                Cookies.set(
+                    "AccessToken",
+                    response.data.ResultData.AccessToken
+                );
+                navigator("/");
+            } else {
+                openNotification({
+                    type: "error",
+                    message: "Thông báo",
+                    description: "Đăng nhập thất bại",
+                });
+            }
+        } catch (error) {
+            openNotification({
+                type: "error",
+                message: "Thông báo",
+                error: error,
+            });
+        } finally {
+            setLoading(false);
+        }
     };
 
     const onFinishFailed = (errorInfo) => {
-        console.log("Failed:", errorInfo);
+        openNotification({
+            type: "info",
+            message: "Thông báo",
+            description: "Vui lòng nhập đầy đủ thông tin",
+        });
     };
-
     return (
         <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-green-400 to-blue-600">
             <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
@@ -29,44 +67,53 @@ const Login = () => {
                     layout="vertical"
                 >
                     <Form.Item
-                        className="pb-4"
-                        name="email"
+                        name="Username"
                         rules={[
                             {
                                 required: true,
-                                message: "Vui lòng nhập email của bạn!",
+                                message: "Vui lòng nhập tên đăng nhập của bạn!",
+                            },
+                            {
+                                min: 4,
+                                message: "Tên đăng nhập phải dài hơn 3 ký tự!",
                             },
                         ]}
                     >
                         <Input
                             prefix={<UserOutlined className="mr-1" />}
-                            placeholder="Email"
                             className="py-2"
+                            placeholder="Tên đăng nhập"
                         />
                     </Form.Item>
                     <Form.Item
-                        name="password"
+                        name="Password"
                         rules={[
                             {
                                 required: true,
                                 message: "Vui lòng nhập mật khẩu của bạn!",
                             },
+                            {
+                                pattern:
+                                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+                                message:
+                                    "Mật khẩu phải bao gồm ít nhất một chữ hoa, một chữ thường, một chữ số và một ký tự đặc biệt.",
+                            },
                         ]}
                     >
                         <Input.Password
-                            prefix={<LockOutlined className="mr-1" />}
-                            placeholder="Mật khẩu"
+                            prefix={<LockOutlined className="mr-2" />}
                             className="py-2"
+                            placeholder="Mật khẩu"
                         />
                     </Form.Item>
                     <Form.Item>
-                        <Button
-                            type="primary"
-                            htmlType="submit"
+                        <BtnLoading
+                            loading={loading}
                             className="w-full bg-blue-500 hover:bg-blue-600 py-5 mt-4"
+                            htmlType="submit"
                         >
-                            Đăng Nhập
-                        </Button>
+                            Đăng nhập
+                        </BtnLoading>
                     </Form.Item>
                 </Form>
                 <Divider>Hoặc</Divider>
