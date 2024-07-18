@@ -33,6 +33,7 @@ const App = () => {
         createRoutesFromElements(
             <Route path="/">
                 <Route path="/login" element={<Login />} />
+                <Route path="/admin/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route element={<DefautLayout />}>
                     <Route path="/product/:id" element={<DetailProduct />} />

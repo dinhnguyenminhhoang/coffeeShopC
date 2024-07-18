@@ -1,22 +1,28 @@
-import React, { useState } from "react";
-import { Form, Input, Button, Typography, Divider } from "antd";
-import { LockOutlined, UserOutlined } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
+import BtnLoading from "@/Components/Btn/BtnLoading/BtnLoading";
 import useNotification from "@/hooks/NotiHook";
 import { customerLogin } from "@/service/auth";
-import BtnLoading from "@/Components/Btn/BtnLoading/BtnLoading";
+import { LockOutlined, UserOutlined } from "@ant-design/icons";
+import { Divider, Form, Input, Typography } from "antd";
 import Cookies from "js-cookie";
-import { jwtDecode } from "jwt-decode";
+import React, { useState } from "react";
+import { useNavigate, useResolvedPath } from "react-router-dom";
+import { StaffLogin } from "../../../service/auth";
 const { Title, Text } = Typography;
 
 const Login = () => {
     const navigator = useNavigate();
     const openNotification = useNotification();
     const [loading, setLoading] = useState(false);
+    const param = useResolvedPath();
     const onFinish = async (values) => {
         setLoading(true);
         try {
-            const response = await customerLogin({ formData: values });
+            let response;
+            if (param.pathname.startsWith("/admin")) {
+                response = await StaffLogin({ formData: values });
+            } else {
+                response = await customerLogin({ formData: values });
+            }
             if (response.data?.Success) {
                 openNotification({
                     type: "success",
@@ -27,7 +33,9 @@ const Login = () => {
                     "AccessToken",
                     response.data.ResultData.AccessToken
                 );
-                navigator("/");
+                if (param.pathname.startsWith("/admin")) {
+                    navigator("/staff");
+                } else navigator("/");
             } else {
                 openNotification({
                     type: "error",
