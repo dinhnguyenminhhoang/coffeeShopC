@@ -18,8 +18,10 @@ const Register = () => {
     const onFinish = async (values) => {
         try {
             const response = await customerRegister({ formData: values });
-            if (response.data?.success) {
+            if (response.data?.Success) {
                 openNotification({
+                    type: "success",
+                    message: "Thông báo",
                     description: "Đăng kí thành công",
                 });
                 navigate("/login");
@@ -31,12 +33,11 @@ const Register = () => {
                 });
             }
         } catch (error) {
-            console.log(error);
             openNotification({
                 type: "error",
                 message: "Thông báo",
-                description: error?.message
-                    ? error.message
+                description: error?.response?.data?.Message
+                    ? error?.response.data?.Message
                     : "Đăng kí thất bại",
             });
         }
@@ -64,7 +65,7 @@ const Register = () => {
                     layout="vertical"
                 >
                     <Form.Item
-                        name="username"
+                        name="Username"
                         rules={[
                             {
                                 required: true,
@@ -84,7 +85,7 @@ const Register = () => {
                     </Form.Item>
 
                     <Form.Item
-                        name="phone"
+                        name="Phone"
                         rules={[
                             {
                                 required: true,
@@ -105,7 +106,7 @@ const Register = () => {
                     </Form.Item>
 
                     <Form.Item
-                        name="password"
+                        name="Password"
                         rules={[
                             {
                                 required: true,
@@ -139,7 +140,7 @@ const Register = () => {
                                 validator(_, value) {
                                     if (
                                         !value ||
-                                        getFieldValue("password") === value
+                                        getFieldValue("Password") === value
                                     ) {
                                         return Promise.resolve();
                                     }
@@ -160,7 +161,7 @@ const Register = () => {
                     </Form.Item>
 
                     <Form.Item
-                        name="address"
+                        name="Address"
                         rules={[
                             {
                                 required: true,
