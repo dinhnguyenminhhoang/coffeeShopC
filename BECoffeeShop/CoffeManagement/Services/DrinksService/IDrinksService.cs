@@ -1,6 +1,5 @@
 ﻿using CoffeManagement.Common.Pagging;
-using CoffeManagement.DTO.Drinks.Request;
-using CoffeManagement.DTO.Drinks.Response;
+using CoffeManagement.DTO.Drinks;
 using CoffeManagement.DTO.Paging;
 using Microsoft.AspNetCore.Mvc;
 

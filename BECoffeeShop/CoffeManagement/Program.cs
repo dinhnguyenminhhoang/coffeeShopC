@@ -1,9 +1,14 @@
-
+﻿
 using CoffeManagement.Data;
+using CoffeManagement.Extensions.Jwt;
+using CoffeManagement.Infrastructure.Jwt;
 using CoffeManagement.Middlewares;
+using CoffeManagement.Repositories.CustomerRepo;
 using CoffeManagement.Repositories.DrinksRepo;
+using CoffeManagement.Services.AccountService;
 using CoffeManagement.Services.DrinksService;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 
 namespace CoffeManagement
 {
@@ -21,8 +26,33 @@ namespace CoffeManagement
             });
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "CoffeeManagement API", Version = "v1" });
 
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "bearer",
+                });
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        Array.Empty<string>()
+                    }
+                });
+            });
 
             // Services configs
             builder.Services.AddDbContext<DBContext>(option =>
@@ -33,10 +63,14 @@ namespace CoffeManagement
             });
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddAutoMapper(typeof(Program).Assembly);
+            builder.Services.AddJwtConfiguration(builder.Configuration, builder.Environment);
 
+            builder.Services.AddScoped<JwtUtil>();
+            builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
             builder.Services.AddScoped<IDrinksService, DrinksService>();
-
             builder.Services.AddScoped<IDrinkRepository, DrinkRepository>();
+            builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+            builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 
             var app = builder.Build();
 
@@ -52,8 +86,8 @@ namespace CoffeManagement
 
             app.UseHttpsRedirection();
 
+            app.UseAuthentication();
             app.UseAuthorization();
-
 
             app.MapControllers();
 

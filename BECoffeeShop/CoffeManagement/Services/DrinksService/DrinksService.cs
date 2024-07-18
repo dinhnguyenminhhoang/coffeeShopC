@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using CoffeManagement.Common.Pagging;
-using CoffeManagement.DTO.Drinks.Request;
-using CoffeManagement.DTO.Drinks.Response;
+using CoffeManagement.DTO.Drinks;
 using CoffeManagement.DTO.Paging;
 using CoffeManagement.Models;
 using CoffeManagement.Repositories.DrinksRepo;

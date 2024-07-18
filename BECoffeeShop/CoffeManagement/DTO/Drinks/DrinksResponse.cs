@@ -1,7 +1,8 @@
-﻿namespace CoffeManagement.DTO.Drinks.Request
+﻿namespace CoffeManagement.DTO.Drinks
 {
-    public class CreateDrinksRequest
+    public class DrinksResponse
     {
+        public int Id { get; set; }
 
         public string Name { get; set; }
 

@@ -14,12 +14,65 @@ public partial class DBContext : DbContext
     {
     }
 
+    public virtual DbSet<Account> Accounts { get; set; }
+
+    public virtual DbSet<Customer> Customers { get; set; }
+
     public virtual DbSet<Drinks> Drinks { get; set; }
 
     public virtual DbSet<DrinksSize> DrinksSizes { get; set; }
 
+    public virtual DbSet<Staff> Staffs { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Account>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__Accounts__3214EC07E3378DFE");
+
+            entity.ToTable(tb => tb.HasTrigger("TRG_UpdateUpdatedAtOfAccountsTable"));
+
+            entity.HasIndex(e => e.Username, "UQ__Accounts__536C85E40904D4CC").IsUnique();
+
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.HashedPassword)
+                .IsRequired()
+                .HasMaxLength(100);
+            entity.Property(e => e.UpdatedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.Username)
+                .IsRequired()
+                .HasMaxLength(50);
+        });
+
+        modelBuilder.Entity<Customer>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__Customer__3214EC07C30DA4FC");
+
+            entity.Property(e => e.Address)
+                .IsRequired()
+                .HasMaxLength(255);
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.FullName).HasMaxLength(50);
+            entity.Property(e => e.Phone)
+                .IsRequired()
+                .HasMaxLength(20)
+                .IsUnicode(false)
+                .IsFixedLength();
+            entity.Property(e => e.UpdatedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+
+            entity.HasOne(d => d.Account).WithMany(p => p.Customers)
+                .HasForeignKey(d => d.AccountId)
+                .HasConstraintName("FK_Customers_Accounts");
+        });
+
         modelBuilder.Entity<Drinks>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__Drinks__3214EC07E8A3978D");
@@ -42,6 +95,46 @@ public partial class DBContext : DbContext
                 .HasForeignKey(d => d.DrinkId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_DrinksSizes_Drinks");
+        });
+
+        modelBuilder.Entity<Staff>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__Staffs__3214EC07E6017B28");
+
+            entity.Property(e => e.Address)
+                .IsRequired()
+                .HasMaxLength(255);
+            entity.Property(e => e.Avatar)
+                .IsRequired()
+                .HasMaxLength(255);
+            entity.Property(e => e.Cccd)
+                .IsRequired()
+                .HasMaxLength(20)
+                .IsUnicode(false)
+                .IsFixedLength()
+                .HasColumnName("CCCD");
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.Email)
+                .IsRequired()
+                .HasMaxLength(60)
+                .IsUnicode(false);
+            entity.Property(e => e.FullName)
+                .IsRequired()
+                .HasMaxLength(50);
+            entity.Property(e => e.Phone)
+                .IsRequired()
+                .HasMaxLength(20)
+                .IsUnicode(false)
+                .IsFixedLength();
+            entity.Property(e => e.UpdatedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+
+            entity.HasOne(d => d.Account).WithMany(p => p.Staff)
+                .HasForeignKey(d => d.AccountId)
+                .HasConstraintName("FK_Staffs_Accounts");
         });
 
         OnModelCreatingPartial(modelBuilder);

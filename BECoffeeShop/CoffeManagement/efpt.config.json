@@ -15,11 +15,23 @@
    "T4TemplatePath": null,
    "Tables": [
       {
+         "Name": "[dbo].[Accounts]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Customers]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[Drinks]",
          "ObjectType": 0
       },
       {
          "Name": "[dbo].[DrinksSizes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Staffs]",
          "ObjectType": 0
       }
    ],
