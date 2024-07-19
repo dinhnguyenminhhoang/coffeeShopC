@@ -4,9 +4,11 @@ using CoffeManagement.Extensions.CORS;
 using CoffeManagement.Extensions.Jwt;
 using CoffeManagement.Infrastructure.Jwt;
 using CoffeManagement.Middlewares;
+using CoffeManagement.Repositories.BranchesRepo;
 using CoffeManagement.Repositories.CustomerRepo;
 using CoffeManagement.Repositories.DrinksRepo;
 using CoffeManagement.Services.AccountService;
+using CoffeManagement.Services.BrachesService;
 using CoffeManagement.Services.DrinksService;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -71,10 +73,12 @@ namespace CoffeManagement
             builder.Services.AddScoped<JwtUtil>();
             builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
             builder.Services.AddScoped<IDrinksService, DrinksService>();
+            builder.Services.AddScoped<IBranchesSevice, BranchesSevice>();
             builder.Services.AddScoped<IDrinkRepository, DrinkRepository>();
             builder.Services.AddScoped<IDrinksSizeRepository, DrinksSizeRepository>();
             builder.Services.AddScoped<IAccountRepository, AccountRepository>();
             builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+            builder.Services.AddScoped<IBranchesRepository, BranchesRepository>();
 
             var app = builder.Build();
 
