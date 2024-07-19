@@ -8,7 +8,7 @@ namespace CoffeManagement.Extensions.AutoMapper
         public AutoMapperProfile()
         {
             LoadDrinksMapperProfile();
-
+            LoadBrachesMapperProfile();
         }
     }
 }
