@@ -8,11 +8,13 @@ namespace CoffeManagement.Middlewares
     {
         private readonly RequestDelegate _next;
         private readonly IHostEnvironment _env;
+        private readonly ILogger<ErrorHandlingMiddleware> _logger;
 
-        public ErrorHandlingMiddleware(RequestDelegate next, IHostEnvironment env)
+        public ErrorHandlingMiddleware(RequestDelegate next, IHostEnvironment env, ILogger<ErrorHandlingMiddleware> logger)
         {
             _next = next;
             _env = env;
+            _logger = logger;
         }
 
         public async Task Invoke(HttpContext context)
@@ -26,7 +28,8 @@ namespace CoffeManagement.Middlewares
             }
             catch (CustomHttpException e)
             {
-                context.Response.ContentType = "application/json";
+                context.Response.ContentType = "application/json"; _logger.LogError(e, "Custom HTTP exception occurred: {Message}", e.Message);
+
                 context.Response.StatusCode = (int)e.StatusCode;
                 await context.Response.WriteAsJsonAsync(
                     new ErrorResponse()
@@ -42,7 +45,8 @@ namespace CoffeManagement.Middlewares
             }
             catch (Exception e)
             {
-                context.Response.ContentType = "application/json";
+                context.Response.ContentType = "application/json"; _logger.LogError(e, "An unhandled exception occurred: {Message}", e.Message);
+
                 context.Response.StatusCode = StatusCodes.Status500InternalServerError;
                 await context.Response.WriteAsJsonAsync(
                     new ErrorResponse()
