@@ -2,11 +2,9 @@
 using CoffeManagement.Common.Exceptions;
 using CoffeManagement.Common.Pagging;
 using CoffeManagement.DTO.Branches;
-using CoffeManagement.DTO.Drinks;
 using CoffeManagement.DTO.Paging;
 using CoffeManagement.Models;
 using CoffeManagement.Repositories.BranchesRepo;
-using CoffeManagement.Repositories.DrinksRepo;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CoffeManagement.Services.BrachesService
@@ -59,6 +57,17 @@ namespace CoffeManagement.Services.BrachesService
             var branchDetail = _mapper.Map<BranchesDetailReponse>(branch);
 
             return branchDetail;
+        }
+
+        public async Task<int> DeleteBranches(int id)
+        {
+            var branch = await _branchesRepository.GetById(id);
+
+            if (branch == null) throw new NotFoundException("Not found branch.");
+
+            await _branchesRepository.Remove(id);
+
+            return branch.Id;
         }
     }
 }

@@ -7,9 +7,11 @@ using CoffeManagement.Middlewares;
 using CoffeManagement.Repositories.BranchesRepo;
 using CoffeManagement.Repositories.CustomerRepo;
 using CoffeManagement.Repositories.DrinksRepo;
+using CoffeManagement.Repositories.StaffsRepo;
 using CoffeManagement.Services.AccountService;
 using CoffeManagement.Services.BrachesService;
 using CoffeManagement.Services.DrinksService;
+using CoffeManagement.Services.StaffsService;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
@@ -74,11 +76,13 @@ namespace CoffeManagement
             builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
             builder.Services.AddScoped<IDrinksService, DrinksService>();
             builder.Services.AddScoped<IBranchesSevice, BranchesSevice>();
+            builder.Services.AddScoped<IStaffsService, StaffsService>();
             builder.Services.AddScoped<IDrinkRepository, DrinkRepository>();
             builder.Services.AddScoped<IDrinksSizeRepository, DrinksSizeRepository>();
             builder.Services.AddScoped<IAccountRepository, AccountRepository>();
             builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
             builder.Services.AddScoped<IBranchesRepository, BranchesRepository>();
+            builder.Services.AddScoped<IStaffsRepository,StaffsRepository>();
 
             var app = builder.Build();
 
