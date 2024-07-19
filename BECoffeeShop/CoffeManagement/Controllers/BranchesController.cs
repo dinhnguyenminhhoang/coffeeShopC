@@ -59,5 +59,15 @@ namespace CoffeManagement.Controllers
 
             return Ok(RenderSuccessResponse(result));
         }
+
+        [HttpDelete("{id:int}")]
+        //[Authorize(Policy = nameof(AuthPolicy.POL_ADMIN))]
+        [SwaggerOperation(Summary = "Delete Branch")]
+        public async Task<IActionResult> DeleteBranches([FromRoute] int id)
+        {
+            var result = await _branchesService.DeleteBranches(id);
+
+            return Ok(RenderSuccessResponse(data: result, message: "SUCCESS"));
+        }
     }
 }
