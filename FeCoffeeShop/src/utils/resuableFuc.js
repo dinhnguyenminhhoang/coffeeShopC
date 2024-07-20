@@ -7,5 +7,14 @@ const getInitials = (name) => {
         .toUpperCase();
     return initials.slice(0, 2);
 };
+const isValidImageUrl = (url) => {
+    return url && /\.(jpg|jpeg|png|webp|avif|gif|svg)$/.test(url);
+};
+const formatVND = (price) => {
+    return new Intl.NumberFormat("vi-VN", {
+        style: "currency",
+        currency: "VND",
+    }).format(price);
+};
 
-export { getInitials };
+export { getInitials, isValidImageUrl, formatVND };
