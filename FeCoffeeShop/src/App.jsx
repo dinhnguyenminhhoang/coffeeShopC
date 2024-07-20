@@ -3,6 +3,7 @@ import {
     createBrowserRouter,
     createRoutesFromElements,
     Route,
+    Router,
     RouterProvider,
 } from "react-router-dom";
 import DefautLayout from "./Layout/DefautLayout";
@@ -27,6 +28,7 @@ import StaffPage from "./Pages/admin/StaffPage/StaffPage";
 import VouchersPage from "./Pages/admin/VouchersPage/VouchersPage";
 import IngredientsPage from "./Pages/IngredientsPage/IngredientsPage";
 import IngredientsStocksPage from "./Pages/IngredientsStocksPage/IngredientsStocksPage";
+import AdminLayout from "./Layout/AdminLayout";
 
 const App = () => {
     const router = createBrowserRouter(
@@ -76,8 +78,6 @@ const App = () => {
                         path="/service-rating"
                         element={<ServiceRatingsPage />}
                     />
-                    {/* staff */}
-                    <Route path="/manager-staff" element={<StaffPage />} />
                     {/* voucher */}
                     <Route
                         path="/manager-vouchers"
@@ -92,6 +92,9 @@ const App = () => {
                         path="/manager-ingredients-stocks"
                         element={<IngredientsStocksPage />}
                     />
+                </Route>
+                <Route element={<AdminLayout />}>
+                    <Route path="/manager-staff" element={<StaffPage />} />
                 </Route>
                 <Route path="*" element={<PageNotFound />} />
             </Route>

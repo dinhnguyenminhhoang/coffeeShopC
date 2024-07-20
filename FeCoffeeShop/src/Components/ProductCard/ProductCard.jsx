@@ -10,7 +10,7 @@ const ProductCard = ({ product, loading }) => {
     const navigator = useNavigate();
     return (
         <Card
-            onClick={() => navigator(`/product/${product.id}`)}
+            onClick={() => navigator(`/product/${product.Id}`)}
             hoverable
             cover={
                 <div className="relative w-full h-80">

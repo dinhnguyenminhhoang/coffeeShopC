@@ -41,9 +41,15 @@ const Navbar = () => {
                 phone: data.phone.trim(),
                 username: data.username,
             });
-            console.log(data);
             localStorage.setItem("isLogger", true);
-
+            localStorage.setItem(
+                "userInfo",
+                JSON.stringify({
+                    fullname: data.fullname,
+                    phone: data.phone.trim(),
+                    username: data.username,
+                })
+            );
             setisLogger(true);
         } else {
             localStorage.setItem("isLogger", false);
