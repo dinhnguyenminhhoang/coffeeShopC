@@ -43,7 +43,7 @@ async function helperForUploadingImageToFirebase(file) {
     });
 }
 
-const UploadImage = () => {
+const UploadImage = ({ onUploadSuccess, className }) => {
     const [fileList, setFileList] = React.useState([]);
 
     const handleChange = (info) => {
@@ -62,6 +62,7 @@ const UploadImage = () => {
         try {
             const downloadUrl = await helperForUploadingImageToFirebase(file);
             onSuccess(downloadUrl);
+            onUploadSuccess(downloadUrl); // Call the callback function with the URL
         } catch (error) {
             onError(error);
         }
@@ -72,8 +73,11 @@ const UploadImage = () => {
             fileList={fileList}
             onChange={handleChange}
             customRequest={customRequest}
+            style={{ width: "100%" }}
         >
-            <Button icon={<UploadOutlined />}>Upload</Button>
+            <Button icon={<UploadOutlined />} className={className}>
+                Upload
+            </Button>
         </Upload>
     );
 };
