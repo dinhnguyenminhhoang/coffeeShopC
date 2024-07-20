@@ -9,8 +9,8 @@ const headers = {
 const getAllStaff = ({ listParam }) => {
     return instance.get(`/Staffs`, { headers, params: listParam });
 };
-const getStaffDetaiil = ({ Staffid }) => {
-    return instance.get(`/Staffs/${Staffid}`, { headers });
+const getStaffDetaiil = ({ staffid }) => {
+    return instance.get(`/Staffs/${staffid}`, { headers });
 };
 
 const createStaff = ({ formData }) => {
@@ -19,4 +19,7 @@ const createStaff = ({ formData }) => {
 const updateStaff = ({ formData }) => {
     return instance.put(`/Staffs`, formData, { headers });
 };
-export { getAllStaff, getStaffDetaiil, createStaff, updateStaff };
+const deleteStaff = ({ staffId }) => {
+    return instance.delete(`/Branches/${staffId}`, { headers });
+};
+export { getAllStaff, getStaffDetaiil, createStaff, updateStaff, deleteStaff };
