@@ -20,5 +20,9 @@ namespace CoffeManagement.Repositories.CustomerRepo
         {
             return _dbSet.FirstOrDefaultAsync(x => x.Phone == phone);
         }
+        public IQueryable<Customer> GetQueryable()
+        {
+            return _dbSet.AsQueryable();
+        }
     }
 }
