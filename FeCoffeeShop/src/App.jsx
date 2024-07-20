@@ -29,6 +29,7 @@ import VouchersPage from "./Pages/admin/VouchersPage/VouchersPage";
 import IngredientsPage from "./Pages/IngredientsPage/IngredientsPage";
 import IngredientsStocksPage from "./Pages/IngredientsStocksPage/IngredientsStocksPage";
 import AdminLayout from "./Layout/AdminLayout";
+import AdminBranches from "./Pages/admin/AdminBranches/AdminBranches";
 
 const App = () => {
     const router = createBrowserRouter(
@@ -94,7 +95,11 @@ const App = () => {
                     />
                 </Route>
                 <Route element={<AdminLayout />}>
-                    <Route path="/manager-staff" element={<StaffPage />} />
+                    <Route path="/manager-staffs" element={<StaffPage />} />
+                    <Route
+                        path="/manager-branches"
+                        element={<AdminBranches />}
+                    />
                 </Route>
                 <Route path="*" element={<PageNotFound />} />
             </Route>
