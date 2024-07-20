@@ -16,5 +16,14 @@ const formatVND = (price) => {
         currency: "VND",
     }).format(price);
 };
-
-export { getInitials, isValidImageUrl, formatVND };
+const firebaseConfig = {
+    apiKey: "AIzaSyBM2yqGG7Ky7KfLeHg6G7-21jfH6smHuzI",
+    authDomain: "coffee-8ec85.firebaseapp.com",
+    projectId: "coffee-8ec85",
+    storageBucket: "coffee-8ec85.appspot.com",
+    messagingSenderId: "772302752788",
+    appId: "1:772302752788:web:f2f60ae48a908047e5eb01",
+    measurementId: "G-K5ZNM7M5DS",
+};
+const firebaseUrl = "gs://coffee-8ec85.appspot.com";
+export { getInitials, isValidImageUrl, formatVND, firebaseConfig, firebaseUrl };
