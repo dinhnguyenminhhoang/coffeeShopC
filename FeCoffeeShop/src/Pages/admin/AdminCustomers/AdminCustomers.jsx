@@ -4,32 +4,33 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import BrachesFrom from "../../../Components/FormManager/BrachesFrom";
 import {
-    createBranches,
-    deleteBranches,
-    getAllBranches,
-    updateBranches,
-} from "../../../service/branchs";
+    createCustomers,
+    deleteCustomers,
+    getAllCustomers,
+    updateCustomers,
+} from "../../../service/Customer";
+import CustomerForm from "../../../Components/FormManager/CustomerForm";
 
 const AdminCustomers = () => {
-    const [branch, setBranch] = useState([]);
+    const [customersData, setCustmerData] = useState([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
-    const [editingBranch, setEditingBranch] = useState(null);
+    const [editingCustomer, setEditingCustomer] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [totalCount, setTotalCount] = useState(0);
     const openNotification = useNotification();
 
     useEffect(() => {
-        fetchBranches(currentPage, pageSize);
+        fetchCustomers(currentPage, pageSize);
     }, [currentPage, pageSize]);
 
-    const fetchBranches = async (pageIndex, pageSize) => {
-        const response = await getAllBranches({
+    const fetchCustomers = async (pageIndex, pageSize) => {
+        const response = await getAllCustomers({
             listParam: { PageIndex: pageIndex, PageSize: pageSize },
         });
 
         if (response.data.Success) {
-            setBranch(response.data.ResultData);
+            setCustmerData(response.data.ResultData);
             setTotalCount(response.data.ResultData.Paging.TotalCount);
         } else {
             openNotification({
@@ -40,23 +41,25 @@ const AdminCustomers = () => {
     };
 
     const handleAdd = () => {
-        setEditingBranch(null);
+        setEditingCustomer(null);
         setIsModalVisible(true);
     };
 
-    const handleEdit = (branch) => {
-        setEditingBranch(branch);
+    const handleEdit = (customersData) => {
+        setEditingCustomer(customersData);
         setIsModalVisible(true);
     };
 
-    const handleDelete = async (branchesid) => {
+    const handleDelete = async (customerId) => {
         try {
-            const response = await deleteBranches({ branchesid: branchesid });
+            const response = await deleteCustomers({
+                customerId: customerId,
+            });
             if (response.data?.Success) {
-                fetchBranches(currentPage, pageSize);
+                fetchCustomers(currentPage, pageSize);
                 openNotification({
                     type: "success",
-                    description: "delete branch successfully",
+                    description: "delete customersData successfully",
                 });
             }
         } catch (error) {
@@ -70,22 +73,22 @@ const AdminCustomers = () => {
 
     const handleSave = async (values) => {
         try {
-            if (editingBranch) {
-                const res = await updateBranches({
-                    formData: { ...values, Id: editingBranch.Id },
+            if (editingCustomer) {
+                const res = await updateCustomers({
+                    formData: { ...values, Id: editingCustomer.Id },
                 });
                 if (res.data.Success) {
                     openNotification({
                         type: "success",
-                        description: "Edit  branch successfully",
+                        description: "Edit  customersData successfully",
                     });
                 }
             } else {
-                const res = await createBranches({ formData: values });
+                const res = await createCustomers({ formData: values });
                 if (res.data.Success) {
                     openNotification({
                         type: "success",
-                        description: "Create branch successfully",
+                        description: "Create customersData successfully",
                     });
                 }
             }
@@ -96,7 +99,7 @@ const AdminCustomers = () => {
                 error: error,
             });
         }
-        fetchBranches(currentPage, pageSize);
+        fetchCustomers(currentPage, pageSize);
         setIsModalVisible(false);
     };
 
@@ -107,7 +110,9 @@ const AdminCustomers = () => {
 
     const columns = [
         { title: "ID", dataIndex: "Id", key: "Id" },
-        { title: "Name", dataIndex: "Name", key: "Name" },
+        { title: "AccountId", dataIndex: "AccountId", key: "AccountId" },
+        { title: "FullName", dataIndex: "FullName", key: "FullName" },
+        { title: "Phone", dataIndex: "Phone", key: "Phone" },
         { title: "Address", dataIndex: "Address", key: "Address" },
         {
             title: "Actions",
@@ -116,7 +121,7 @@ const AdminCustomers = () => {
                 <Space>
                     <Button onClick={() => handleEdit(record)}>Edit</Button>
                     <Popconfirm
-                        title={`Confirm delete branch ${record.Name}?`}
+                        title={`Confirm delete customers ${record.FullName}?`}
                         onConfirm={() => handleDelete(record.Id)}
                         onCancel={() => {}}
                         okText="Yes"
@@ -132,11 +137,11 @@ const AdminCustomers = () => {
     return (
         <div className="container mx-auto p-6">
             <Button type="primary" onClick={handleAdd} className="mb-4">
-                Add Branch
+                Add Customer
             </Button>
             <Table
                 columns={columns}
-                dataSource={branch?.List}
+                dataSource={customersData?.List}
                 rowKey="Id"
                 pagination={{
                     current: currentPage,
@@ -147,13 +152,15 @@ const AdminCustomers = () => {
                 onChange={handleTableChange}
             />
             <Modal
-                title={editingBranch ? "Edit Staff" : "Add Staff"}
+                title={editingCustomer ? "Edit Customer" : "Add Customer"}
                 visible={isModalVisible}
                 footer={null}
                 onCancel={() => setIsModalVisible(false)}
             >
-                <BrachesFrom
-                    initialValues={editingBranch?.Id ? editingBranch.Id : null}
+                <CustomerForm
+                    initialValues={
+                        editingCustomer?.Id ? editingCustomer.Id : null
+                    }
                     onSave={handleSave}
                     onCancel={() => setIsModalVisible(false)}
                 />
