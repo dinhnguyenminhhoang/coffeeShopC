@@ -1,4 +1,7 @@
-﻿namespace CoffeManagement.DTO.Staffs
+﻿using CoffeManagement.DTO.Account;
+using System.Text.Json.Serialization;
+
+namespace CoffeManagement.DTO.Staffs
 {
     public class StaffsDetailResponse
     {
@@ -22,8 +25,25 @@
 
         public int OnJobDays { get; set; }
 
+        public int AsentDays { get; set; }
+
         public int AsetDays { get; set; }
 
-        public int Position { get; set; }
+        public string Position { get; set; }
+
+        public int BranchId { get; set; }
+
+        [JsonIgnore]
+        public int AccountId { get; set; }
+
+        public bool IsActivated { get; set; }
+
+        public DateTime? CreatedAt { get; set; }
+
+        public DateTime? UpdatedAt { get; set; }
+
+        // ------------------------------
+
+        public AccountResponse Account { get; set; }
     }
 }

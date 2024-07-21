@@ -29,7 +29,7 @@ public partial class Staff
 
     public int? AsentDays { get; set; }
 
-    public int Position { get; set; }
+    public string Position { get; set; }
 
     public int BranchId { get; set; }
 

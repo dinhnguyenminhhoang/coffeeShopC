@@ -17,6 +17,12 @@ namespace CoffeManagement.Repositories.StaffRepo
             _dbSet = _context.Set<Staff>();
         }
 
+        public Task<Staff?> GetByPhone(string phone)
+        {
+            return _dbSet.FirstOrDefaultAsync(x => x.Phone == phone);
+        }
+
+
         public IQueryable<Staff> GetQueryable()
         {
             return _dbSet.AsQueryable();

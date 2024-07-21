@@ -1,4 +1,5 @@
-﻿using CoffeManagement.DTO.Drink;
+﻿using CoffeManagement.DTO.Account;
+using CoffeManagement.DTO.Drink;
 
 namespace CoffeManagement.DTO.Staffs
 {
@@ -20,14 +21,11 @@ namespace CoffeManagement.DTO.Staffs
 
         public float Salary { get; set; }
 
-        public int OnJobDays { get; set; }
-
-        public int AsetDays { get; set; }
-
-        public int Position { get; set; }
+        public string Position { get; set; }
 
         public int BranchId { get; set; }
 
-        public int AccountId { get; set; }
+        public CreateAccountRequest? Account { get; set; }
+
     }
 }

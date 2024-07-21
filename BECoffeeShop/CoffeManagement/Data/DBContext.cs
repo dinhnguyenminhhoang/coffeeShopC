@@ -111,8 +111,7 @@ public partial class DBContext : DbContext
             entity.Property(e => e.Phone)
                 .IsRequired()
                 .HasMaxLength(20)
-                .IsUnicode(false)
-                .IsFixedLength();
+                .IsUnicode(false);
             entity.Property(e => e.UpdatedAt)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
@@ -293,7 +292,6 @@ public partial class DBContext : DbContext
                 .IsRequired()
                 .HasMaxLength(20)
                 .IsUnicode(false)
-                .IsFixedLength()
                 .HasColumnName("CCCD");
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("(getdate())")
@@ -311,8 +309,12 @@ public partial class DBContext : DbContext
             entity.Property(e => e.Phone)
                 .IsRequired()
                 .HasMaxLength(20)
+                .IsUnicode(false);
+            entity.Property(e => e.Position)
+                .IsRequired()
+                .HasMaxLength(10)
                 .IsUnicode(false)
-                .IsFixedLength();
+                .HasDefaultValue("POS_STAFF");
             entity.Property(e => e.Salary).HasDefaultValue(0.0);
             entity.Property(e => e.UpdatedAt)
                 .HasDefaultValueSql("(getdate())")

@@ -26,7 +26,7 @@ namespace CoffeManagement.Controllers
         [SwaggerOperation(Summary = "Get List Staffs")]
         public async Task<IActionResult> GetListStaffs([FromQuery] PagingDTO pagingDto)
         {
-            var result = await _staffsService.GetListStaffs(pagingDto);
+            var result = await _staffsService.GetListStaff(pagingDto);
 
             return Ok(RenderSuccessResponse(result));
         }
@@ -35,7 +35,7 @@ namespace CoffeManagement.Controllers
         [SwaggerOperation(Summary = "Get Staff Detail")]
         public async Task<IActionResult> GetStaffsDetail([FromRoute] int id)
         {
-            var result = await _staffsService.GetStaffsDetail(id);
+            var result = await _staffsService.GetStaffDetail(id);
 
             return Ok(RenderSuccessResponse(result));
         }
@@ -45,7 +45,7 @@ namespace CoffeManagement.Controllers
         [SwaggerOperation(Summary = "Create new staff")]
         public async Task<IActionResult> CreateStaffs(CreateStaffRequest request)
         {
-            var result = await _staffsService.CreateStaffs(request);
+            var result = await _staffsService.CreateStaff(request);
 
             return Ok(RenderSuccessResponse(data: result, message: "SUCCESS"));
         }
@@ -55,7 +55,7 @@ namespace CoffeManagement.Controllers
         [SwaggerOperation(Summary = "Update Staffs")]
         public async Task<IActionResult> UpdateStaffs([FromBody] UpdateStaffsRequest request)
         {
-            var result = await _staffsService.UpdateStaffs(request);
+            var result = await _staffsService.UpdateStaff(request);
 
             return Ok(RenderSuccessResponse(data: result, message: "SUCCESS"));
         }
@@ -65,7 +65,7 @@ namespace CoffeManagement.Controllers
         [SwaggerOperation(Summary = "Delete staff")]
         public async Task<IActionResult> DeleteStaffs([FromRoute] int id)
         {
-            var result = await _staffsService.DeleteStaffs(id);
+            var result = await _staffsService.DeleteStaff(id);
 
             return Ok(RenderSuccessResponse(data: result, message: "SUCCESS"));
         }

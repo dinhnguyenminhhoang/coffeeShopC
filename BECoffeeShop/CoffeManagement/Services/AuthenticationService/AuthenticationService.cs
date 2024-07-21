@@ -102,7 +102,7 @@ namespace CoffeManagement.Services.AccountService
                 new(AppClaimTypes.Username, account.Username),
                 new(AppClaimTypes.FullName, staff?.FullName ?? string.Empty),
                 new(AppClaimTypes.Phone, staff ?.Phone ?? string.Empty),
-                new(ClaimTypes.Role, GetRoleByStaffPosition(staff?.Position ?? -1))
+                new(ClaimTypes.Role, staff?.Position ?? StaffPosition.POS_STAFF.ToString())
             };
 
             var accessToken = _jwtUtil.GenerateToken(claims, "2d");
@@ -110,15 +110,5 @@ namespace CoffeManagement.Services.AccountService
             return new LoginResponse() { AccessToken = accessToken };
         }
 
-
-        private string GetRoleByStaffPosition(int position)
-        {
-            return position switch
-            {
-                (int)StaffPosition.POS_ADMIN => AuthRole.ROLE_ADMIN.ToString(),
-                (int)StaffPosition.POS_STAFF => AuthRole.ROLE_STAFF.ToString(),
-                _ => "",
-            };
-        }
     }
 }

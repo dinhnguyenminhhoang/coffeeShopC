@@ -20,10 +20,8 @@
 
         public float Salary { get; set; }
 
-        public int OnJobDays { get; set; }
+        public string Position { get; set; }
 
-        public int AsetDays { get; set; }
-
-        public int Position { get; set; }
+        public int BranchId { get; set; }
     }
 }

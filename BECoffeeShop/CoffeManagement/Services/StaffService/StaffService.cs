@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
+using Azure.Core;
 using CoffeManagement.Common.Exceptions;
 using CoffeManagement.Common.Pagging;
+using CoffeManagement.DTO.Account;
 using CoffeManagement.DTO.Paging;
 using CoffeManagement.DTO.Staffs;
 using CoffeManagement.Models;
+using CoffeManagement.Repositories.CustomerRepo;
 using CoffeManagement.Repositories.StaffRepo;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,16 +17,19 @@ namespace CoffeManagement.Services.StaffService
         private readonly HttpContext _httpContext;
         private readonly IMapper _mapper;
         private readonly IStaffRepository _staffRepository;
-        public StaffService(IHttpContextAccessor httpContextAccessor, IMapper mapper, IStaffRepository staffsRepository)
+        private readonly IAccountRepository _accountRepository;
+
+        public StaffService(IHttpContextAccessor httpContextAccessor, IMapper mapper, IStaffRepository staffsRepository, IAccountRepository accountRepository)
         {
             _httpContext = httpContextAccessor.HttpContext;
             _mapper = mapper;
             _staffRepository = staffsRepository;
+            _accountRepository = accountRepository;
         }
 
-        public async Task<PagingListModel<StaffsResponse>> GetListStaffs([FromQuery] PagingDTO pagingDto)
+        public async Task<PagingListModel<StaffsResponse>> GetListStaff([FromQuery] PagingDTO pagingDto)
         {
-            var staffQueryable = _staffRepository.GetQueryable();
+            var staffQueryable = _staffRepository.GetQueryable().Where(s => s.IsDeleted == false);
 
             var pagingList = new PagingListModel<Staff>(staffQueryable, pagingDto.PageIndex, pagingDto.PageSize);
 
@@ -32,43 +38,70 @@ namespace CoffeManagement.Services.StaffService
             return result;
         }
 
-        public async Task<int> CreateStaffs(CreateStaffRequest request)
+        public async Task<int> CreateStaff(CreateStaffRequest request)
         {
-            var staffs = _mapper.Map<Staff>(request);
+            var staffExits = await _staffRepository.GetByPhone(request.Phone);
+            if (staffExits != null) throw new ConflictException("This phone number already used, please use another phone number.");
 
-            await _staffRepository.Add(staffs);
+            if (request.Account == null)
+            {
+                var staff = _mapper.Map<Staff>(request);
 
-            return staffs.Id;
+                await _staffRepository.Add(staff);
+
+                return staff.Id;
+            }
+            else
+            {
+                var accountExits = await _accountRepository.GetAccountCustomerByUsername(request.Account.Username);
+                if (accountExits != null) throw new ConflictException("This username already used, please use another username.");
+
+                var staff = _mapper.Map<Staff>(request);
+
+                await _accountRepository.Add(new()
+                {
+                    Username = request.Account.Username,
+                    HashedPassword = BCrypt.Net.BCrypt.HashPassword(request.Account.Password),
+                    Staff = new Staff[] { staff }
+                });
+
+                return staff.Id;
+            }
         }
 
-        public async Task<int> UpdateStaffs(UpdateStaffsRequest request)
+        public async Task<int> UpdateStaff(UpdateStaffsRequest request)
         {
-            var staffs = _mapper.Map<Staff>(request);
+            var existedStaff = await _staffRepository.GetById(request.Id);
+            if (existedStaff == null || existedStaff.IsDeleted == true) throw new NotFoundException("Not found staff.");
 
-            await _staffRepository.Update(staffs);
+            _mapper.Map(request, existedStaff);
 
-            return staffs.Id;
+            await _staffRepository.Update(existedStaff);
+
+            return existedStaff.Id;
         }
 
-        public async Task<StaffsDetailResponse> GetStaffsDetail(int id)
+        public async Task<StaffsDetailResponse> GetStaffDetail(int id)
         {
-            var staff = await _staffRepository.GetById(id);
+            var existedStaff = await _staffRepository.GetById(id);
+            if (existedStaff == null || existedStaff.IsDeleted == true) throw new NotFoundException("Not found staff.");
 
-            if (staff == null) throw new NotFoundException("Not found Staffs.");
-
-            var staffDetail = _mapper.Map<StaffsDetailResponse>(staff);
+            var staffDetail = _mapper.Map<StaffsDetailResponse>(existedStaff);
+            var account = await _accountRepository.GetById(staffDetail.AccountId);
+            if (account != null) staffDetail.Account = _mapper.Map<AccountResponse>(account);
 
             return staffDetail;
         }
-        public async Task<int> DeleteStaffs(int id)
+
+        public async Task<int> DeleteStaff(int id)
         {
-            var staffs = await _staffRepository.GetById(id);
+            var existedStaff = await _staffRepository.GetById(id);
+            if (existedStaff == null || existedStaff.IsDeleted == true) throw new NotFoundException("Not found staff.");
 
-            if (staffs == null) throw new NotFoundException("Not found  staff.");
+            existedStaff.IsActivated = true;
+            await _staffRepository.Update(existedStaff);
 
-            await _staffRepository.Remove(id);
-
-            return staffs.Id;
+            return existedStaff.Id;
         }
 
     }

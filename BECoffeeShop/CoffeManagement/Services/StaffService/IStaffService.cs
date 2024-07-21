@@ -6,11 +6,11 @@ namespace CoffeManagement.Services.StaffService
 {
     public interface IStaffService
     {
-        Task<PagingListModel<StaffsResponse>> GetListStaffs(PagingDTO pagingDto);
-        Task<int> CreateStaffs(CreateStaffRequest request);
-        Task<int> UpdateStaffs(UpdateStaffsRequest request);
-        Task<StaffsDetailResponse> GetStaffsDetail(int id);
-        Task<int> DeleteStaffs(int id);
+        Task<PagingListModel<StaffsResponse>> GetListStaff(PagingDTO pagingDto);
+        Task<int> CreateStaff(CreateStaffRequest request);
+        Task<int> UpdateStaff(UpdateStaffsRequest request);
+        Task<StaffsDetailResponse> GetStaffDetail(int id);
+        Task<int> DeleteStaff(int id);
 
     }
 }
