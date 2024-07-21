@@ -301,7 +301,9 @@ const DrinkManager = () => {
                     />
                     <Modal
                         title={
-                            editingDrink ? "Edit Drink Size" : "Add Drink Size"
+                            editingDrinkSize
+                                ? "Edit Drink Size"
+                                : "Add Drink Size"
                         }
                         visible={isModalSizeVisible}
                         footer={null}
@@ -319,7 +321,7 @@ const DrinkManager = () => {
             ) : (
                 <>
                     <Button type="primary" onClick={handleAdd} className="mb-4">
-                        Add Drink
+                        Add DrinK
                     </Button>
                     <Table
                         columns={columns}
