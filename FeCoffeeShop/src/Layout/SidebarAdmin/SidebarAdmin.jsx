@@ -53,9 +53,9 @@ const SidebarAdmin = () => {
     };
     const adminLinks = [
         { path: "/manager-staffs", label: "MANAGER STAFF" },
+        { path: "/manager-customers", label: "MANAGER CUSTOMER" },
         { path: "/manager-drinks", label: "MANAGER DRINKS" },
-        { path: "/manager-branches", label: "MANAGER CUSTOMER" },
-        { path: "/manager-customers", label: "MANAGER BRANCHES" },
+        { path: "/manager-branches", label: "MANAGER BRANCHES" },
     ];
     const staffLinks = [
         { path: "/staff-order", label: "STAFF ORDER" },

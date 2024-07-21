@@ -19,6 +19,9 @@ const createCustomers = ({ formData }) => {
 const updateCustomers = ({ formData }) => {
     return instance.put(`/Customers`, formData, { headers });
 };
+const updateAccountCustomers = ({ formData }) => {
+    return instance.put(`/Customers/UpdateAccount`, formData, { headers });
+};
 const deleteCustomers = ({ customerId }) => {
     return instance.delete(`/Customers/${customerId}`, { headers });
 };
@@ -29,4 +32,5 @@ export {
     getCustomersDetaiil,
     updateCustomers,
     deleteCustomers,
+    updateAccountCustomers,
 };
