@@ -2,14 +2,14 @@ import useNotification from "@/hooks/NotiHook";
 import { Button, Modal, Popconfirm, Space, Table } from "antd";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import BrachesFrom from "../../../Components/FormManager/BrachesFrom";
+import BrachesFrom from "@//Components/FormManager/BrachesFrom";
 import {
     createCustomers,
     deleteCustomers,
     getAllCustomers,
     updateCustomers,
-} from "../../../service/Customer";
-import CustomerForm from "../../../Components/FormManager/CustomerForm";
+} from "@//service/Customer";
+import CustomerForm from "@//Components/FormManager/CustomerForm";
 
 const AdminCustomers = () => {
     const [customersData, setCustmerData] = useState([]);

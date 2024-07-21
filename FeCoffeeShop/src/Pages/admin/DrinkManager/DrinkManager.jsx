@@ -4,8 +4,8 @@ import React, { useEffect, useState } from "react";
 import { BiEdit } from "react-icons/bi";
 import { BsBack } from "react-icons/bs";
 import { MdDelete } from "react-icons/md";
-import DrinkForm from "../../../Components/FormManager/DrinkForm";
-import { deleteBranches } from "../../../service/branchs";
+import DrinkForm from "@//Components/FormManager/DrinkForm";
+import { deleteBranches } from "@//service/branchs";
 import {
     createDrink,
     createDrinkSize,
@@ -14,9 +14,9 @@ import {
     getDrinkById,
     updateDrink,
     updateDrinkSize,
-} from "../../../service/drinks";
-import { formatVND } from "../../../utils/resuableFuc";
-import DrinksSizeForm from "../../../Components/FormManager/DrinksSizeForm";
+} from "@//service/drinks";
+import { formatVND } from "@//utils/resuableFuc";
+import DrinksSizeForm from "@//Components/FormManager/DrinksSizeForm";
 
 const DrinkManager = () => {
     const [drinksData, setDrinksData] = useState([]);

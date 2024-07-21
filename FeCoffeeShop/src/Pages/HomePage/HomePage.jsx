@@ -2,7 +2,7 @@ import React, { useEffect, Suspense, lazy, useState } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import Spiner from "@/Components/Spiner/Spiner";
-import UploadImage from "../../Components/UploadImage/UploadImage";
+import UploadImage from "@/Components/UploadImage/UploadImage";
 const Banner = lazy(() => import("@/Components/Banner/Banner"));
 const Introduce = lazy(() => import("@/Components/Introduce/Introduce"));
 const Services = lazy(() => import("@/Components/Services/Services"));

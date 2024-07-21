@@ -2,13 +2,13 @@ import useNotification from "@/hooks/NotiHook";
 import { Button, Modal, Popconfirm, Space, Table } from "antd";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import BrachesFrom from "../../../Components/FormManager/BrachesFrom";
+import BrachesFrom from "@//Components/FormManager/BrachesFrom";
 import {
     createBranches,
     deleteBranches,
     getAllBranches,
     updateBranches,
-} from "../../../service/branchs";
+} from "@//service/branchs";
 
 const AdminBranches = () => {
     const [branch, setBranch] = useState([]);

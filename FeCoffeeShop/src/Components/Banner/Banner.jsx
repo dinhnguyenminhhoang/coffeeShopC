@@ -1,6 +1,6 @@
 import React from "react";
-import BannerImg from "../../assets/coffee-white.png";
-import BgTexture from "../../assets/website/coffee-texture.jpg";
+import BannerImg from "@/assets/coffee-white.png";
+import BgTexture from "@/assets/website/coffee-texture.jpg";
 import { GrSecure } from "react-icons/gr";
 import { IoFastFood } from "react-icons/io5";
 import { GiFoodTruck } from "react-icons/gi";

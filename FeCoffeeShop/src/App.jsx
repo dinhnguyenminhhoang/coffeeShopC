@@ -12,25 +12,25 @@ import DrinkManager from "./Pages/admin/DrinkManager/DrinkManager";
 import StaffPage from "./Pages/admin/StaffPage/StaffPage";
 import VouchersPage from "./Pages/admin/VouchersPage/VouchersPage";
 import Login from "./Pages/Auth/Login/Login";
-import Register from "./Pages/Auth/Register/Register";
-import Branches from "./Pages/Branches/Branches";
-import CartPage from "./Pages/CartPage/CartPage";
-import DetailProduct from "./Pages/DetailProduct/DetailProduct";
-import DrinkMenuDetailsPage from "./Pages/DrinkMenuDetailsPage/DrinkMenuDetailsPage";
-import DrinkRatingsPage from "./Pages/DrinkRatings/DrinkRatings";
 import HomePage from "./Pages/HomePage/HomePage";
-import IngredientsPage from "./Pages/IngredientsPage/IngredientsPage";
-import IngredientsStocksPage from "./Pages/IngredientsStocksPage/IngredientsStocksPage";
+import IngredientsStocksPage from "./Pages/admin/IngredientsStocksPage/IngredientsStocksPage";
 import OrderDrinkDetailsPage from "./Pages/OrderDrinkDetails/OrderDrinkDetails";
 import PageNotFound from "./Pages/PageNotFound/PageNotFound";
-import PaymentDetailsPage from "./Pages/PaymentDetails/PaymentDetails";
-import RecipeDetailsPage from "./Pages/RecipeDetails/RecipeDetails";
-import RecipesPage from "./Pages/RecipesPage/RecipesPage";
-import ServiceRatingsPage from "./Pages/ServiceRatingsPage/ServiceRatingsPage";
 import OrderDetailsPage from "./Pages/staff/OrderDetailsPage/OrderDetailsPage";
 import OrdersPage from "./Pages/staff/OrdersPage/OrdersPage";
 import AdminCustomers from "./Pages/admin/AdminCustomers/AdminCustomers";
-
+import DrinkRatingsPage from "./Pages/staff/DrinkRatings/DrinkRatings";
+import DrinkMenuDetailsPage from "./Pages/DrinkMenuDetailsPage/DrinkMenuDetailsPage";
+import DetailProduct from "./Pages/DetailProduct/DetailProduct";
+import CartPage from "./Pages/CartPage/CartPage";
+import Branches from "./Pages/Branches/Branches";
+import Register from "./Pages/Auth/Register/Register";
+import IngredientsPage from "./Pages/admin/IngredientsPage/IngredientsPage";
+import PaymentDetailsPage from "./Pages/admin/PaymentDetails/PaymentDetails";
+import RecipeDetailsPage from "./Pages/staff/RecipeDetails/RecipeDetails";
+import RecipesPage from "./Pages/staff/RecipesPage/RecipesPage";
+import ServiceRatingsPage from "./Pages/staff/ServiceRatingsPage/ServiceRatingsPage";
+import Profille from "./Pages/Profille/Profille";
 const App = () => {
     const router = createBrowserRouter(
         createRoutesFromElements(
@@ -41,7 +41,7 @@ const App = () => {
                 <Route element={<DefautLayout />}>
                     <Route path="/product/:id" element={<DetailProduct />} />
                     <Route index element={<HomePage />} />
-                    <Route path="/cart" element={<CartPage />} />
+                    <Route path="/carts" element={<CartPage />} />
                     <Route path="/branches" element={<Branches />} />
                     {/* order */}
                     <Route path="/orders" element={<OrdersPage />} />
@@ -86,11 +86,12 @@ const App = () => {
                     <Route
                         path="/manager-ingredients"
                         element={<IngredientsPage />}
-                    />{" "}
+                    />
                     <Route
                         path="/manager-ingredients-stocks"
                         element={<IngredientsStocksPage />}
                     />
+                    <Route path="/profile/:id" element={<Profille />} />
                 </Route>
                 <Route element={<AdminLayout />}>
                     <Route path="/manager-staffs" element={<StaffPage />} />

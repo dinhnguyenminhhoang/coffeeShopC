@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import { Button, Select, Radio, Tag, Row, Col } from "antd";
 import { ShoppingCartOutlined } from "@ant-design/icons";
 import { useParams } from "react-router-dom";
-import { getDrinkById } from "../../service/drinks";
+import { getDrinkById } from "@/service/drinks";
 import noImage from "@/assets/website/noimg.jpg";
-import { formatVND, isValidImageUrl } from "../../utils/resuableFuc";
-import Spiner from "../../Components/Spiner/Spiner";
+import { formatVND, isValidImageUrl } from "@/utils/resuableFuc";
+import Spiner from "@/Components/Spiner/Spiner";
 
 const { Option } = Select;
 
@@ -42,11 +42,7 @@ const DetailProduct = () => {
                         <Col xs={24} md={12}>
                             <div className="relative">
                                 <img
-                                    src={
-                                        isValidImageUrl(data.Image)
-                                            ? data.Image
-                                            : noImage
-                                    }
+                                    src={data.Image}
                                     alt="Product"
                                     className="w-full max-h-[600px] rounded-md"
                                 />

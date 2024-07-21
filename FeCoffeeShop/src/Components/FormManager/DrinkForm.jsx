@@ -1,7 +1,7 @@
 import { Button, Form, Input, InputNumber, message } from "antd";
 import React, { useEffect, useState } from "react";
 import UploadImage from "../UploadImage/UploadImage";
-import { getDrinkById } from "../../service/drinks";
+import { getDrinkById } from "@/service/drinks";
 
 const DrinkForm = ({ initialValues, onSave, onCancel }) => {
     const [form] = Form.useForm();

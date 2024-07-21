@@ -1,6 +1,6 @@
 import { Button, Form, Input } from "antd";
 import React, { useEffect } from "react";
-import { getCustomersDetaiil } from "../../service/Customer";
+import { getCustomersDetaiil } from "@/service/Customer";
 
 const CustomerForm = ({ initialValues, onSave, onCancel }) => {
     const [form] = Form.useForm();

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Table, Button, Modal, Space } from "antd";
 import axios from "axios";
-import IngredientForm from "../../Components/FormManager/IngredientForm";
+import IngredientForm from "@/Components/FormManager/IngredientForm";
 const mockIngredients = [
     {
         id: 1,
