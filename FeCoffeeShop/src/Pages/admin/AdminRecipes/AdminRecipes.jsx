@@ -1,67 +1,66 @@
 import React, { useState, useEffect } from "react";
 import { Table, Button, Modal, Space } from "antd";
 import axios from "axios";
-import VoucherForm from "@/Components/FormManager/VoucherForm";
-const mockVouchers = [
+import RecipeForm from "@/Components/FormManager/RecipeForm";
+const mockRecipes = [
     {
         id: 1,
-        name: "Summer Sale Voucher",
-        description: "Get 20% off on all summer products.",
+        name: "Recipe 1",
+        description: "This is the description for Recipe 1",
+        creationDate: "2023-01-01",
     },
     {
         id: 2,
-        name: "Holiday Special Voucher",
-        description: "Enjoy a discount of $50 on holiday bookings.",
+        name: "Recipe 2",
+        description: "This is the description for Recipe 2",
+        creationDate: "2023-02-01",
     },
     {
         id: 3,
-        name: "Birthday Gift Voucher",
-        description: "Receive a free gift on your birthday.",
-    },
-    {
-        id: 4,
-        name: "New User Welcome Voucher",
-        description: "New users get a $10 discount on their first purchase.",
+        name: "Recipe 3",
+        description: "This is the description for Recipe 3",
+        creationDate: "2023-03-01",
     },
 ];
-const VouchersPage = () => {
-    const [vouchers, setVouchers] = useState([]);
+
+const AdminRecipes = () => {
+    const [recipes, setRecipes] = useState([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
-    const [editingVoucher, setEditingVoucher] = useState(null);
+    const [editingRecipe, setEditingRecipe] = useState(null);
 
     useEffect(() => {
-        fetchVouchers();
+        fetchRecipes();
     }, []);
 
-    const fetchVouchers = async () => {
-        const response = await axios.get("/api/vouchers");
+    const fetchRecipes = async () => {
+        const response = await axios.get("/api/recipes");
         if (response.data.id) {
-            setVouchers(response.data);
-        } else setVouchers(mockVouchers);
+            setRecipes(response.data);
+        } else setRecipes(mockRecipes);
     };
 
     const handleAdd = () => {
-        setEditingVoucher(null);
+        setEditingRecipe(null);
         setIsModalVisible(true);
     };
 
-    const handleEdit = (voucher) => {
-        setEditingVoucher(voucher);
+    const handleEdit = (recipe) => {
+        setEditingRecipe(recipe);
         setIsModalVisible(true);
     };
 
-    const handleDelete = async (voucherId) => {
-        await axios.delete(`/api/vouchers/${voucherId}`);
-        fetchVouchers();
+    const handleDelete = async (recipeId) => {
+        await axios.delete(`/api/recipes/${recipeId}`);
+        fetchRecipes();
     };
 
     const handleSave = async (values) => {
-        if (editingVoucher) {
-            await axios.put(`/api/vouchers/${editingVoucher.id}`, values);
+        if (editingRecipe) {
+            await axios.put(`/api/recipes/${editingRecipe.id}`, values);
         } else {
-            await axios.post("/api/vouchers", values);
+            await axios.post("/api/recipes", values);
         }
-        fetchVouchers();
+        fetchRecipes();
         setIsModalVisible(false);
     };
 
@@ -69,6 +68,11 @@ const VouchersPage = () => {
         { title: "ID", dataIndex: "id", key: "id" },
         { title: "Name", dataIndex: "name", key: "name" },
         { title: "Description", dataIndex: "description", key: "description" },
+        {
+            title: "Creation Date",
+            dataIndex: "creationDate",
+            key: "creationDate",
+        },
         {
             title: "Actions",
             key: "actions",
@@ -86,17 +90,17 @@ const VouchersPage = () => {
     return (
         <div className="container mx-auto p-6">
             <Button type="primary" onClick={handleAdd} className="mb-4">
-                Add Voucher
+                Add Recipe
             </Button>
-            <Table columns={columns} dataSource={vouchers} rowKey="id" />
+            <Table columns={columns} dataSource={recipes} rowKey="id" />
             <Modal
-                title={editingVoucher ? "Edit Voucher" : "Add Voucher"}
+                title={editingRecipe ? "Edit Recipe" : "Add Recipe"}
                 visible={isModalVisible}
                 footer={null}
                 onCancel={() => setIsModalVisible(false)}
             >
-                <VoucherForm
-                    initialValues={editingVoucher}
+                <RecipeForm
+                    initialValues={editingRecipe}
                     onSave={handleSave}
                     onCancel={() => setIsModalVisible(false)}
                 />
@@ -105,4 +109,4 @@ const VouchersPage = () => {
     );
 };
 
-export default VouchersPage;
+export default AdminRecipes;

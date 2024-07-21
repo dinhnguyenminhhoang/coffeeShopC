@@ -52,18 +52,6 @@ const DrinksSizeForm = ({ initialValues, onSave, onCancel }) => {
                 >
                     <Input type="number" />
                 </Form.Item>
-                <Form.Item
-                    name="SizeMultiplier "
-                    label="SizeMultiplier "
-                    rules={[
-                        {
-                            required: true,
-                            message: "Please input the SizeMultiplier !",
-                        },
-                    ]}
-                >
-                    <Input />
-                </Form.Item>
                 <Form.Item>
                     <Button type="primary" htmlType="submit">
                         Save

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Button, Select, Radio, Tag, Row, Col } from "antd";
 import { ShoppingCartOutlined } from "@ant-design/icons";
 import { useParams } from "react-router-dom";
-import { getDrinkById } from "@/service/drinks";
+import { getDrinkById, getDrink } from "@/service/drinks";
 import noImage from "@/assets/website/noimg.jpg";
 import { formatVND, isValidImageUrl } from "@/utils/resuableFuc";
 import Spiner from "@/Components/Spiner/Spiner";
@@ -11,7 +11,8 @@ const { Option } = Select;
 
 const DetailProduct = () => {
     const [data, setData] = useState();
-    const [selectedSize, setSelectedSize] = useState(""); // State to store selected size
+    const [selectedSize, setSelectedSize] = useState("");
+    const [DrinkCateData, setDrinkCateData] = useState();
     const param = useParams();
 
     useEffect(() => {
@@ -19,7 +20,6 @@ const DetailProduct = () => {
             const response = await getDrinkById({ drinkId: param.id });
             if (response?.data?.Success) {
                 setData(response.data?.ResultData);
-                // Set default selected size if available
                 if (response.data?.ResultData?.DrinksSizes.length > 0) {
                     setSelectedSize(
                         response.data?.ResultData?.DrinksSizes[0].Price
@@ -27,7 +27,16 @@ const DetailProduct = () => {
                 }
             }
         };
+        const fetchDataCate = async () => {
+            const response = await getDrink({
+                listParam: { PageIndex: 1, PageSize: 6 },
+            });
+            if (response?.data?.Success) {
+                setDrinkCateData(response.data?.ResultData?.List);
+            }
+        };
         fetchData();
+        fetchDataCate();
     }, [param]);
 
     const handleSizeChange = (e) => {
@@ -119,37 +128,23 @@ const DetailProduct = () => {
                             Sản phẩm liên quan
                         </h2>
                         <Row gutter={[16, 16]}>
-                            {[
-                                {
-                                    name: "CloudFee Hạnh Nhân Nướng",
-                                    price: "49.000 đ",
-                                },
-                                {
-                                    name: "Cold Brew Sữa Tươi",
-                                    price: "49.000 đ",
-                                },
-                                { name: "Espresso Đá", price: "49.000 đ" },
-                                { name: "Cà Phê Đen Đá", price: "29.000 đ" },
-                                { name: "Bạc Sỉu", price: "29.000 đ" },
-                                {
-                                    name: "Cà Phê Sữa Nóng",
-                                    price: "39.000 đ",
-                                },
-                            ].map((item, index) => (
-                                <Col key={index} xs={12} sm={8} lg={4}>
-                                    <div className="text-center">
-                                        <img
-                                            src={`https://i.pinimg.com/564x/43/60/51/436051daa1380ba78a6eb41f8b45ac9b.jpg`}
-                                            alt={item.name}
-                                            className="w-full rounded-md mb-2"
-                                        />
-                                        <p>{item.name}</p>
-                                        <p className="text-red-500">
-                                            {item.price}
-                                        </p>
-                                    </div>
-                                </Col>
-                            ))}
+                            {DrinkCateData?.length
+                                ? DrinkCateData.map((item, index) => (
+                                      <Col key={index} xs={12} sm={8} lg={4}>
+                                          <div className="text-center">
+                                              <img
+                                                  src={item.Image}
+                                                  alt={item.name}
+                                                  className="w-full rounded-md mb-2 h-[240px] border shadow-md"
+                                              />
+                                              <p>{item.name}</p>
+                                              <p className="text-red-500">
+                                                  {item.Name}
+                                              </p>
+                                          </div>
+                                      </Col>
+                                  ))
+                                : null}
                         </Row>
                     </div>
                 </div>

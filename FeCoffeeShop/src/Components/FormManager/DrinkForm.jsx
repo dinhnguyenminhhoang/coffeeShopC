@@ -115,25 +115,6 @@ const DrinkForm = ({ initialValues, onSave, onCancel }) => {
                                     style={{ flex: 1, marginRight: "8px" }}
                                 >
                                     <Input type="number" />
-                                </Form.Item>{" "}
-                                <Form.Item
-                                    {...field}
-                                    name={[field.name, "SizeMultiplier"]}
-                                    fieldKey={[
-                                        field.fieldKey,
-                                        "SizeMultiplier",
-                                    ]}
-                                    label="SizeMultiplier"
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message:
-                                                "Please input the SizeMultiplier!",
-                                        },
-                                    ]}
-                                    style={{ flex: 1, marginRight: "8px" }}
-                                >
-                                    <Input />
                                 </Form.Item>
                                 <div>
                                     <h1 className="mb-2 ml-2">Xóa trường</h1>

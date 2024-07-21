@@ -39,7 +39,7 @@ const mockOrders = [
         status: "Processing",
     },
 ];
-const OrdersPage = () => {
+const ManagerOrder = () => {
     const [orders, setOrders] = useState([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [editingOrder, setEditingOrder] = useState(null);
@@ -122,4 +122,4 @@ const OrdersPage = () => {
     );
 };
 
-export default OrdersPage;
+export default ManagerOrder;

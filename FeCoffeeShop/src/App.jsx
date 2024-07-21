@@ -8,29 +8,29 @@ import {
 import AdminLayout from "./Layout/AdminLayout";
 import DefautLayout from "./Layout/DefautLayout";
 import AdminBranches from "./Pages/admin/AdminBranches/AdminBranches";
+import AdminCustomers from "./Pages/admin/AdminCustomers/AdminCustomers";
+import AdminRecipes from "./Pages/admin/AdminRecipes/AdminRecipes";
+import AdminVouchers from "./Pages/admin/AdminVouchers/AdminVouchers";
 import DrinkManager from "./Pages/admin/DrinkManager/DrinkManager";
-import StaffPage from "./Pages/admin/StaffPage/StaffPage";
-import VouchersPage from "./Pages/admin/VouchersPage/VouchersPage";
-import Login from "./Pages/Auth/Login/Login";
-import HomePage from "./Pages/HomePage/HomePage";
+import IngredientsPage from "./Pages/admin/IngredientsPage/IngredientsPage";
 import IngredientsStocksPage from "./Pages/admin/IngredientsStocksPage/IngredientsStocksPage";
+import PaymentDetailsPage from "./Pages/admin/PaymentDetails/PaymentDetails";
+import StaffPage from "./Pages/admin/StaffPage/StaffPage";
+import Login from "./Pages/Auth/Login/Login";
+import Register from "./Pages/Auth/Register/Register";
+import Branches from "./Pages/Branches/Branches";
+import CartPage from "./Pages/CartPage/CartPage";
+import DetailProduct from "./Pages/DetailProduct/DetailProduct";
+import DrinkMenuDetailsPage from "./Pages/DrinkMenuDetailsPage/DrinkMenuDetailsPage";
+import HomePage from "./Pages/HomePage/HomePage";
 import OrderDrinkDetailsPage from "./Pages/OrderDrinkDetails/OrderDrinkDetails";
 import PageNotFound from "./Pages/PageNotFound/PageNotFound";
-import OrderDetailsPage from "./Pages/staff/OrderDetailsPage/OrderDetailsPage";
-import OrdersPage from "./Pages/staff/OrdersPage/OrdersPage";
-import AdminCustomers from "./Pages/admin/AdminCustomers/AdminCustomers";
-import DrinkRatingsPage from "./Pages/staff/DrinkRatings/DrinkRatings";
-import DrinkMenuDetailsPage from "./Pages/DrinkMenuDetailsPage/DrinkMenuDetailsPage";
-import DetailProduct from "./Pages/DetailProduct/DetailProduct";
-import CartPage from "./Pages/CartPage/CartPage";
-import Branches from "./Pages/Branches/Branches";
-import Register from "./Pages/Auth/Register/Register";
-import IngredientsPage from "./Pages/admin/IngredientsPage/IngredientsPage";
-import PaymentDetailsPage from "./Pages/admin/PaymentDetails/PaymentDetails";
-import RecipeDetailsPage from "./Pages/staff/RecipeDetails/RecipeDetails";
-import RecipesPage from "./Pages/staff/RecipesPage/RecipesPage";
-import ServiceRatingsPage from "./Pages/staff/ServiceRatingsPage/ServiceRatingsPage";
 import Profille from "./Pages/Profille/Profille";
+import DrinkRatingsPage from "./Pages/staff/DrinkRatings/DrinkRatings";
+import ManagerBill from "./Pages/staff/ManagerBill/ManagerBill";
+import ManagerOrder from "./Pages/staff/ManagerOrder/ManagerOrder";
+import OrderDetailsPage from "./Pages/staff/OrderDetailsPage/OrderDetailsPage";
+import ServiceRatingsPage from "./Pages/staff/ServiceRatingsPage/ServiceRatingsPage";
 const App = () => {
     const router = createBrowserRouter(
         createRoutesFromElements(
@@ -44,7 +44,6 @@ const App = () => {
                     <Route path="/carts" element={<CartPage />} />
                     <Route path="/branches" element={<Branches />} />
                     {/* order */}
-                    <Route path="/orders" element={<OrdersPage />} />
                     <Route
                         path="/order-detail/:id"
                         element={<OrderDetailsPage />}
@@ -66,23 +65,12 @@ const App = () => {
                         path="/payment-detail"
                         element={<PaymentDetailsPage />}
                     />
-                    {/* Recipe */}
-                    <Route
-                        path="/recipe-detail"
-                        element={<RecipeDetailsPage />}
-                    />
-                    <Route path="/recipe" element={<RecipesPage />} />
                     {/* service */}
                     <Route
                         path="/service-rating"
                         element={<ServiceRatingsPage />}
                     />
                     {/* voucher */}
-                    <Route
-                        path="/manager-vouchers"
-                        element={<VouchersPage />}
-                    />
-                    {/* IngredientsPage */}
                     <Route
                         path="/manager-ingredients"
                         element={<IngredientsPage />}
@@ -103,6 +91,13 @@ const App = () => {
                     <Route
                         path="/manager-customers"
                         element={<AdminCustomers />}
+                    />
+                    <Route path="/manager-bills" element={<ManagerBill />} />
+                    <Route path="/manager-orders" element={<ManagerOrder />} />
+                    <Route path="/manager-recipes" element={<AdminRecipes />} />
+                    <Route
+                        path="/manager-vouchers"
+                        element={<AdminVouchers />}
                     />
                 </Route>
                 <Route path="*" element={<PageNotFound />} />
