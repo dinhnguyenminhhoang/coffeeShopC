@@ -8,11 +8,11 @@ namespace CoffeManagement.Controllers
 {
     [Route("Customers")]
     [ApiController]
-    public class CustomersController : BaseController
+    public class CustomerController : BaseController
     {
-        private readonly ICustomersService _customersService;
+        private readonly ICustomerService _customersService;
 
-        public CustomersController(ICustomersService customersService)
+        public CustomerController(ICustomerService customersService)
         {
             _customersService = customersService;
         }
@@ -53,7 +53,7 @@ namespace CoffeManagement.Controllers
         {
             var result = await _customersService.UpdateCustomers(request);
 
-            return Ok(RenderSuccessResponse(result));
+            return Ok(RenderSuccessResponse(data: result, message: "SUCCESS"));
         }
 
         [HttpDelete("{id:int}")]

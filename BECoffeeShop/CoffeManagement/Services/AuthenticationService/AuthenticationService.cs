@@ -29,16 +29,16 @@ namespace CoffeManagement.Services.AccountService
             _staffAccessTokenExpired = configuration.GetValue<string>("Jwt:CustomerAccessTokenExpired") ?? string.Empty;
         }
 
-        public async Task<LoginResponse> CustomerLogin(LoginRequest loginRequest)
+        public async Task<LoginResponse> CustomerLogin(LoginRequest request)
         {
             // Check login info
 
-            var account = await _accountRepository.GetAccountCustomerByUsername(loginRequest.Username);
+            var account = await _accountRepository.GetAccountCustomerByUsername(request.Username);
 
             if (account == null)
                 throw new UnauthorizedException("Login info incorrect");
 
-            if (!BCrypt.Net.BCrypt.Verify(loginRequest.Password, account.HashedPassword))
+            if (!BCrypt.Net.BCrypt.Verify(request.Password, account.HashedPassword))
                 throw new UnauthorizedException("Login info incorrect!");
 
             // Generate access token
@@ -56,26 +56,26 @@ namespace CoffeManagement.Services.AccountService
             return new LoginResponse() { AccessToken = accessToken };
         }
 
-        public async Task<int> CustomerRegister(CustomerRegisterRequest customerRegisterRequest)
+        public async Task<int> CustomerRegister(CustomerRegisterRequest request)
         {
             // Check username or phone number already used?
-            var accountExits = await _accountRepository.GetAccountCustomerByUsername(customerRegisterRequest.Username);
+            var accountExits = await _accountRepository.GetAccountCustomerByUsername(request.Username);
             if (accountExits != null) throw new ConflictException("This username already used, please use another username.");
 
-            var customerExits = await _customerRepository.GetByPhone(customerRegisterRequest.Phone);
+            var customerExits = await _customerRepository.GetByPhone(request.Phone);
             if (customerExits != null) throw new ConflictException("This phone number already used, please use another phone number.");
 
             // Create new customer with account
             var account = await _accountRepository.Add(new()
             {
-                Username = customerRegisterRequest.Username,
-                HashedPassword = BCrypt.Net.BCrypt.HashPassword(customerRegisterRequest.Password),
+                Username = request.Username,
+                HashedPassword = BCrypt.Net.BCrypt.HashPassword(request.Password),
                 Customers = new Customer[]
                 {
                     new()
                     {
-                        Phone = customerRegisterRequest.Phone,
-                        Address = customerRegisterRequest.Address,
+                        Phone = request.Phone.Trim(),
+                        Address = request.Address.Trim(),
                     }
                 }
             });
@@ -83,16 +83,16 @@ namespace CoffeManagement.Services.AccountService
             return account.Customers.FirstOrDefault()?.Id ?? 0;
         }
 
-        public async Task<LoginResponse> StaffLogin(LoginRequest loginRequest)
+        public async Task<LoginResponse> StaffLogin(LoginRequest request)
         {
             // Check login info
 
-            var account = await _accountRepository.GetAccountStaffByUsername(loginRequest.Username);
+            var account = await _accountRepository.GetAccountStaffByUsername(request.Username);
 
             if (account == null)
                 throw new UnauthorizedException("Login info incorrect!");
 
-            if (!BCrypt.Net.BCrypt.Verify(loginRequest.Password, account.HashedPassword))
+            if (!BCrypt.Net.BCrypt.Verify(request.Password, account.HashedPassword))
                 throw new UnauthorizedException("Login info incorrect!");
 
             // Generate access token

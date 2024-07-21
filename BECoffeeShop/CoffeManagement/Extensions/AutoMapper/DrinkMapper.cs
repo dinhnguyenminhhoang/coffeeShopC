@@ -6,15 +6,15 @@ namespace CoffeManagement.Extensions.AutoMapper
     {
         private void LoadDrinkMapperProfile()
         {
-            CreateMap<CoffeManagement.Models.Drink, CoffeManagement.DTO.Drink.DrinkResponse>();
-            CreateMap<CoffeManagement.Models.Drink, CoffeManagement.DTO.Drink.DrinkDetailResponse>();
-            CreateMap<CoffeManagement.Common.Pagging.PagingListModel<CoffeManagement.Models.Drink>, CoffeManagement.Common.Pagging.PagingListModel<CoffeManagement.DTO.Drink.DrinkResponse>>();
-            CreateMap<CoffeManagement.DTO.Drink.CreateDrinkRequest, CoffeManagement.Models.Drink>();
-            CreateMap<CoffeManagement.DTO.Drink.UpdateDrinkRequest, CoffeManagement.Models.Drink>();
-            CreateMap<CoffeManagement.Models.DrinkSize, CoffeManagement.DTO.Drink.DrinkSize>();
-            CreateMap<CoffeManagement.DTO.Drink.DrinkSizeCreate, CoffeManagement.Models.DrinkSize>();
-            CreateMap<CoffeManagement.DTO.Drink.CreateDrinkSizeRequest, CoffeManagement.Models.DrinkSize>();
-            CreateMap<CoffeManagement.DTO.Drink.UpdateDrinkSizeRequest, CoffeManagement.Models.DrinkSize>();
+            CreateMap<Models.Drink, DTO.Drink.DrinkResponse>();
+            CreateMap<Models.Drink, DTO.Drink.DrinkDetailResponse>();
+            CreateMap<Common.Pagging.PagingListModel<Models.Drink>, Common.Pagging.PagingListModel<DTO.Drink.DrinkResponse>>();
+            CreateMap<DTO.Drink.CreateDrinkRequest, Models.Drink>();
+            CreateMap<DTO.Drink.UpdateDrinkRequest, Models.Drink>();
+            CreateMap<Models.DrinkSize, DTO.Drink.DrinkSize>();
+            CreateMap<DTO.Drink.DrinkSizeCreate, Models.DrinkSize>();
+            CreateMap<DTO.Drink.CreateDrinkSizeRequest, Models.DrinkSize>();
+            CreateMap<DTO.Drink.UpdateDrinkSizeRequest, Models.DrinkSize>();
         }
     }
 }

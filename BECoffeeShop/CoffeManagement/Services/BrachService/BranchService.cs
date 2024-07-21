@@ -45,6 +45,7 @@ namespace CoffeManagement.Services.BrachService
             if (existedBranch == null || existedBranch.IsDeleted == true) throw new NotFoundException("Not found branches.");
 
             _mapper.Map(request, existedBranch);
+            existedBranch.UpdatedAt = DateTime.Now;
             await _branchRepository.Update(existedBranch);
 
             return existedBranch.Id;
@@ -66,6 +67,7 @@ namespace CoffeManagement.Services.BrachService
             if (existedBranch == null || existedBranch.IsDeleted == true) throw new NotFoundException("Not found branch.");
 
             existedBranch.IsDeleted = true;
+            existedBranch.UpdatedAt = DateTime.Now;
             await _branchRepository.Update(existedBranch);
 
             return existedBranch.Id;

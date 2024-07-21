@@ -1,4 +1,7 @@
-﻿namespace CoffeManagement.DTO.Customers
+﻿using CoffeManagement.DTO.Account;
+using CoffeManagement.Models;
+
+namespace CoffeManagement.DTO.Customers
 {
     public class CustomersDetailResponse
     {
@@ -10,5 +13,15 @@
         public string Address { get; set; }
 
         public int AccountId { get; set; }
+
+        public bool? IsActivated { get; set; }
+
+        public DateTime? CreatedAt { get; set; }
+
+        public DateTime? UpdatedAt { get; set; }
+        
+        // -------------------------------
+
+        public AccountResponse Account { get; set; }
     }
 }

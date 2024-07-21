@@ -4,8 +4,8 @@ namespace CoffeManagement.Services.AccountService
 {
     public interface IAuthenticationService
     {
-        Task<LoginResponse> CustomerLogin(LoginRequest loginRequest);
-        Task<int> CustomerRegister(CustomerRegisterRequest customerRegisterRequest);
-        Task<LoginResponse> StaffLogin(LoginRequest loginRequest);
+        Task<LoginResponse> CustomerLogin(LoginRequest request);
+        Task<int> CustomerRegister(CustomerRegisterRequest request);
+        Task<LoginResponse> StaffLogin(LoginRequest request);
     }
 }

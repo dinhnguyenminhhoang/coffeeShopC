@@ -6,11 +6,11 @@ namespace CoffeManagement.Extensions.AutoMapper
     {
         private void LoadStaffMapperProfile()
         {
-            CreateMap<CoffeManagement.Models.Staff, CoffeManagement.DTO.Staffs.StaffsResponse>();
-            CreateMap<CoffeManagement.Models.Staff, CoffeManagement.DTO.Staffs.StaffsDetailResponse>();
-            CreateMap<CoffeManagement.Common.Pagging.PagingListModel<CoffeManagement.Models.Staff>, CoffeManagement.Common.Pagging.PagingListModel<CoffeManagement.DTO.Staffs.StaffsResponse>>();
-            CreateMap<CoffeManagement.DTO.Staffs.CreateStaffRequest, CoffeManagement.Models.Staff>();
-            CreateMap<CoffeManagement.DTO.Staffs.UpdateStaffsRequest, CoffeManagement.Models.Staff>();
+            CreateMap<Models.Staff, DTO.Staffs.StaffsResponse>();
+            CreateMap<Models.Staff, DTO.Staffs.StaffsDetailResponse>();
+            CreateMap<Common.Pagging.PagingListModel<Models.Staff>, Common.Pagging.PagingListModel<DTO.Staffs.StaffsResponse>>();
+            CreateMap<DTO.Staffs.CreateStaffRequest, Models.Staff>();
+            CreateMap<DTO.Staffs.UpdateStaffsRequest, Models.Staff>();
         }
     }
 }

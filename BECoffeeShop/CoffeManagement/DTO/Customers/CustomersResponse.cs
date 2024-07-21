@@ -1,4 +1,6 @@
-﻿namespace CoffeManagement.DTO.Customers
+﻿using System.Text.Json.Serialization;
+
+namespace CoffeManagement.DTO.Customers
 {
     public class CustomersResponse
     {
@@ -10,7 +12,18 @@
 
         public string Address { get; set; }
 
+        [JsonIgnore]
         public int AccountId { get; set; }
+
+        public bool? IsActivated { get; set; }
+
+        public DateTime? CreatedAt { get; set; }
+
+        public DateTime? UpdatedAt { get; set; }
+
+        // ------------------------
+
+        public bool IsHaveAccount { get => AccountId > 0; }
 
     }
 }

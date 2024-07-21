@@ -1,4 +1,6 @@
-﻿namespace CoffeManagement.DTO.Customers
+﻿using CoffeManagement.DTO.Account;
+
+namespace CoffeManagement.DTO.Customers
 {
     public class CreateCustomerRequest
     {
@@ -7,5 +9,7 @@
         public string Phone {  get; set; }
 
         public string Address { get; set; }
+
+        public CreateAccountRequest? Account { get; set; }
     }
 }

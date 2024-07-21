@@ -10,6 +10,7 @@ using CoffeManagement.Repositories.DrinkRepo;
 using CoffeManagement.Repositories.StaffRepo;
 using CoffeManagement.Services.AccountService;
 using CoffeManagement.Services.BrachService;
+using CoffeManagement.Services.CustomersService;
 using CoffeManagement.Services.DrinkService;
 using CoffeManagement.Services.StaffService;
 using Microsoft.EntityFrameworkCore;
@@ -82,6 +83,7 @@ namespace CoffeManagement
             builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
             builder.Services.AddScoped<IDrinkService, DrinkService>();
             builder.Services.AddScoped<IBranchService, BranchService>();
+            builder.Services.AddScoped<ICustomerService, CustomerService>();
             builder.Services.AddScoped<IStaffService, StaffService>();
 
             var app = builder.Build();

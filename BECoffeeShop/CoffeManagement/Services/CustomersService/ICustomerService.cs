@@ -4,7 +4,7 @@ using CoffeManagement.DTO.Paging;
 
 namespace CoffeManagement.Services.CustomersService
 {
-    public interface ICustomersService
+    public interface ICustomerService
     {
         Task<PagingListModel<CustomersResponse>> GetListCustomers(PagingDTO pagingDto);
         Task<int> CreateCustomers(CreateCustomerRequest request);
