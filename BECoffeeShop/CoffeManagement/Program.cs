@@ -11,9 +11,11 @@ using CoffeManagement.Repositories.StaffRepo;
 using CoffeManagement.Services.AccountService;
 using CoffeManagement.Services.BrachService;
 using CoffeManagement.Services.DrinkService;
+using CoffeManagement.Services.PaymentStripeService;
 using CoffeManagement.Services.StaffService;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Stripe;
 
 namespace CoffeManagement
 {
@@ -83,6 +85,7 @@ namespace CoffeManagement
             builder.Services.AddScoped<IDrinkService, DrinkService>();
             builder.Services.AddScoped<IBranchService, BranchService>();
             builder.Services.AddScoped<IStaffService, StaffService>();
+            builder.Services.AddScoped<IPaymentStripeService, PaymentStripeService>();
 
             var app = builder.Build();
 
