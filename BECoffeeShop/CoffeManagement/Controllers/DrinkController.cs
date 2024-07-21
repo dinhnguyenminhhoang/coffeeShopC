@@ -41,7 +41,7 @@ namespace CoffeManagement.Controllers
         }
 
         [HttpPost]
-        [Authorize(Policy = nameof(AuthPolicy.POL_ADMIN))]
+        //[Authorize(Policy = nameof(AuthPolicy.POL_ADMIN))]
         [SwaggerOperation(Summary = "Create new Drinks")]
         public async Task<IActionResult> CreateDrinks(CreateDrinkRequest request)
         {
@@ -52,7 +52,7 @@ namespace CoffeManagement.Controllers
 
 
         [HttpPut]
-        [Authorize(Policy = nameof(AuthPolicy.POL_ADMIN))]
+        //[Authorize(Policy = nameof(AuthPolicy.POL_ADMIN))]
         [SwaggerOperation(Summary = "Update Drinks")]
         public async Task<IActionResult> GetUpdateDrinks([FromBody] UpdateDrinkRequest request)
         {
@@ -62,7 +62,7 @@ namespace CoffeManagement.Controllers
         }
 
         [HttpDelete("Size/{id:int}")]
-        [Authorize(Policy = nameof(AuthPolicy.POL_ADMIN))]
+        //[Authorize(Policy = nameof(AuthPolicy.POL_ADMIN))]
         [SwaggerOperation(Summary = "Delete Drinks_Size from Drinsk")]
         public async Task<IActionResult> DeleteDrinksSize([FromRoute] int id)
         {
@@ -72,7 +72,7 @@ namespace CoffeManagement.Controllers
         }
 
         [HttpPost("Size")]
-        [Authorize(Policy = nameof(AuthPolicy.POL_ADMIN))]
+        //[Authorize(Policy = nameof(AuthPolicy.POL_ADMIN))]
         [SwaggerOperation(Summary = "Add Drinks_Size to Drinsk")]
         public async Task<IActionResult> CreateDrinksSize([FromBody] CreateDrinkSizeRequest request)
         {
@@ -82,7 +82,7 @@ namespace CoffeManagement.Controllers
         }
 
         [HttpPut("Size")]
-        [Authorize(Policy = nameof(AuthPolicy.POL_ADMIN))]
+        //[Authorize(Policy = nameof(AuthPolicy.POL_ADMIN))]
         [SwaggerOperation(Summary = "Update Drinks_Size")]
         public async Task<IActionResult> UpdateDrinksSize([FromBody] UpdateDrinkSizeRequest request)
         {
