@@ -16,13 +16,27 @@ public partial class DBContext : DbContext
 
     public virtual DbSet<Account> Accounts { get; set; }
 
-    public virtual DbSet<Branch> Branchs { get; set; }
+    public virtual DbSet<Branch> Branches { get; set; }
+
+    public virtual DbSet<Category> Categories { get; set; }
 
     public virtual DbSet<Customer> Customers { get; set; }
 
-    public virtual DbSet<Drinks> Drinks { get; set; }
+    public virtual DbSet<Drink> Drinks { get; set; }
 
-    public virtual DbSet<DrinksSize> DrinksSizes { get; set; }
+    public virtual DbSet<DrinkSize> DrinkSizes { get; set; }
+
+    public virtual DbSet<Ingredient> Ingredients { get; set; }
+
+    public virtual DbSet<IngredientStock> IngredientStocks { get; set; }
+
+    public virtual DbSet<Order> Orders { get; set; }
+
+    public virtual DbSet<OrderDetail> OrderDetails { get; set; }
+
+    public virtual DbSet<Recipe> Recipes { get; set; }
+
+    public virtual DbSet<RecipeDetail> RecipeDetails { get; set; }
 
     public virtual DbSet<Staff> Staffs { get; set; }
 
@@ -30,9 +44,7 @@ public partial class DBContext : DbContext
     {
         modelBuilder.Entity<Account>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Accounts__3214EC07C715FC2C");
-
-            entity.HasIndex(e => e.Username, "UQ__Accounts__536C85E47A93EB48").IsUnique();
+            entity.HasIndex(e => e.Username, "UQ__Accounts__536C85E4590D6CB5").IsUnique();
 
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("(getdate())")
@@ -40,6 +52,7 @@ public partial class DBContext : DbContext
             entity.Property(e => e.HashedPassword)
                 .IsRequired()
                 .HasMaxLength(100);
+            entity.Property(e => e.IsActivated).HasDefaultValue(true);
             entity.Property(e => e.Type)
                 .HasMaxLength(10)
                 .IsUnicode(false)
@@ -54,18 +67,28 @@ public partial class DBContext : DbContext
 
         modelBuilder.Entity<Branch>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Branchs__3214EC077DFCDE54");
-
-            entity.ToTable(tb => tb.HasTrigger("TRG_UpdateUpdatedAtOfBranchsTable"));
-
-            entity.HasIndex(e => e.Name, "UQ__Branchs__737584F6506FFCA2").IsUnique();
-
             entity.Property(e => e.Address)
                 .IsRequired()
                 .HasMaxLength(1255);
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
+            entity.Property(e => e.Name)
+                .IsRequired()
+                .HasMaxLength(255);
+            entity.Property(e => e.UpdatedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+        });
+
+        modelBuilder.Entity<Category>(entity =>
+        {
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.Description).IsRequired();
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
             entity.Property(e => e.Name)
                 .IsRequired()
                 .HasMaxLength(255);
@@ -76,8 +99,6 @@ public partial class DBContext : DbContext
 
         modelBuilder.Entity<Customer>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Customer__3214EC0712869329");
-
             entity.Property(e => e.Address)
                 .IsRequired()
                 .HasMaxLength(255);
@@ -85,6 +106,8 @@ public partial class DBContext : DbContext
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
             entity.Property(e => e.FullName).HasMaxLength(50);
+            entity.Property(e => e.IsActivated).HasDefaultValue(true);
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
             entity.Property(e => e.Phone)
                 .IsRequired()
                 .HasMaxLength(20)
@@ -99,37 +122,170 @@ public partial class DBContext : DbContext
                 .HasConstraintName("FK_Customers_Accounts");
         });
 
-        modelBuilder.Entity<Drinks>(entity =>
+        modelBuilder.Entity<Drink>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Drinks__3214EC07E8A3978D");
-
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.Description).IsRequired();
             entity.Property(e => e.Image)
+                .IsRequired()
                 .HasMaxLength(255)
                 .IsUnicode(false);
-            entity.Property(e => e.Name).HasMaxLength(255);
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
+            entity.Property(e => e.Name)
+                .IsRequired()
+                .HasMaxLength(255);
+            entity.Property(e => e.UpdatedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+
+            entity.HasOne(d => d.Category).WithMany(p => p.Drinks)
+                .HasForeignKey(d => d.CategoryId)
+                .HasConstraintName("FK_Drinks_Categories");
         });
 
-        modelBuilder.Entity<DrinksSize>(entity =>
+        modelBuilder.Entity<DrinkSize>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__DrinksSi__3214EC071CEEB5B6");
-
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
             entity.Property(e => e.Size)
                 .IsRequired()
                 .HasMaxLength(255);
+            entity.Property(e => e.UpdatedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
 
-            entity.HasOne(d => d.Drink).WithMany(p => p.DrinksSizes)
+            entity.HasOne(d => d.Drink).WithMany(p => p.DrinkSizes)
                 .HasForeignKey(d => d.DrinkId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_DrinksSizes_Drinks");
+                .HasConstraintName("FK_DrinkSizes_Drinks");
+        });
+
+        modelBuilder.Entity<Ingredient>(entity =>
+        {
+            entity.HasIndex(e => e.Name, "UQ__Ingredie__737584F65E0010B6").IsUnique();
+
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.Description).IsRequired();
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
+            entity.Property(e => e.Name)
+                .IsRequired()
+                .HasMaxLength(255);
+            entity.Property(e => e.UpdatedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+        });
+
+        modelBuilder.Entity<IngredientStock>(entity =>
+        {
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.ExpiredAt).HasColumnType("datetime");
+            entity.Property(e => e.ReceivedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.UpdatedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+
+            entity.HasOne(d => d.Ingredient).WithMany(p => p.IngredientStocks)
+                .HasForeignKey(d => d.IngredientId)
+                .HasConstraintName("FK_IngredientStocks_Ingredients");
+        });
+
+        modelBuilder.Entity<Order>(entity =>
+        {
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.CustomerNote).HasMaxLength(255);
+            entity.Property(e => e.OrderdAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.PaymentMethod)
+                .HasMaxLength(10)
+                .IsUnicode(false)
+                .HasDefaultValue("PAY_CASH");
+            entity.Property(e => e.ShippingAddress).HasMaxLength(255);
+            entity.Property(e => e.StaffNote).HasMaxLength(255);
+            entity.Property(e => e.Status)
+                .HasMaxLength(10)
+                .IsUnicode(false)
+                .HasDefaultValue("ODR_INIT");
+            entity.Property(e => e.Type)
+                .HasMaxLength(10)
+                .IsUnicode(false)
+                .HasDefaultValue("ODR_OFF");
+            entity.Property(e => e.UpdatedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+
+            entity.HasOne(d => d.Customer).WithMany(p => p.Orders)
+                .HasForeignKey(d => d.CustomerId)
+                .HasConstraintName("FK_Orders_Customers");
+
+            entity.HasOne(d => d.Staff).WithMany(p => p.Orders)
+                .HasForeignKey(d => d.StaffId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Orders_Staffs");
+        });
+
+        modelBuilder.Entity<OrderDetail>(entity =>
+        {
+            entity.Property(e => e.Note).HasMaxLength(255);
+
+            entity.HasOne(d => d.Drink).WithMany(p => p.OrderDetails)
+                .HasForeignKey(d => d.DrinkId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_OrderDetails_Drinks");
+
+            entity.HasOne(d => d.DrinkSize).WithMany(p => p.OrderDetails)
+                .HasForeignKey(d => d.DrinkSizeId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_OrderDetails_DrinkSizes");
+
+            entity.HasOne(d => d.Order).WithMany(p => p.OrderDetails)
+                .HasForeignKey(d => d.OrderId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_OrderDetails_Orders");
+        });
+
+        modelBuilder.Entity<Recipe>(entity =>
+        {
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.Intructon).IsRequired();
+            entity.Property(e => e.UpdatedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+
+            entity.HasOne(d => d.Drink).WithMany(p => p.Recipes)
+                .HasForeignKey(d => d.DrinkId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Recipes_Drinks");
+        });
+
+        modelBuilder.Entity<RecipeDetail>(entity =>
+        {
+            entity.HasOne(d => d.Recipe).WithMany(p => p.RecipeDetails)
+                .HasForeignKey(d => d.RecipeId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_RecipeDetails_Recipes");
         });
 
         modelBuilder.Entity<Staff>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Staffs__3214EC07925A4A59");
-
             entity.Property(e => e.Address)
                 .IsRequired()
                 .HasMaxLength(255);
+            entity.Property(e => e.AsentDays).HasDefaultValue(0);
             entity.Property(e => e.Avatar)
                 .IsRequired()
                 .HasMaxLength(255);
@@ -149,11 +305,15 @@ public partial class DBContext : DbContext
             entity.Property(e => e.FullName)
                 .IsRequired()
                 .HasMaxLength(50);
+            entity.Property(e => e.IsActivated).HasDefaultValue(true);
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
+            entity.Property(e => e.OnJobDays).HasDefaultValue(0);
             entity.Property(e => e.Phone)
                 .IsRequired()
                 .HasMaxLength(20)
                 .IsUnicode(false)
                 .IsFixedLength();
+            entity.Property(e => e.Salary).HasDefaultValue(0.0);
             entity.Property(e => e.UpdatedAt)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");

@@ -17,9 +17,15 @@ public partial class Customer
 
     public int? AccountId { get; set; }
 
+    public bool? IsDeleted { get; set; }
+
+    public bool? IsActivated { get; set; }
+
     public DateTime? CreatedAt { get; set; }
 
     public DateTime? UpdatedAt { get; set; }
 
     public virtual Account Account { get; set; }
+
+    public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
 }

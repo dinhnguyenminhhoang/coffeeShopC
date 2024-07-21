@@ -1,7 +1,7 @@
 ﻿using CoffeManagement.Data;
 using CoffeManagement.Models;
 using CoffeManagement.Models.Enum;
-using CoffeManagement.Repositories.DrinksRepo;
+using CoffeManagement.Repositories.DrinkRepo;
 using Microsoft.EntityFrameworkCore;
 
 namespace CoffeManagement.Repositories.CustomerRepo

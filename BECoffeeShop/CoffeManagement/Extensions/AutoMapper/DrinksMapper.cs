@@ -6,15 +6,15 @@ namespace CoffeManagement.Extensions.AutoMapper
     {
         private void LoadDrinksMapperProfile()
         {
-            CreateMap<CoffeManagement.Models.Drinks, CoffeManagement.DTO.Drinks.DrinksResponse>();
-            CreateMap<CoffeManagement.Models.Drinks, CoffeManagement.DTO.Drinks.DrinksDetailResponse>();
-            CreateMap<CoffeManagement.Common.Pagging.PagingListModel<CoffeManagement.Models.Drinks>, CoffeManagement.Common.Pagging.PagingListModel<CoffeManagement.DTO.Drinks.DrinksResponse>>();
-            CreateMap<CoffeManagement.DTO.Drinks.CreateDrinksRequest, CoffeManagement.Models.Drinks>();
-            CreateMap<CoffeManagement.DTO.Drinks.UpdateDrinksRequest, CoffeManagement.Models.Drinks>();
-            CreateMap<CoffeManagement.Models.DrinksSize, CoffeManagement.DTO.Drinks.DrinksSize>();
-            CreateMap<CoffeManagement.DTO.Drinks.DrinksSizeCreate, CoffeManagement.Models.DrinksSize>();
-            CreateMap<CoffeManagement.DTO.Drinks.CreateDrinksSizeRequest, CoffeManagement.Models.DrinksSize>();
-            CreateMap<CoffeManagement.DTO.Drinks.UpdateDrinksSizeRequest, CoffeManagement.Models.DrinksSize>();
+            CreateMap<CoffeManagement.Models.Drink, CoffeManagement.DTO.Drink.DrinkResponse>();
+            CreateMap<CoffeManagement.Models.Drink, CoffeManagement.DTO.Drink.DrinkDetailResponse>();
+            CreateMap<CoffeManagement.Common.Pagging.PagingListModel<CoffeManagement.Models.Drink>, CoffeManagement.Common.Pagging.PagingListModel<CoffeManagement.DTO.Drink.DrinkResponse>>();
+            CreateMap<CoffeManagement.DTO.Drink.CreateDrinkRequest, CoffeManagement.Models.Drink>();
+            CreateMap<CoffeManagement.DTO.Drink.UpdateDrinkRequest, CoffeManagement.Models.Drink>();
+            CreateMap<CoffeManagement.Models.DrinkSize, CoffeManagement.DTO.Drink.DrinkSize>();
+            CreateMap<CoffeManagement.DTO.Drink.DrinkSizeCreate, CoffeManagement.Models.DrinkSize>();
+            CreateMap<CoffeManagement.DTO.Drink.CreateDrinkSizeRequest, CoffeManagement.Models.DrinkSize>();
+            CreateMap<CoffeManagement.DTO.Drink.UpdateDrinkSizeRequest, CoffeManagement.Models.DrinkSize>();
         }
     }
 }

@@ -23,17 +23,21 @@ public partial class Staff
 
     public string Email { get; set; }
 
-    public double Salary { get; set; }
+    public double? Salary { get; set; }
 
-    public int OnJobDays { get; set; }
+    public int? OnJobDays { get; set; }
 
-    public int AsentDays { get; set; }
+    public int? AsentDays { get; set; }
 
     public int Position { get; set; }
 
     public int BranchId { get; set; }
 
     public int? AccountId { get; set; }
+
+    public bool? IsDeleted { get; set; }
+
+    public bool? IsActivated { get; set; }
 
     public DateTime? CreatedAt { get; set; }
 
@@ -42,4 +46,6 @@ public partial class Staff
     public virtual Account Account { get; set; }
 
     public virtual Branch Branch { get; set; }
+
+    public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
 }

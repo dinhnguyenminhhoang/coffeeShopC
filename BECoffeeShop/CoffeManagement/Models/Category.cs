@@ -5,13 +5,13 @@ using System.Collections.Generic;
 
 namespace CoffeManagement.Models;
 
-public partial class Branch
+public partial class Category
 {
     public int Id { get; set; }
 
     public string Name { get; set; }
 
-    public string Address { get; set; }
+    public string Description { get; set; }
 
     public bool? IsDeleted { get; set; }
 
@@ -19,5 +19,5 @@ public partial class Branch
 
     public DateTime? UpdatedAt { get; set; }
 
-    public virtual ICollection<Staff> Staff { get; set; } = new List<Staff>();
+    public virtual ICollection<Drink> Drinks { get; set; } = new List<Drink>();
 }

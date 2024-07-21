@@ -1,4 +1,4 @@
-﻿using CoffeManagement.DTO.Drinks;
+﻿using CoffeManagement.DTO.Drink;
 
 namespace CoffeManagement.DTO.Staffs
 {

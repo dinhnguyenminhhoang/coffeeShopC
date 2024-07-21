@@ -4,15 +4,14 @@ using CoffeManagement.Extensions.CORS;
 using CoffeManagement.Extensions.Jwt;
 using CoffeManagement.Infrastructure.Jwt;
 using CoffeManagement.Middlewares;
-using CoffeManagement.Repositories.BranchesRepo;
+using CoffeManagement.Repositories.BranchRepo;
 using CoffeManagement.Repositories.CustomerRepo;
-using CoffeManagement.Repositories.DrinksRepo;
-using CoffeManagement.Repositories.StaffsRepo;
+using CoffeManagement.Repositories.DrinkRepo;
+using CoffeManagement.Repositories.StaffRepo;
 using CoffeManagement.Services.AccountService;
-using CoffeManagement.Services.BrachesService;
-using CoffeManagement.Services.CustomersService;
-using CoffeManagement.Services.DrinksService;
-using CoffeManagement.Services.StaffsService;
+using CoffeManagement.Services.BrachService;
+using CoffeManagement.Services.DrinkService;
+using CoffeManagement.Services.StaffService;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
@@ -74,17 +73,16 @@ namespace CoffeManagement
             builder.Services.AddJwtConfiguration(builder.Configuration, builder.Environment);
 
             builder.Services.AddScoped<JwtUtil>();
-            builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
-            builder.Services.AddScoped<IDrinksService, DrinksService>();
-            builder.Services.AddScoped<IBranchesSevice, BranchesSevice>();
-            builder.Services.AddScoped<IStaffsService, StaffsService>();
-            builder.Services.AddScoped<ICustomersService, CustomersService>();
             builder.Services.AddScoped<IDrinkRepository, DrinkRepository>();
-            builder.Services.AddScoped<IDrinksSizeRepository, DrinksSizeRepository>();
+            builder.Services.AddScoped<IDrinkSizeRepository, DrinkSizeRepository>();
             builder.Services.AddScoped<IAccountRepository, AccountRepository>();
             builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
-            builder.Services.AddScoped<IBranchesRepository, BranchesRepository>();
-            builder.Services.AddScoped<IStaffsRepository,StaffsRepository>();
+            builder.Services.AddScoped<IBranchRepository, BranchRepository>();
+            builder.Services.AddScoped<IStaffRepository, StaffRepository>();
+            builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+            builder.Services.AddScoped<IDrinkService, DrinkService>();
+            builder.Services.AddScoped<IBranchService, BranchService>();
+            builder.Services.AddScoped<IStaffService, StaffService>();
 
             var app = builder.Build();
 
