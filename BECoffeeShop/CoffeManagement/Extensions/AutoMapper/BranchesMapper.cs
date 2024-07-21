@@ -4,7 +4,7 @@ namespace CoffeManagement.Extensions.AutoMapper
 {
     public sealed partial class AutoMapperProfile :Profile
     {
-        private void LoadBrachesMapperProfile()
+        private void LoadBrachMapperProfile()
         {
             CreateMap<CoffeManagement.Models.Branch, CoffeManagement.DTO.Branches.BranchesResponse>();
             CreateMap<CoffeManagement.Models.Branch, CoffeManagement.DTO.Branches.BranchesDetailReponse>();

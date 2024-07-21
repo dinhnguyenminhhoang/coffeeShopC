@@ -4,7 +4,7 @@ namespace CoffeManagement.Extensions.AutoMapper
 {
     public sealed partial class AutoMapperProfile : Profile
     {
-        private void LoadDrinksMapperProfile()
+        private void LoadDrinkMapperProfile()
         {
             CreateMap<CoffeManagement.Models.Drink, CoffeManagement.DTO.Drink.DrinkResponse>();
             CreateMap<CoffeManagement.Models.Drink, CoffeManagement.DTO.Drink.DrinkDetailResponse>();

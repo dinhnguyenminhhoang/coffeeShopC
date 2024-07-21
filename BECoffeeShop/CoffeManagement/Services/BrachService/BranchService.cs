@@ -24,7 +24,7 @@ namespace CoffeManagement.Services.BrachService
 
         public async Task<PagingListModel<BranchesResponse>> GetListBranches([FromQuery] PagingDTO pagingDto)
         {
-            var branchQueryable = _branchRepository.GetQueryable();
+            var branchQueryable = _branchRepository.GetQueryable().Where(b => b.IsDeleted == false);
 
             var pagingList = new PagingListModel<Branch>(branchQueryable, pagingDto.PageIndex, pagingDto.PageSize);
 
@@ -41,33 +41,34 @@ namespace CoffeManagement.Services.BrachService
         }
         public async Task<int> UpdateBranches(UpdateBranchesRequest request)
         {
-            var branches = _mapper.Map<Branch>(request);
+            var existedBranch = await _branchRepository.GetById(request.Id);
+            if (existedBranch == null || existedBranch.IsDeleted == true) throw new NotFoundException("Not found branches.");
 
-            await _branchRepository.Update(branches);
+            _mapper.Map(request, existedBranch);
+            await _branchRepository.Update(existedBranch);
 
-            return branches.Id;
+            return existedBranch.Id;
         }
 
         public async Task<BranchesDetailReponse> GetBranchesDetail(int id)
         {
-            var branch = await _branchRepository.GetById(id);
+            var existedBranch = await _branchRepository.GetById(id);
+            if (existedBranch == null || existedBranch.IsDeleted == true) throw new NotFoundException("Not found branches.");
 
-            if (branch == null) throw new NotFoundException("Not found branches.");
-
-            var branchDetail = _mapper.Map<BranchesDetailReponse>(branch);
+            var branchDetail = _mapper.Map<BranchesDetailReponse>(existedBranch);
 
             return branchDetail;
         }
 
         public async Task<int> DeleteBranches(int id)
         {
-            var branch = await _branchRepository.GetById(id);
+            var existedBranch = await _branchRepository.GetById(id);
+            if (existedBranch == null || existedBranch.IsDeleted == true) throw new NotFoundException("Not found branch.");
 
-            if (branch == null) throw new NotFoundException("Not found branch.");
+            existedBranch.IsDeleted = true;
+            await _branchRepository.Update(existedBranch);
 
-            await _branchRepository.Remove(id);
-
-            return branch.Id;
+            return existedBranch.Id;
         }
     }
 }

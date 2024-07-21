@@ -1,9 +1,6 @@
-﻿using CoffeManagement.DTO.Branches;
-using CoffeManagement.DTO.Customers;
+﻿using CoffeManagement.DTO.Customers;
 using CoffeManagement.DTO.Paging;
-using CoffeManagement.Services.BrachesService;
 using CoffeManagement.Services.CustomersService;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
