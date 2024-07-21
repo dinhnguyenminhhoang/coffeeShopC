@@ -6,11 +6,11 @@ namespace CoffeManagement.Extensions.AutoMapper
     {
         private void LoadBrachMapperProfile()
         {
-            CreateMap<Models.Branch, DTO.Branches.BranchesResponse>();
-            CreateMap<Models.Branch, DTO.Branches.BranchesDetailReponse>();
-            CreateMap<Common.Pagging.PagingListModel<Models.Branch>, Common.Pagging.PagingListModel<DTO.Branches.BranchesResponse>>();
-            CreateMap<DTO.Branches.CreateBranchesRequest, Models.Branch>();
-            CreateMap<DTO.Branches.UpdateBranchesRequest, Models.Branch>();
+            CreateMap<Models.Branch, DTO.Branch.BranchesResponse>();
+            CreateMap<Models.Branch, DTO.Branch.BranchesDetailReponse>();
+            CreateMap<Common.Pagging.PagingListModel<Models.Branch>, Common.Pagging.PagingListModel<DTO.Branch.BranchesResponse>>();
+            CreateMap<DTO.Branch.CreateBranchesRequest, Models.Branch>();
+            CreateMap<DTO.Branch.UpdateBranchesRequest, Models.Branch>();
         }
     }
 }

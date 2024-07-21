@@ -1,4 +1,4 @@
-﻿namespace CoffeManagement.DTO.Branches
+﻿namespace CoffeManagement.DTO.Branch
 {
     public class BranchesResponse
     {

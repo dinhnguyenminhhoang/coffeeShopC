@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using CoffeManagement.Common.Exceptions;
 using CoffeManagement.Common.Pagging;
-using CoffeManagement.DTO.Branches;
+using CoffeManagement.DTO.Branch;
 using CoffeManagement.DTO.Paging;
 using CoffeManagement.Models;
 using CoffeManagement.Repositories.BranchRepo;

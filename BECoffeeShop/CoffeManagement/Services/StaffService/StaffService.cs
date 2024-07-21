@@ -3,8 +3,9 @@ using Azure.Core;
 using CoffeManagement.Common.Exceptions;
 using CoffeManagement.Common.Pagging;
 using CoffeManagement.DTO.Account;
+using CoffeManagement.DTO.Customer;
 using CoffeManagement.DTO.Paging;
-using CoffeManagement.DTO.Staffs;
+using CoffeManagement.DTO.Staff;
 using CoffeManagement.Models;
 using CoffeManagement.Repositories.CustomerRepo;
 using CoffeManagement.Repositories.StaffRepo;
@@ -104,5 +105,43 @@ namespace CoffeManagement.Services.StaffService
             return existedStaff.Id;
         }
 
+        public async Task<int> AddAccountForStaff(CreateAccountForStaffRequest request)
+        {
+            var existedStaff = await _staffRepository.GetById(request.StaffId);
+            if (existedStaff == null || existedStaff.IsDeleted == true) throw new NotFoundException("Not found Staff.");
+            if (existedStaff.AccountId != null && existedStaff.AccountId > 0) throw new ConflictException("Staff already have Account.");
+
+            var accountExits = await _accountRepository.GetAccountCustomerByUsername(request.Username);
+            if (accountExits != null) throw new ConflictException("This username already used, please use another username.");
+
+            var account = await _accountRepository.Add(new()
+            {
+                Username = request.Username,
+                HashedPassword = BCrypt.Net.BCrypt.HashPassword(request.Password),
+            });
+
+            existedStaff.AccountId = account.Id;
+            existedStaff.UpdatedAt = DateTime.Now;
+            await _staffRepository.Update(existedStaff);
+
+            return account.Id;
+        }
+
+        public async Task<int> UpdateAccountOfStaff(UpdateAccountOfStaffRequest request)
+        {
+            var existedStaff = await _staffRepository.GetById(request.StaffId);
+            if (existedStaff == null || existedStaff.IsDeleted == true) throw new NotFoundException("Not found Staff.");
+            if (existedStaff.Account == null) throw new ConflictException("Staff don't have Account.");
+
+            var accountExits = await _accountRepository.GetAccountCustomerByUsername(request.Username);
+            if (accountExits != null) throw new ConflictException("This username already used, please use another username.");
+
+            var account = existedStaff.Account;
+            _mapper.Map(request, account);
+
+            await _accountRepository.Update(account);
+
+            return account.Id;
+        }
     }
 }

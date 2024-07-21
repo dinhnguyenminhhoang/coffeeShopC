@@ -1,6 +1,6 @@
-﻿namespace CoffeManagement.DTO.Branches
+﻿namespace CoffeManagement.DTO.Branch
 {
-    public class UpdateBranchesRequest
+    public class BranchesDetailReponse
     {
         public int Id { get; set; }
         public string Name { get; set; }

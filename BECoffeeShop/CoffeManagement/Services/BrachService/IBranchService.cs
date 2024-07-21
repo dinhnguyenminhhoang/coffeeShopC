@@ -1,5 +1,5 @@
 ﻿using CoffeManagement.Common.Pagging;
-using CoffeManagement.DTO.Branches;
+using CoffeManagement.DTO.Branch;
 using CoffeManagement.DTO.Paging;
 
 namespace CoffeManagement.Services.BrachService

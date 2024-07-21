@@ -1,6 +1,7 @@
 ﻿using CoffeManagement.Common.Pagging;
+using CoffeManagement.DTO.Customer;
 using CoffeManagement.DTO.Paging;
-using CoffeManagement.DTO.Staffs;
+using CoffeManagement.DTO.Staff;
 
 namespace CoffeManagement.Services.StaffService
 {
@@ -11,6 +12,7 @@ namespace CoffeManagement.Services.StaffService
         Task<int> UpdateStaff(UpdateStaffsRequest request);
         Task<StaffsDetailResponse> GetStaffDetail(int id);
         Task<int> DeleteStaff(int id);
-
+        Task<int> AddAccountForStaff(CreateAccountForStaffRequest request);
+        Task<int> UpdateAccountOfStaff(UpdateAccountOfStaffRequest request);
     }
 }

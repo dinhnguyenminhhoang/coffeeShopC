@@ -1,7 +1,7 @@
 ﻿using CoffeManagement.DTO.Account;
 using CoffeManagement.Models;
 
-namespace CoffeManagement.DTO.Customers
+namespace CoffeManagement.DTO.Customer
 {
     public class CustomersDetailResponse
     {

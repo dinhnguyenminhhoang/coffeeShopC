@@ -6,11 +6,11 @@ namespace CoffeManagement.Extensions.AutoMapper
     {
         private void LoadCustomerMapperProfile()
         {
-            CreateMap<Models.Customer, DTO.Customers.CustomersResponse>();
-            CreateMap<Models.Customer, DTO.Customers.CustomersDetailResponse>();
-            CreateMap<Common.Pagging.PagingListModel<Models.Customer>, Common.Pagging.PagingListModel<DTO.Customers.CustomersResponse>>();
-            CreateMap<DTO.Customers.CreateCustomerRequest, Models.Customer>();
-            CreateMap<DTO.Customers.UpdateCustomerRequest, Models.Customer>();
+            CreateMap<Models.Customer, DTO.Customer.CustomersResponse>();
+            CreateMap<Models.Customer, DTO.Customer.CustomersDetailResponse>();
+            CreateMap<Common.Pagging.PagingListModel<Models.Customer>, Common.Pagging.PagingListModel<DTO.Customer.CustomersResponse>>();
+            CreateMap<DTO.Customer.CreateCustomerRequest, Models.Customer>();
+            CreateMap<DTO.Customer.UpdateCustomerRequest, Models.Customer>();
         }
     }
 }

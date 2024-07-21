@@ -1,8 +1,5 @@
-﻿using CoffeManagement.DTO.Drink;
-using CoffeManagement.DTO.Paging;
-using CoffeManagement.DTO.Staffs;
-using CoffeManagement.Models.Enum;
-using CoffeManagement.Services.BrachService;
+﻿using CoffeManagement.DTO.Paging;
+using CoffeManagement.DTO.Staff;
 using CoffeManagement.Services.StaffService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -70,5 +67,24 @@ namespace CoffeManagement.Controllers
             return Ok(RenderSuccessResponse(data: result, message: "SUCCESS"));
         }
 
+        [HttpPost("AddAccount")]
+        //[Authorize(Policy = nameof(AuthPolicy.POL_ADMIN))]
+        [SwaggerOperation(Summary = "Add Account for Staff")]
+        public async Task<IActionResult> AddAcountForStaff([FromBody] CreateAccountForStaffRequest request)
+        {
+            var result = await _staffsService.AddAccountForStaff(request);
+
+            return Ok(RenderSuccessResponse(data: result, message: "SUCCESS"));
+        }
+
+        [HttpPut("UpdateAccount")]
+        //[Authorize(Policy = nameof(AuthPolicy.POL_ADMIN))]
+        [SwaggerOperation(Summary = "Update Account of Customers")]
+        public async Task<IActionResult> UpdateAcountForCustomer([FromBody] UpdateAccountOfStaffRequest request)
+        {
+            var result = await _staffsService.UpdateAccountOfStaff(request);
+
+            return Ok(RenderSuccessResponse(data: result, message: "SUCCESS"));
+        }
     }
 }

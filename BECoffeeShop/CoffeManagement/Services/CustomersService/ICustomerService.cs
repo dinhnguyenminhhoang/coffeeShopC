@@ -1,15 +1,18 @@
 ﻿using CoffeManagement.Common.Pagging;
-using CoffeManagement.DTO.Customers;
+using CoffeManagement.DTO.Account;
+using CoffeManagement.DTO.Customer;
 using CoffeManagement.DTO.Paging;
 
 namespace CoffeManagement.Services.CustomersService
 {
     public interface ICustomerService
     {
-        Task<PagingListModel<CustomersResponse>> GetListCustomers(PagingDTO pagingDto);
-        Task<int> CreateCustomers(CreateCustomerRequest request);
-        Task<int> UpdateCustomers(UpdateCustomerRequest request);
-        Task<CustomersDetailResponse> GetCustomersDetail(int id);
-        Task<int> DeleteCustomers(int id);
+        Task<PagingListModel<CustomersResponse>> GetListCustomer(PagingDTO pagingDto);
+        Task<int> CreateCustomer(CreateCustomerRequest request);
+        Task<int> UpdateCustomer(UpdateCustomerRequest request);
+        Task<CustomersDetailResponse> GetCustomerDetail(int id);
+        Task<int> DeleteCustomer(int id);
+        Task<int> AddAccountForCustomers(CreateAccountForCustomerRequest request);
+        Task<int> UpdateAccountOfCustomers(UpdateAccountOfCustomerRequest request);
     }
 }

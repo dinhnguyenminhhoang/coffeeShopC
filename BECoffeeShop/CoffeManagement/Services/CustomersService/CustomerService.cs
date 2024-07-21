@@ -3,8 +3,8 @@ using CoffeManagement.Common.Exceptions;
 using CoffeManagement.Common.Pagging;
 using CoffeManagement.DTO.Account;
 using CoffeManagement.DTO.Authentication;
-using CoffeManagement.DTO.Branches;
-using CoffeManagement.DTO.Customers;
+using CoffeManagement.DTO.Branch;
+using CoffeManagement.DTO.Customer;
 using CoffeManagement.DTO.Paging;
 using CoffeManagement.Models;
 using CoffeManagement.Repositories.CustomerRepo;
@@ -27,7 +27,7 @@ namespace CoffeManagement.Services.CustomersService
             _accountRepository = accountRepository;
         }
 
-        public async Task<PagingListModel<CustomersResponse>> GetListCustomers([FromQuery] PagingDTO pagingDto)
+        public async Task<PagingListModel<CustomersResponse>> GetListCustomer([FromQuery] PagingDTO pagingDto)
         {
             var customerhQueryable = _customerRepository.GetQueryable().Where(c => c.IsDeleted == false);
 
@@ -37,7 +37,8 @@ namespace CoffeManagement.Services.CustomersService
 
             return result;
         }
-        public async Task<int> CreateCustomers(CreateCustomerRequest request)
+
+        public async Task<int> CreateCustomer(CreateCustomerRequest request)
         {
             var customerExits = await _customerRepository.GetByPhone(request.Phone);
             if (customerExits != null) throw new ConflictException("This phone number already used, please use another phone number.");
@@ -67,7 +68,8 @@ namespace CoffeManagement.Services.CustomersService
                 return customer.Id;
             }
         }
-        public async Task<int> UpdateCustomers(UpdateCustomerRequest request)
+
+        public async Task<int> UpdateCustomer(UpdateCustomerRequest request)
         {
             var existedCustomer = await _customerRepository.GetById(request.Id);
             if (existedCustomer == null || existedCustomer.IsDeleted == true) throw new NotFoundException("Not found customers.");
@@ -79,7 +81,7 @@ namespace CoffeManagement.Services.CustomersService
             return existedCustomer.Id;
         }
 
-        public async Task<CustomersDetailResponse> GetCustomersDetail(int id)
+        public async Task<CustomersDetailResponse> GetCustomerDetail(int id)
         {
             var existedCustomer = await _customerRepository.GetById(id);
             if (existedCustomer == null || existedCustomer.IsDeleted == true) throw new NotFoundException("Not found customers.");
@@ -91,7 +93,7 @@ namespace CoffeManagement.Services.CustomersService
             return customerDetail;
         }
 
-        public async Task<int> DeleteCustomers(int id)
+        public async Task<int> DeleteCustomer(int id)
         {
             var existedCustomer = await _customerRepository.GetById(id);
             if (existedCustomer == null || existedCustomer.IsDeleted == true) throw new NotFoundException("Not found customers.");
@@ -101,6 +103,45 @@ namespace CoffeManagement.Services.CustomersService
             await _customerRepository.Update(existedCustomer);
 
             return existedCustomer.Id;
+        }
+
+        public async Task<int> AddAccountForCustomers(CreateAccountForCustomerRequest request)
+        {
+            var existedCustomer = await _customerRepository.GetById(request.CustomerId);
+            if (existedCustomer == null || existedCustomer.IsDeleted == true) throw new NotFoundException("Not found customers.");
+            if (existedCustomer.AccountId !=  null && existedCustomer.AccountId > 0) throw new ConflictException("Customers already have Account.");
+
+            var accountExits = await _accountRepository.GetAccountCustomerByUsername(request.Username);
+            if (accountExits != null) throw new ConflictException("This username already used, please use another username.");
+
+            var account = await _accountRepository.Add(new()
+            {
+                Username = request.Username,
+                HashedPassword = BCrypt.Net.BCrypt.HashPassword(request.Password),
+            });
+
+            existedCustomer.AccountId = account.Id;
+            existedCustomer.UpdatedAt = DateTime.Now;
+            await _customerRepository.Update(existedCustomer);
+
+            return account.Id;
+        }
+
+        public async Task<int> UpdateAccountOfCustomers(UpdateAccountOfCustomerRequest request)
+        {
+            var existedCustomer = await _customerRepository.GetById(request.CustomerId);
+            if (existedCustomer == null || existedCustomer.IsDeleted == true) throw new NotFoundException("Not found customers.");
+            if (existedCustomer.Account == null) throw new ConflictException("Customers don't have Account.");
+
+            var accountExits = await _accountRepository.GetAccountCustomerByUsername(request.Username);
+            if (accountExits != null) throw new ConflictException("This username already used, please use another username.");
+
+            var account = existedCustomer.Account;
+            _mapper.Map(request, account);
+
+            await _accountRepository.Update(account);
+
+            return account.Id;
         }
     }
 }

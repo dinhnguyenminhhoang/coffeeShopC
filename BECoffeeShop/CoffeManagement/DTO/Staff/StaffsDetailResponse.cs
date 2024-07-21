@@ -1,8 +1,9 @@
-﻿using System.Text.Json.Serialization;
+﻿using CoffeManagement.DTO.Account;
+using System.Text.Json.Serialization;
 
-namespace CoffeManagement.DTO.Staffs
+namespace CoffeManagement.DTO.Staff
 {
-    public class StaffsResponse
+    public class StaffsDetailResponse
     {
         public int Id { get; set; }
 
@@ -32,7 +33,7 @@ namespace CoffeManagement.DTO.Staffs
 
         public int BranchId { get; set; }
 
-        [JsonIgnore]        
+        [JsonIgnore]
         public int AccountId { get; set; }
 
         public bool IsActivated { get; set; }
@@ -41,8 +42,8 @@ namespace CoffeManagement.DTO.Staffs
 
         public DateTime? UpdatedAt { get; set; }
 
-        // --------------------
-        public bool IsHaveAccount { get => AccountId > 0; }
+        // ------------------------------
 
+        public AccountResponse Account { get; set; }
     }
 }

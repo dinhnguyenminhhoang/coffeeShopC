@@ -1,6 +1,6 @@
 ﻿using CoffeManagement.DTO.Account;
 
-namespace CoffeManagement.DTO.Customers
+namespace CoffeManagement.DTO.Customer
 {
     public class CreateCustomerRequest
     {

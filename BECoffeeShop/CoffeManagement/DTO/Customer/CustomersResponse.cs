@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace CoffeManagement.DTO.Customers
+namespace CoffeManagement.DTO.Customer
 {
     public class CustomersResponse
     {

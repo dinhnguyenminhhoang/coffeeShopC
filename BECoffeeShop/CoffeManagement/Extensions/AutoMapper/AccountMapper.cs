@@ -8,6 +8,8 @@ namespace CoffeManagement.Extensions.AutoMapper
         {
             CreateMap<Models.Account, DTO.Account.AccountResponse>();
             CreateMap<DTO.Account.CreateAccountRequest, Models.Account>();
+            CreateMap<DTO.Customer.UpdateAccountOfCustomerRequest, Models.Account>();
+            CreateMap<DTO.Staff.UpdateAccountOfStaffRequest, Models.Account>();
         }
     }
 }

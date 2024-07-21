@@ -1,4 +1,4 @@
-﻿using CoffeManagement.DTO.Branches;
+﻿using CoffeManagement.DTO.Branch;
 using CoffeManagement.DTO.Drink;
 using CoffeManagement.DTO.Paging;
 using CoffeManagement.Models.Enum;

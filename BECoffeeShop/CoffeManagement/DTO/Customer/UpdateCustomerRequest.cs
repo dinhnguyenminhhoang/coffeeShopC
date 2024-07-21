@@ -1,4 +1,4 @@
-﻿namespace CoffeManagement.DTO.Customers
+﻿namespace CoffeManagement.DTO.Customer
 {
     public class UpdateCustomerRequest
     {

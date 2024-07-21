@@ -1,10 +1,9 @@
-﻿using CoffeManagement.DTO.Account;
-using CoffeManagement.DTO.Drink;
-
-namespace CoffeManagement.DTO.Staffs
+﻿namespace CoffeManagement.DTO.Staff
 {
-    public class CreateStaffRequest
+    public class UpdateStaffsRequest
     {
+        public int Id { get; set; }
+
         public string FullName { get; set; }
 
         public DateOnly Birthday { get; set; }
@@ -24,8 +23,5 @@ namespace CoffeManagement.DTO.Staffs
         public string Position { get; set; }
 
         public int BranchId { get; set; }
-
-        public CreateAccountRequest? Account { get; set; }
-
     }
 }
