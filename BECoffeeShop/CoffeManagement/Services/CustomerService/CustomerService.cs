@@ -2,15 +2,13 @@
 using CoffeManagement.Common.Exceptions;
 using CoffeManagement.Common.Pagging;
 using CoffeManagement.DTO.Account;
-using CoffeManagement.DTO.Authentication;
-using CoffeManagement.DTO.Branch;
 using CoffeManagement.DTO.Customer;
 using CoffeManagement.DTO.Paging;
 using CoffeManagement.Models;
 using CoffeManagement.Repositories.CustomerRepo;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CoffeManagement.Services.CustomersService
+namespace CoffeManagement.Services.CustomerService
 {
     public class CustomerService : ICustomerService
     {

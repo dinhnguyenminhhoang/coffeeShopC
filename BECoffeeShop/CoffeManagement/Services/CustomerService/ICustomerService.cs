@@ -3,7 +3,7 @@ using CoffeManagement.DTO.Account;
 using CoffeManagement.DTO.Customer;
 using CoffeManagement.DTO.Paging;
 
-namespace CoffeManagement.Services.CustomersService
+namespace CoffeManagement.Services.CustomerService
 {
     public interface ICustomerService
     {

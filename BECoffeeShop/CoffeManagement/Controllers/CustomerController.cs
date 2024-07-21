@@ -1,6 +1,6 @@
 ﻿using CoffeManagement.DTO.Customer;
 using CoffeManagement.DTO.Paging;
-using CoffeManagement.Services.CustomersService;
+using CoffeManagement.Services.CustomerService;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
