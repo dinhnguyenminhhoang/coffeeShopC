@@ -5,6 +5,7 @@ using CoffeManagement.DTO.Account;
 using CoffeManagement.DTO.Customer;
 using CoffeManagement.DTO.Paging;
 using CoffeManagement.Models;
+using CoffeManagement.Models.Enum;
 using CoffeManagement.Repositories.CustomerRepo;
 using Microsoft.AspNetCore.Mvc;
 
@@ -60,6 +61,7 @@ namespace CoffeManagement.Services.CustomerService
                 {
                     Username = request.Account.Username,
                     HashedPassword = BCrypt.Net.BCrypt.HashPassword(request.Account.Password),
+                    Type = AccountType.ACC_CUS.ToString(),
                     Customers = new Customer[] { customer }
                 });
 
@@ -116,6 +118,7 @@ namespace CoffeManagement.Services.CustomerService
             {
                 Username = request.Username,
                 HashedPassword = BCrypt.Net.BCrypt.HashPassword(request.Password),
+                Type = AccountType.ACC_CUS.ToString(),
             });
 
             existedCustomer.AccountId = account.Id;

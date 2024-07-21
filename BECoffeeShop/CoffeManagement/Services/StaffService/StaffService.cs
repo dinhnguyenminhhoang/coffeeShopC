@@ -7,6 +7,7 @@ using CoffeManagement.DTO.Customer;
 using CoffeManagement.DTO.Paging;
 using CoffeManagement.DTO.Staff;
 using CoffeManagement.Models;
+using CoffeManagement.Models.Enum;
 using CoffeManagement.Repositories.CustomerRepo;
 using CoffeManagement.Repositories.StaffRepo;
 using Microsoft.AspNetCore.Mvc;
@@ -63,6 +64,7 @@ namespace CoffeManagement.Services.StaffService
                 {
                     Username = request.Account.Username,
                     HashedPassword = BCrypt.Net.BCrypt.HashPassword(request.Account.Password),
+                    Type = AccountType.ACC_STA.ToString(),
                     Staff = new Staff[] { staff }
                 });
 
@@ -99,7 +101,7 @@ namespace CoffeManagement.Services.StaffService
             var existedStaff = await _staffRepository.GetById(id);
             if (existedStaff == null || existedStaff.IsDeleted == true) throw new NotFoundException("Not found staff.");
 
-            existedStaff.IsActivated = true;
+            existedStaff.IsDeleted = true;
             await _staffRepository.Update(existedStaff);
 
             return existedStaff.Id;
@@ -118,6 +120,7 @@ namespace CoffeManagement.Services.StaffService
             {
                 Username = request.Username,
                 HashedPassword = BCrypt.Net.BCrypt.HashPassword(request.Password),
+                Type = AccountType.ACC_STA.ToString(),
             });
 
             existedStaff.AccountId = account.Id;
