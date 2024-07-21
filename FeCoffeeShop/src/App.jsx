@@ -3,34 +3,33 @@ import {
     createBrowserRouter,
     createRoutesFromElements,
     Route,
-    Router,
     RouterProvider,
 } from "react-router-dom";
+import AdminLayout from "./Layout/AdminLayout";
 import DefautLayout from "./Layout/DefautLayout";
+import AdminBranches from "./Pages/admin/AdminBranches/AdminBranches";
+import DrinkManager from "./Pages/admin/DrinkManager/DrinkManager";
+import StaffPage from "./Pages/admin/StaffPage/StaffPage";
+import VouchersPage from "./Pages/admin/VouchersPage/VouchersPage";
 import Login from "./Pages/Auth/Login/Login";
 import Register from "./Pages/Auth/Register/Register";
 import Branches from "./Pages/Branches/Branches";
 import CartPage from "./Pages/CartPage/CartPage";
 import DetailProduct from "./Pages/DetailProduct/DetailProduct";
-import HomePage from "./Pages/HomePage/HomePage";
-import OrdersPage from "./Pages/staff/OrdersPage/OrdersPage";
-import PageNotFound from "./Pages/PageNotFound/PageNotFound";
-import OrderDetailsPage from "./Pages/staff/OrderDetailsPage/OrderDetailsPage";
-import DrinkRatingsPage from "./Pages/DrinkRatings/DrinkRatings";
 import DrinkMenuDetailsPage from "./Pages/DrinkMenuDetailsPage/DrinkMenuDetailsPage";
-import DrinksSizePage from "./Pages/DrinksSizePage/DrinksSizePage";
+import DrinkRatingsPage from "./Pages/DrinkRatings/DrinkRatings";
+import HomePage from "./Pages/HomePage/HomePage";
+import IngredientsPage from "./Pages/IngredientsPage/IngredientsPage";
+import IngredientsStocksPage from "./Pages/IngredientsStocksPage/IngredientsStocksPage";
 import OrderDrinkDetailsPage from "./Pages/OrderDrinkDetails/OrderDrinkDetails";
+import PageNotFound from "./Pages/PageNotFound/PageNotFound";
 import PaymentDetailsPage from "./Pages/PaymentDetails/PaymentDetails";
 import RecipeDetailsPage from "./Pages/RecipeDetails/RecipeDetails";
 import RecipesPage from "./Pages/RecipesPage/RecipesPage";
 import ServiceRatingsPage from "./Pages/ServiceRatingsPage/ServiceRatingsPage";
-import StaffPage from "./Pages/admin/StaffPage/StaffPage";
-import VouchersPage from "./Pages/admin/VouchersPage/VouchersPage";
-import IngredientsPage from "./Pages/IngredientsPage/IngredientsPage";
-import IngredientsStocksPage from "./Pages/IngredientsStocksPage/IngredientsStocksPage";
-import AdminLayout from "./Layout/AdminLayout";
-import AdminBranches from "./Pages/admin/AdminBranches/AdminBranches";
-import DrinkManager from "./Pages/admin/DrinkManager/DrinkManager";
+import OrderDetailsPage from "./Pages/staff/OrderDetailsPage/OrderDetailsPage";
+import OrdersPage from "./Pages/staff/OrdersPage/OrdersPage";
+import AdminCustomers from "./Pages/admin/AdminCustomers/AdminCustomers";
 
 const App = () => {
     const router = createBrowserRouter(
@@ -63,8 +62,6 @@ const App = () => {
                         path="/drink-menu-detail"
                         element={<DrinkMenuDetailsPage />}
                     />
-                    <Route path="/drink-size" element={<DrinksSizePage />} />
-                    {/* payment */}
                     <Route
                         path="/payment-detail"
                         element={<PaymentDetailsPage />}
@@ -101,6 +98,10 @@ const App = () => {
                     <Route
                         path="/manager-branches"
                         element={<AdminBranches />}
+                    />
+                    <Route
+                        path="/manager-customers"
+                        element={<AdminCustomers />}
                     />
                 </Route>
                 <Route path="*" element={<PageNotFound />} />
