@@ -53,13 +53,15 @@ const SidebarAdmin = () => {
     };
     const adminLinks = [
         { path: "/manager-staffs", label: "MANAGER STAFF" },
+        { path: "/manager-customers", label: "MANAGER CUSTOMER" },
         { path: "/manager-drinks", label: "MANAGER DRINKS" },
-        { path: "/manager-branches", label: "MANAGER CUSTOMER" },
-        { path: "/manager-customers", label: "MANAGER BRANCHES" },
+        { path: "/manager-branches", label: "MANAGER BRANCHES" },
+        { path: "/manager-recipes", label: "MANAGER RECIPES" },
+        { path: "/manager-vouchers", label: "MANAGER VOUCHERS" },
     ];
     const staffLinks = [
-        { path: "/staff-order", label: "STAFF ORDER" },
-        { path: "/staff-bill", label: "STAFF BILL" },
+        { path: "/manager-orders", label: "STAFF ORDER" },
+        { path: "/manager-bills", label: "STAFF BILL" },
     ];
     return userData ? (
         <Layout className="flex-none pt-3 border-r border-[#ccc] min-h-screen">

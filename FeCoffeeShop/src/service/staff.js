@@ -19,7 +19,17 @@ const createStaff = ({ formData }) => {
 const updateStaff = ({ formData }) => {
     return instance.put(`/Staffs`, formData, { headers });
 };
+const updateStaffAccount = ({ formData }) => {
+    return instance.put(`/Staffs/UpdateAccount`, formData, { headers });
+};
 const deleteStaff = ({ staffId }) => {
     return instance.delete(`/Staffs/${staffId}`, { headers });
 };
-export { getAllStaff, getStaffDetaiil, createStaff, updateStaff, deleteStaff };
+export {
+    getAllStaff,
+    getStaffDetaiil,
+    createStaff,
+    updateStaff,
+    deleteStaff,
+    updateStaffAccount,
+};

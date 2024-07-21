@@ -34,7 +34,7 @@ const Login = () => {
                     response.data.ResultData.AccessToken
                 );
                 if (param.pathname.startsWith("/admin")) {
-                    navigator("/staff");
+                    navigator("/manager-drinks");
                 } else navigator("/");
             } else {
                 openNotification({

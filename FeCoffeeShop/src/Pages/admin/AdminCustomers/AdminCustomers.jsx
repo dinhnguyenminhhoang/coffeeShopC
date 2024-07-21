@@ -8,6 +8,7 @@ import {
     deleteCustomers,
     getAllCustomers,
     updateCustomers,
+    updateAccountCustomers,
 } from "@//service/Customer";
 import CustomerForm from "@//Components/FormManager/CustomerForm";
 
@@ -59,7 +60,7 @@ const AdminCustomers = () => {
                 fetchCustomers(currentPage, pageSize);
                 openNotification({
                     type: "success",
-                    description: "delete customersData successfully",
+                    description: "delete customers successfully",
                 });
             }
         } catch (error) {
@@ -74,13 +75,24 @@ const AdminCustomers = () => {
     const handleSave = async (values) => {
         try {
             if (editingCustomer) {
-                const res = await updateCustomers({
-                    formData: { ...values, Id: editingCustomer.Id },
-                });
+                let res;
+                if (values?.Password) {
+                    res = await updateAccountCustomers({
+                        formData: {
+                            ...values,
+                            CustomerId: editingCustomer.Id,
+                            IsActivated: true,
+                        },
+                    });
+                } else {
+                    res = await updateCustomers({
+                        formData: { ...values, Id: editingCustomer.Id },
+                    });
+                }
                 if (res.data.Success) {
                     openNotification({
                         type: "success",
-                        description: "Edit  customersData successfully",
+                        description: "Edit  customer successfully",
                     });
                 }
             } else {
@@ -88,7 +100,7 @@ const AdminCustomers = () => {
                 if (res.data.Success) {
                     openNotification({
                         type: "success",
-                        description: "Create customersData successfully",
+                        description: "Create customer successfully",
                     });
                 }
             }
@@ -110,10 +122,22 @@ const AdminCustomers = () => {
 
     const columns = [
         { title: "ID", dataIndex: "Id", key: "Id" },
-        { title: "AccountId", dataIndex: "AccountId", key: "AccountId" },
         { title: "FullName", dataIndex: "FullName", key: "FullName" },
         { title: "Phone", dataIndex: "Phone", key: "Phone" },
         { title: "Address", dataIndex: "Address", key: "Address" },
+        {
+            title: "STATUS",
+            dataIndex: "IsActivated",
+            key: "IsActivated",
+            render: (text) => (
+                <span
+                    className="text-xl font-bold"
+                    style={{ color: text ? "green" : "red" }}
+                >
+                    {text ? "ON" : "OFF"}
+                </span>
+            ),
+        },
         {
             title: "Actions",
             key: "actions",

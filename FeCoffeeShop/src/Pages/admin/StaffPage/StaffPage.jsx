@@ -1,11 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { Table, Button, Modal, Space, Popconfirm } from "antd";
+import { Table, Button, Modal, Space, Popconfirm, Image } from "antd";
 import axios from "axios";
 import StaffForm from "@/Components/FormManager/StaffForm";
 import { getAllStaff } from "@/service/staff";
 import useNotification from "@/hooks/NotiHook";
 import { formatVND } from "@/utils/resuableFuc";
-import { createStaff, deleteStaff } from "@//service/staff";
+import {
+    createStaff,
+    deleteStaff,
+    updateStaff,
+    updateStaffAccount,
+} from "@//service/staff";
+import { BiEdit } from "react-icons/bi";
 
 const StaffPage = () => {
     const [staff, setStaff] = useState([]);
@@ -68,9 +74,30 @@ const StaffPage = () => {
     const handleSave = async (values) => {
         try {
             if (editingStaff) {
-                await axios.put(`/api/staff/${editingStaff.id}`, values);
+                let res;
+                if (values?.Password) {
+                    res = await updateStaffAccount({
+                        formData: {
+                            ...values,
+                            StaffId: editingStaff.Id,
+                            IsActivated: true,
+                        },
+                    });
+                } else {
+                    res = await updateStaff({
+                        formData: { ...values, Position: "POS_STAFF" },
+                    });
+                }
+                if (res.data.Success) {
+                    openNotification({
+                        type: "success",
+                        description: "Create staff successfully",
+                    });
+                }
             } else {
-                const res = await createStaff({ formData: values });
+                const res = await createStaff({
+                    formData: { ...values, Position: "POS_STAFF" },
+                });
                 if (res.data.Success) {
                     openNotification({
                         type: "success",
@@ -96,13 +123,34 @@ const StaffPage = () => {
 
     const columns = [
         { title: "ID", dataIndex: "Id", key: "Id" },
+        {
+            title: "Avatar",
+            dataIndex: "Avatar",
+            key: "Avatar",
+            render: (text) => <Image src={text} width={50} height={50} />,
+        },
         { title: "FullName", dataIndex: "FullName", key: "FullName" },
-        { title: "Email", dataIndex: "Email", key: "Email" },
+        {
+            title: "Email",
+            dataIndex: "Email",
+            key: "Email",
+        },
         { title: "Phone", dataIndex: "Phone", key: "Phone" },
+        {
+            title: "STATUS",
+            dataIndex: "IsActivated",
+            key: "IsActivated",
+            render: (text) => (
+                <span
+                    className="text-xl font-bold"
+                    style={{ color: text ? "green" : "red" }}
+                >
+                    {text ? "ON" : "OFF"}
+                </span>
+            ),
+        },
         { title: "Address", dataIndex: "Address", key: "Address" },
         { title: "Position", dataIndex: "Position", key: "Position" },
-        { title: "AsetDays", dataIndex: "AsetDays", key: "AsetDays" },
-        { title: "OnJobDays", dataIndex: "OnJobDays", key: "OnJobDays" },
         {
             title: "Salary",
             dataIndex: "Salary",
@@ -114,7 +162,12 @@ const StaffPage = () => {
             key: "actions",
             render: (text, record) => (
                 <Space>
-                    <Button onClick={() => handleEdit(record)}>Edit</Button>
+                    <Button
+                        onClick={() => handleEdit(record)}
+                        icon={<BiEdit />}
+                    >
+                        Edit
+                    </Button>
                     <Popconfirm
                         title={`Confirm delete staff ${record.Email}?`}
                         onConfirm={() => handleDelete(record.Id)}

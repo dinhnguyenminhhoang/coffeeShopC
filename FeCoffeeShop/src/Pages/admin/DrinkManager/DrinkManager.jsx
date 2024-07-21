@@ -1,5 +1,5 @@
 import useNotification from "@/hooks/NotiHook";
-import { Button, Image, Modal, Popconfirm, Space, Table } from "antd";
+import { Button, Flex, Image, Modal, Popconfirm, Space, Table } from "antd";
 import React, { useEffect, useState } from "react";
 import { BiEdit } from "react-icons/bi";
 import { BsBack } from "react-icons/bs";
@@ -259,9 +259,6 @@ const DrinkManager = () => {
             key: "actions",
             render: (text, record) => (
                 <Space>
-                    <Button onClick={handlebackAllDrinks} icon={<BsBack />}>
-                        Back to all drinks
-                    </Button>
                     <Button
                         onClick={() => handleEditSize(record)}
                         icon={<BiEdit />}
@@ -287,13 +284,18 @@ const DrinkManager = () => {
         <div className="container mx-auto p-6">
             {detailSize ? (
                 <>
-                    <Button
-                        type="primary"
-                        onClick={handleAddSize}
-                        className="mb-4"
-                    >
-                        Add Drink Size
-                    </Button>
+                    <Flex gap={6}>
+                        <Button
+                            type="primary"
+                            onClick={handleAddSize}
+                            className="mb-4"
+                        >
+                            Add Drink Size
+                        </Button>
+                        <Button onClick={handlebackAllDrinks} icon={<BsBack />}>
+                            Back to all drinks
+                        </Button>
+                    </Flex>
                     <Table
                         columns={columnsSize}
                         dataSource={detailSize?.DrinksSizes}
@@ -301,7 +303,9 @@ const DrinkManager = () => {
                     />
                     <Modal
                         title={
-                            editingDrink ? "Edit Drink Size" : "Add Drink Size"
+                            editingDrinkSize
+                                ? "Edit Drink Size"
+                                : "Add Drink Size"
                         }
                         visible={isModalSizeVisible}
                         footer={null}
@@ -319,7 +323,7 @@ const DrinkManager = () => {
             ) : (
                 <>
                     <Button type="primary" onClick={handleAdd} className="mb-4">
-                        Add Drink
+                        Add DrinK
                     </Button>
                     <Table
                         columns={columns}

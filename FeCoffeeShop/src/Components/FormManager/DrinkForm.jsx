@@ -8,11 +8,13 @@ const DrinkForm = ({ initialValues, onSave, onCancel }) => {
     const [imageUrl, setImageUrl] = useState("");
 
     const handleFinish = (values) => {
+        form.resetFields();
         const finalValues = { ...values, Image: imageUrl };
         onSave(finalValues);
     };
 
     useEffect(() => {
+        form.resetFields();
         if (initialValues) {
             getDrinkById({ drinkId: initialValues })
                 .then((response) => response.data)
@@ -114,13 +116,16 @@ const DrinkForm = ({ initialValues, onSave, onCancel }) => {
                                 >
                                     <Input type="number" />
                                 </Form.Item>
-                                <Button
-                                    type="dashed"
-                                    onClick={() => remove(field.name)}
-                                    style={{ marginBottom: "24px" }}
-                                >
-                                    Remove
-                                </Button>
+                                <div>
+                                    <h1 className="mb-2 ml-2">Xóa trường</h1>
+                                    <Button
+                                        type="dashed"
+                                        onClick={() => remove(field.name)}
+                                        style={{ marginBottom: "24px" }}
+                                    >
+                                        Remove
+                                    </Button>
+                                </div>
                             </div>
                         ))}
                         <Form.Item>
