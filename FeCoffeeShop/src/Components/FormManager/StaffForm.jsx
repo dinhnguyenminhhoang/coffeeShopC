@@ -8,9 +8,9 @@ import {
     Tabs,
     Select,
 } from "antd";
-import { getAllBranches } from "../../service/branchs";
+import { getAllBranches } from "@/service/branchs";
 import moment from "moment";
-import { getStaffDetaiil } from "../../service/staff";
+import { getStaffDetaiil } from "@/service/staff";
 
 const { TabPane } = Tabs;
 

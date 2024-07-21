@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Table, Button, Modal, Space } from "antd";
 import axios from "axios";
-import ServiceRatingForm from "../../Components/FormManager/ServiceRatingForm";
+import ServiceRatingForm from "@/Components/FormManager/ServiceRatingForm";
 const mockServiceRatings = [
     {
         id: 1,

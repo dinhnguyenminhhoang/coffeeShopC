@@ -8,7 +8,7 @@ import {
     uploadBytesResumable,
     getDownloadURL,
 } from "firebase/storage";
-import { firebaseConfig, firebaseUrl } from "../../utils/resuableFuc";
+import { firebaseConfig, firebaseUrl } from "@/utils/resuableFuc";
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);

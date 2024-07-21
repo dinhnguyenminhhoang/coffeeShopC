@@ -8,7 +8,7 @@ import {
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import useNotification from "@/hooks/NotiHook";
-import { customerRegister } from "../../../service/auth";
+import { customerRegister } from "@//service/auth";
 
 const { Title, Text } = Typography;
 

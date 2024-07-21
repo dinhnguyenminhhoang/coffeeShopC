@@ -6,7 +6,7 @@ import { Divider, Form, Input, Typography } from "antd";
 import Cookies from "js-cookie";
 import React, { useState } from "react";
 import { useNavigate, useResolvedPath } from "react-router-dom";
-import { StaffLogin } from "../../../service/auth";
+import { StaffLogin } from "@//service/auth";
 const { Title, Text } = Typography;
 
 const Login = () => {

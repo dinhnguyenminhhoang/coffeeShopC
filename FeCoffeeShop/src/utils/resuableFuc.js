@@ -26,4 +26,13 @@ const firebaseConfig = {
     measurementId: "G-K5ZNM7M5DS",
 };
 const firebaseUrl = "gs://coffee-8ec85.appspot.com";
-export { getInitials, isValidImageUrl, formatVND, firebaseConfig, firebaseUrl };
+const stripeKey =
+    "pk_test_51O2Re5Ch5jfUlQ3sapQzL592oYJdmXdGmYKaQIHXU20LmTrYYVxHNRrrTNbZSrp0R2to70M4F1P4vYpU5aQEVyK1004RjU0FtI";
+export {
+    getInitials,
+    isValidImageUrl,
+    formatVND,
+    firebaseConfig,
+    firebaseUrl,
+    stripeKey,
+};

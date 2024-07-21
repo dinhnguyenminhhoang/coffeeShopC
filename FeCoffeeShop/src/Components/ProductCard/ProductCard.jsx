@@ -1,8 +1,8 @@
 import React from "react";
 import { Button, Card, Spin } from "antd";
 import { useNavigate } from "react-router-dom";
-import noImg from "../../assets/website/noimg.jpg";
-import { isValidImageUrl } from "../../utils/resuableFuc";
+import noImg from "@/assets/website/noimg.jpg";
+import { isValidImageUrl } from "@/utils/resuableFuc";
 import { HeartOutlined } from "@ant-design/icons";
 const { Meta } = Card;
 
@@ -21,11 +21,7 @@ const ProductCard = ({ product, loading }) => {
                     ) : null}
                     <img
                         alt={product.Name}
-                        src={
-                            isValidImageUrl(product.Image)
-                                ? product.Image
-                                : noImg
-                        }
+                        src={product.Image}
                         className={`w-full h-80 object-cover ${
                             loading ? "opacity-50" : ""
                         }`}

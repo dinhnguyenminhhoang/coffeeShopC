@@ -1,6 +1,6 @@
 import React from "react";
 import Slider from "react-slick";
-import { settings } from "../../config/configSlider";
+import { settings } from "@/config/configSlider";
 
 const TestimonialData = [
     {

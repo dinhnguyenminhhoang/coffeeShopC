@@ -13,7 +13,7 @@ import { PiCashRegister } from "react-icons/pi";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 import { getInitials } from "@/utils/resuableFuc";
-import useNotification from "../../hooks/NotiHook";
+import useNotification from "@/hooks/NotiHook";
 const Menus = [
     {
         id: 1,
@@ -67,7 +67,7 @@ const Navbar = () => {
             <Menu.Item
                 key="profile"
                 icon={<BiUser />}
-                // onClick={() => navigate(`profile/${userData.id}`)}
+                onClick={() => navigator(`/profile/${userData.Id}`)}
             >
                 Profile
             </Menu.Item>
@@ -104,9 +104,9 @@ const Navbar = () => {
                         </ul>
                         <button
                             className="bg-primary/70 px-4 py-2 rounded-full hover:scale-105 duration-200 flex items-center gap-3"
-                            onClick={() => navigator("/order")}
+                            onClick={() => navigator("/carts")}
                         >
-                            Order
+                            Cart
                             <FaCoffee className="text-xl cursor-pointer" />
                         </button>
                         {isLogger ? (

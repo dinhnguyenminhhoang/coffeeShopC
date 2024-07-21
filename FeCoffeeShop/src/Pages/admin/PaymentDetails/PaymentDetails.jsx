@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Table, Button, Modal, Space } from "antd";
 import axios from "axios";
-import PaymentDetailForm from "../../Components/FormManager/PaymentDetailForm";
+import PaymentDetailForm from "@/Components/FormManager/PaymentDetailForm";
 const mockPaymentDetails = [
     {
         id: 1,

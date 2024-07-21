@@ -5,7 +5,7 @@ import StaffForm from "@/Components/FormManager/StaffForm";
 import { getAllStaff } from "@/service/staff";
 import useNotification from "@/hooks/NotiHook";
 import { formatVND } from "@/utils/resuableFuc";
-import { createStaff, deleteStaff } from "../../../service/staff";
+import { createStaff, deleteStaff } from "@//service/staff";
 
 const StaffPage = () => {
     const [staff, setStaff] = useState([]);
