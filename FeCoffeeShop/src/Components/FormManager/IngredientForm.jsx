@@ -1,22 +1,32 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Form, Input, Button } from "antd";
+import { getIngredientById } from "../../service/Ingredients";
 
-const IngredientForm = ({ initialValues, onSave, onCancel }) => {
+const IngredientForm = ({ initialValues, onSave, onCancel, isVisible }) => {
     const [form] = Form.useForm();
 
     const handleFinish = (values) => {
         onSave(values);
     };
 
+    useEffect(() => {
+        if (initialValues && isVisible) {
+            getIngredientById({ id: initialValues })
+                .then((response) => response.data)
+                .then((data) => {
+                    if (data.Success) {
+                        form.setFieldsValue(data.ResultData);
+                    }
+                });
+        } else {
+            form.resetFields();
+        }
+    }, [initialValues, isVisible]);
+
     return (
-        <Form
-            form={form}
-            initialValues={initialValues}
-            onFinish={handleFinish}
-            layout="vertical"
-        >
+        <Form form={form} onFinish={handleFinish} layout="vertical">
             <Form.Item
-                name="name"
+                name="Name"
                 label="Name"
                 rules={[
                     {
@@ -28,12 +38,12 @@ const IngredientForm = ({ initialValues, onSave, onCancel }) => {
                 <Input />
             </Form.Item>
             <Form.Item
-                name="type"
-                label="Type"
+                name="Description"
+                label="Description"
                 rules={[
                     {
                         required: true,
-                        message: "Please input the ingredient type!",
+                        message: "Please input the ingredient description!",
                     },
                 ]}
             >

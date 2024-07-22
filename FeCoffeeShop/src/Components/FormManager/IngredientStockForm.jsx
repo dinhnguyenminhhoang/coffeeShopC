@@ -1,22 +1,24 @@
-import React from "react";
-import { Form, Input, Button } from "antd";
+import { Button, DatePicker, Form, Input } from "antd";
+import React, { useEffect } from "react";
 
-const IngredientStockForm = ({ initialValues, onSave, onCancel }) => {
+const IngredientStockForm = ({ id, isVisible, onSave, onCancel }) => {
     const [form] = Form.useForm();
-
     const handleFinish = (values) => {
-        onSave(values);
+        onSave({
+            ...values,
+            ReceivedAt: values.ReceivedAt.format(),
+            ExpiredAt: values.ExpiredAt.format(),
+        });
     };
 
+    useEffect(() => {
+        form.resetFields();
+    }, [id, isVisible]);
     return (
-        <Form
-            form={form}
-            initialValues={initialValues}
-            onFinish={handleFinish}
-            layout="vertical"
-        >
+        <Form form={form} onFinish={handleFinish} layout="vertical">
             <Form.Item
-                name="ingredientId"
+                initialValue={id}
+                name="IngredientId"
                 label="Ingredient ID"
                 rules={[
                     {
@@ -25,20 +27,39 @@ const IngredientStockForm = ({ initialValues, onSave, onCancel }) => {
                     },
                 ]}
             >
-                <Input />
+                <Input value={id} defaultValue={id} disabled />
             </Form.Item>
             <Form.Item
-                name="quantity"
-                label="Quantity"
+                name="Amount"
+                label="Amount"
                 rules={[
-                    { required: true, message: "Please input the quantity!" },
+                    { required: true, message: "Please input the amount!" },
                 ]}
             >
                 <Input />
             </Form.Item>
             <Form.Item
-                name="expiryDate"
-                label="Expiry Date"
+                name="Cost"
+                label="Cost"
+                rules={[{ required: true, message: "Please input the cost!" }]}
+            >
+                <Input />
+            </Form.Item>
+            <Form.Item
+                name="ReceivedAt"
+                label="Received At"
+                rules={[
+                    {
+                        required: true,
+                        message: "Please input the received date!",
+                    },
+                ]}
+            >
+                <DatePicker showTime format="YYYY-MM-DD HH:mm:ss" />
+            </Form.Item>
+            <Form.Item
+                name="ExpiredAt"
+                label="Expired At"
                 rules={[
                     {
                         required: true,
@@ -46,7 +67,7 @@ const IngredientStockForm = ({ initialValues, onSave, onCancel }) => {
                     },
                 ]}
             >
-                <Input />
+                <DatePicker showTime format="YYYY-MM-DD HH:mm:ss" />
             </Form.Item>
             <Form.Item>
                 <Button type="primary" htmlType="submit">

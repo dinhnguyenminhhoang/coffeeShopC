@@ -25,6 +25,7 @@ const firebaseConfig = {
     appId: "1:772302752788:web:f2f60ae48a908047e5eb01",
     measurementId: "G-K5ZNM7M5DS",
 };
+
 const firebaseUrl = "gs://coffee-8ec85.appspot.com";
 const stripeKey =
     "pk_test_51O2Re5Ch5jfUlQ3sapQzL592oYJdmXdGmYKaQIHXU20LmTrYYVxHNRrrTNbZSrp0R2to70M4F1P4vYpU5aQEVyK1004RjU0FtI";

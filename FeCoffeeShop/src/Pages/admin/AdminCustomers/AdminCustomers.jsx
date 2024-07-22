@@ -17,7 +17,7 @@ const AdminCustomers = () => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [editingCustomer, setEditingCustomer] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
-    const [pageSize, setPageSize] = useState(10);
+    const [pageSize, setPageSize] = useState(1);
     const [totalCount, setTotalCount] = useState(0);
     const openNotification = useNotification();
 
