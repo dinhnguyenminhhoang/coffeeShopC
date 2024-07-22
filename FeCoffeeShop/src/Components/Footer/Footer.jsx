@@ -57,9 +57,7 @@ const Footer = () => {
                                 href="#"
                                 target="_blank"
                                 className="inline-block bg-[#3d2517] py-2 px-4 mt-5 text-sm rounded-full"
-                            >
-                                Visit our YouTube Channel
-                            </a>
+                            ></a>
                         </div>
 
                         {/* Footer Link*/}
@@ -108,8 +106,8 @@ const Footer = () => {
                                     Address
                                 </h1>
                                 <div>
-                                    <p className="mb-3">Enugu, Enugu</p>
-                                    <p>+234 7057619705</p>
+                                    <p className="mb-3">Hồ Chí Minh</p>
+                                    <p>+012345678910</p>
 
                                     {/*Social Link*/}
                                     <div className="space-x-3 mt-6">
