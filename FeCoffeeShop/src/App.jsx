@@ -9,10 +9,10 @@ import AdminLayout from "./Layout/AdminLayout";
 import DefautLayout from "./Layout/DefautLayout";
 import AdminBranches from "./Pages/admin/AdminBranches/AdminBranches";
 import AdminCustomers from "./Pages/admin/AdminCustomers/AdminCustomers";
+import AdminIngredientsPage from "./Pages/admin/AdminIngredientsPage/AdminIngredientsPage";
 import AdminRecipes from "./Pages/admin/AdminRecipes/AdminRecipes";
 import AdminVouchers from "./Pages/admin/AdminVouchers/AdminVouchers";
 import DrinkManager from "./Pages/admin/DrinkManager/DrinkManager";
-import IngredientsPage from "./Pages/admin/IngredientsPage/IngredientsPage";
 import IngredientsStocksPage from "./Pages/admin/IngredientsStocksPage/IngredientsStocksPage";
 import PaymentDetailsPage from "./Pages/admin/PaymentDetails/PaymentDetails";
 import StaffPage from "./Pages/admin/StaffPage/StaffPage";
@@ -71,10 +71,7 @@ const App = () => {
                         element={<ServiceRatingsPage />}
                     />
                     {/* voucher */}
-                    <Route
-                        path="/manager-ingredients"
-                        element={<IngredientsPage />}
-                    />
+
                     <Route
                         path="/manager-ingredients-stocks"
                         element={<IngredientsStocksPage />}
@@ -98,6 +95,10 @@ const App = () => {
                     <Route
                         path="/manager-vouchers"
                         element={<AdminVouchers />}
+                    />
+                    <Route
+                        path="/manager-ingredients"
+                        element={<AdminIngredientsPage />}
                     />
                 </Route>
                 <Route path="*" element={<PageNotFound />} />
