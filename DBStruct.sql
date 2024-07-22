@@ -109,8 +109,8 @@ DROP TABLE IF EXISTS [IngredientStocks];
 CREATE TABLE [IngredientStocks] (
   [Id] INT CONSTRAINT PK_IngredientStocks PRIMARY KEY IDENTITY(1, 1),
   [IngredientId] INT,
-  [Amount] INT NOT NULL,
-  [Remain] INT NOT NULL,
+  [Amount] FLOAT NOT NULL,
+  [Remain] FLOAT NOT NULL,
   [Cost] FLOAT NOT NULL,
   [ReceivedAt] DateTime DEFAULT(GETDATE()),
   [ExpiredAt] DateTime NOT NULL,

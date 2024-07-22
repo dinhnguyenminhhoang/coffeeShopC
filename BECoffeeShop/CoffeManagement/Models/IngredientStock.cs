@@ -11,9 +11,9 @@ public partial class IngredientStock
 
     public int? IngredientId { get; set; }
 
-    public int Amount { get; set; }
+    public double Amount { get; set; }
 
-    public int Remain { get; set; }
+    public double Remain { get; set; }
 
     public double Cost { get; set; }
 
