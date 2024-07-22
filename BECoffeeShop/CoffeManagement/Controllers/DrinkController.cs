@@ -90,6 +90,16 @@ namespace CoffeManagement.Controllers
 
             return Ok(RenderSuccessResponse(data: result, message: "SUCCESS"));
         }
+        
+        [HttpPut("Recipe")]
+        //[Authorize(Policy = nameof(AuthPolicy.POL_ADMIN))]
+        [SwaggerOperation(Summary = "Update Recipe of Drink")]
+        public async Task<IActionResult> UpdateRecipe([FromBody] UpdateRecipeRequest request)
+        {
+            var result = await _drinksService.UpdateRecipe(request);
+
+            return Ok(RenderSuccessResponse(data: result, message: "SUCCESS"));
+        }
 
     }
 }

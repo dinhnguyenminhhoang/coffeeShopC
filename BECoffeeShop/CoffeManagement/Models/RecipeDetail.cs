@@ -13,7 +13,7 @@ public partial class RecipeDetail
 
     public int IngredientId { get; set; }
 
-    public int Amount { get; set; }
+    public double? Amount { get; set; }
 
     public virtual Recipe Recipe { get; set; }
 }

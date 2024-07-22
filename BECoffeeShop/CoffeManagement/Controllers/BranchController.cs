@@ -30,6 +30,7 @@ namespace CoffeManagement.Controllers
 
             return Ok(RenderSuccessResponse(result));
         }
+
         [HttpGet("{id:int}")]
         [AllowAnonymous]
         [SwaggerOperation(Summary = "Get Branches Detail")]

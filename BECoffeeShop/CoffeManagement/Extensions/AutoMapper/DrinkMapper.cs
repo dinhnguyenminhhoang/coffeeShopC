@@ -8,7 +8,8 @@ namespace CoffeManagement.Extensions.AutoMapper
         {
             CreateMap<Models.Drink, DTO.Drink.DrinkResponse>();
             CreateMap<Models.Drink, DTO.Drink.DrinkDetailResponse>()
-                .ForMember(dest => dest.DrinksSizes, otp => otp.MapFrom(src => src.DrinkSizes.AsEnumerable()));
+                .ForMember(dest => dest.DrinksSizes, otp => otp.MapFrom(src => src.DrinkSizes.AsEnumerable()))
+                .ForMember(dest => dest.Recipe, otp => otp.MapFrom(src => src.Recipes.FirstOrDefault()));
             CreateMap<Common.Pagging.PagingListModel<Models.Drink>, Common.Pagging.PagingListModel<DTO.Drink.DrinkResponse>>();
             CreateMap<DTO.Drink.CreateDrinkRequest, Models.Drink>();
             CreateMap<DTO.Drink.UpdateDrinkRequest, Models.Drink>();

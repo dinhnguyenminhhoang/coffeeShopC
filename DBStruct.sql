@@ -134,7 +134,7 @@ CREATE TABLE [RecipeDetails] (
   [Id] INT CONSTRAINT PK_RecipeDetails PRIMARY KEY IDENTITY(1, 1),
   [RecipeId] INT NOT NULL,
   [IngredientId] INT NOT NULL,
-  [Amount] INT NOT NULL,
+  [Amount] FLOAT NOT NULL,
   CONSTRAINT FK_RecipeDetails_Recipes FOREIGN KEY ([RecipeId]) REFERENCES [Recipes] ([Id])
 );
 

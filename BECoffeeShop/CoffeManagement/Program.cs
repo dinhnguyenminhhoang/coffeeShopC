@@ -7,6 +7,7 @@ using CoffeManagement.Middlewares;
 using CoffeManagement.Repositories.BranchRepo;
 using CoffeManagement.Repositories.CustomerRepo;
 using CoffeManagement.Repositories.DrinkRepo;
+using CoffeManagement.Repositories.RecipeRepo;
 using CoffeManagement.Repositories.StaffRepo;
 using CoffeManagement.Services.AccountService;
 using CoffeManagement.Services.BrachService;
@@ -81,6 +82,8 @@ namespace CoffeManagement
             builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
             builder.Services.AddScoped<IBranchRepository, BranchRepository>();
             builder.Services.AddScoped<IStaffRepository, StaffRepository>();
+            builder.Services.AddScoped<IRecipeRepository, RecipeRepository>();
+            builder.Services.AddScoped<IRecipeDetailRepository, RecipeDetailRepository>();
             builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
             builder.Services.AddScoped<IDrinkService, DrinkService>();
             builder.Services.AddScoped<IBranchService, BranchService>();
