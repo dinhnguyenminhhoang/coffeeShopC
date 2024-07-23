@@ -96,6 +96,7 @@ CREATE TABLE [Customers] (
   [Id] INT CONSTRAINT PK_Customers PRIMARY KEY IDENTITY(1, 1),
   [FullName] NVARCHAR(50),
   [Phone] VARCHAR(20) NOT NULL,
+  [Email] VARCHAR(60) NOT NULL,
   [Address] NVARCHAR(255) NOT NULL,
   [AccountId] INT,
   [IsDeleted] BIT DEFAULT(0),

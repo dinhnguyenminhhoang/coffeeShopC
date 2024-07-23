@@ -2,6 +2,7 @@
 using CoffeManagement.Data;
 using CoffeManagement.Extensions.CORS;
 using CoffeManagement.Extensions.Jwt;
+using CoffeManagement.Infrastructure.Email;
 using CoffeManagement.Infrastructure.Jwt;
 using CoffeManagement.Middlewares;
 using CoffeManagement.Repositories.BranchRepo;
@@ -95,6 +96,7 @@ namespace CoffeManagement
             builder.Services.AddScoped<IStaffService, StaffService>();
             builder.Services.AddScoped<IIngredientService, IngredientService>();
             builder.Services.AddScoped<IPaymentStripeService, PaymentStripeService>();
+            builder.Services.AddSingleton<IEmailService, EmailService>();
 
             var app = builder.Build();
 
