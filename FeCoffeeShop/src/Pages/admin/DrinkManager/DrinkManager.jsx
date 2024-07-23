@@ -19,6 +19,7 @@ import { formatVND } from "@//utils/resuableFuc";
 import DrinksSizeForm from "@//Components/FormManager/DrinksSizeForm";
 import RecipeDetailForm from "../../../Components/FormManager/RecipeDetailForm";
 import { updateDrinkRecipe } from "../../../service/drinks";
+import { TbReceiptEuro } from "react-icons/tb";
 
 const DrinkManager = () => {
     const [drinksData, setDrinksData] = useState([]);
@@ -67,8 +68,8 @@ const DrinkManager = () => {
         setEditingDrink(drinksData);
         setIsModalVisible(true);
     };
-    const handleEditRecipe = (id) => {
-        setEditingRecipe(id);
+    const handleEditRecipe = (recipe) => {
+        setEditingRecipe(recipe);
         setIsModalVisibleRecipe(true);
     };
     const handleEditSize = (drinksSize) => {
@@ -194,6 +195,12 @@ const DrinkManager = () => {
                         type: "success",
                         description: "Edit drinks recipe successfully",
                     });
+                    const response = await getDrinkById({
+                        drinkId: detailSize.Id,
+                    });
+                    if (response.data.Success) {
+                        setDetailSize(response.data?.ResultData);
+                    }
                 }
             }
         } catch (error) {
@@ -259,9 +266,7 @@ const DrinkManager = () => {
                         Detail Size
                     </Button>
                     <Button onClick={() => handleEdit(record)}>Edit</Button>
-                    <Button onClick={() => handleEditRecipe(record.Id)}>
-                        Recipe
-                    </Button>
+
                     <Popconfirm
                         title={`Confirm delete drinksData ${record.Name}?`}
                         onConfirm={() => handleDelete(record.Id)}
@@ -275,42 +280,90 @@ const DrinkManager = () => {
             ),
         },
     ];
+
     const columnsSize = [
-        { title: "ID", dataIndex: "Id", key: "Id" },
-
-        { title: "Size", dataIndex: "Size", key: "Size" },
-
         {
-            title: "Price",
-            dataIndex: "Price",
-            key: "Price",
-            render: (text) => <span>{formatVND(text)}</span>,
+            title: "Drinks Sizes",
+            key: "DrinksSizes",
+            render: (record) => (
+                <Table
+                    columns={[
+                        { title: "Size", dataIndex: "Size", key: "Size" },
+                        { title: "Ratio", dataIndex: "Ratio", key: "Ratio" },
+                        {
+                            title: "Price",
+                            dataIndex: "Price",
+                            key: "Price",
+                            render: (text) => <span>{formatVND(text)}</span>,
+                        },
+                        {
+                            title: "Actions",
+                            key: "actions",
+                            render: (text, record) => (
+                                <Space>
+                                    <Button
+                                        onClick={() => handleEditSize(record)}
+                                        icon={<BiEdit />}
+                                    >
+                                        Edit
+                                    </Button>
+
+                                    <Popconfirm
+                                        title={`Confirm delete drinksData ${record.Name}?`}
+                                        onConfirm={() =>
+                                            handleDeleteSzie(record.Id)
+                                        }
+                                        onCancel={() => {}}
+                                        okText="Yes"
+                                        cancelText="No"
+                                    >
+                                        <Button danger icon={<MdDelete />}>
+                                            Delete
+                                        </Button>
+                                    </Popconfirm>
+                                </Space>
+                            ),
+                        },
+                    ]}
+                    dataSource={record.DrinksSizes}
+                    pagination={false}
+                />
+            ),
         },
-
-        { title: "Ratio", dataIndex: "Ratio", key: "Ratio" },
         {
-            title: "Actions",
-            key: "actions",
-            render: (text, record) => (
-                <Space>
-                    <Button
-                        onClick={() => handleEditSize(record)}
-                        icon={<BiEdit />}
-                    >
-                        Edit
-                    </Button>
-                    <Popconfirm
-                        title={`Confirm delete drinksData ${record.Name}?`}
-                        onConfirm={() => handleDeleteSzie(record.Id)}
-                        onCancel={() => {}}
-                        okText="Yes"
-                        cancelText="No"
-                    >
-                        <Button danger icon={<MdDelete />}>
-                            Delete
+            title: "Recipe",
+            key: "Recipe",
+            render: (record) => (
+                <>
+                    <Space>
+                        <p>{record.Recipe?.Intructon}</p>
+                        <Button
+                            onClick={() => handleEditRecipe(record?.Recipe)}
+                            icon={<BiEdit />}
+                        >
+                            update
                         </Button>
-                    </Popconfirm>
-                </Space>
+                    </Space>
+                    <Table
+                        columns={[
+                            {
+                                title: "Ingredient ID",
+                                dataIndex: "IngredientId",
+                                key: "IngredientId",
+                            },
+                            {
+                                title: "Amount",
+                                dataIndex: "Amount",
+                                render: (text) => (
+                                    <span>{formatVND(text)}</span>
+                                ),
+                                key: "Amount",
+                            },
+                        ]}
+                        dataSource={record.Recipe?.RecipeDetails}
+                        pagination={false}
+                    />
+                </>
             ),
         },
     ];
@@ -332,7 +385,7 @@ const DrinkManager = () => {
                     </Flex>
                     <Table
                         columns={columnsSize}
-                        dataSource={detailSize?.DrinksSizes}
+                        dataSource={[detailSize]}
                         rowKey="Id"
                     />
                     <Modal

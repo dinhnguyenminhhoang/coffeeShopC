@@ -5,11 +5,12 @@ import { getAllIngredients } from "../../service/Ingredients";
 const RecipeDetailForm = ({ initialValues, onSave, onCancel, isVisible }) => {
     const [form] = Form.useForm();
     const handleFinish = (values) => {
-        onSave({ ...values, Id: initialValues });
+        onSave({ ...values, Id: initialValues.Id });
     };
     const [ingredients, setIngredients] = useState([]);
     useEffect(() => {
         form.resetFields();
+        form.setFieldValue(initialValues);
         fetchIngredients();
     }, [initialValues, isVisible]);
 
@@ -28,7 +29,12 @@ const RecipeDetailForm = ({ initialValues, onSave, onCancel, isVisible }) => {
         }
     };
     return (
-        <Form form={form} onFinish={handleFinish} layout="vertical">
+        <Form
+            form={form}
+            onFinish={handleFinish}
+            layout="vertical"
+            initialValues={initialValues}
+        >
             <Form.Item
                 name="Intructon"
                 label="Intructon"
