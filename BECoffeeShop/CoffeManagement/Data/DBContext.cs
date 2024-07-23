@@ -203,6 +203,7 @@ public partial class DBContext : DbContext
 
         modelBuilder.Entity<Order>(entity =>
         {
+            entity.Property(e => e.CanceledNote).HasMaxLength(255);
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
@@ -228,13 +229,21 @@ public partial class DBContext : DbContext
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
 
+            entity.HasOne(d => d.Branch).WithMany(p => p.Orders)
+                .HasForeignKey(d => d.BranchId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Orders_Branches");
+
             entity.HasOne(d => d.Customer).WithMany(p => p.Orders)
                 .HasForeignKey(d => d.CustomerId)
                 .HasConstraintName("FK_Orders_Customers");
 
-            entity.HasOne(d => d.Staff).WithMany(p => p.Orders)
+            entity.HasOne(d => d.StaffCanceled).WithMany(p => p.OrderStaffCanceleds)
+                .HasForeignKey(d => d.StaffCanceledId)
+                .HasConstraintName("FK_Orders_Staffs_Cancel");
+
+            entity.HasOne(d => d.Staff).WithMany(p => p.OrderStaffs)
                 .HasForeignKey(d => d.StaffId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Orders_Staffs");
         });
 

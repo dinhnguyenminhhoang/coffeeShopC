@@ -9,6 +9,7 @@ using CoffeManagement.Repositories.BranchRepo;
 using CoffeManagement.Repositories.CustomerRepo;
 using CoffeManagement.Repositories.DrinkRepo;
 using CoffeManagement.Repositories.IngredientRepo;
+using CoffeManagement.Repositories.OrderRepo;
 using CoffeManagement.Repositories.RecipeRepo;
 using CoffeManagement.Repositories.StaffRepo;
 using CoffeManagement.Services.AccountService;
@@ -16,6 +17,7 @@ using CoffeManagement.Services.BrachService;
 using CoffeManagement.Services.CustomerService;
 using CoffeManagement.Services.DrinkService;
 using CoffeManagement.Services.IngredientService;
+using CoffeManagement.Services.OrderService;
 using CoffeManagement.Services.PaymentStripeService;
 using CoffeManagement.Services.StaffService;
 using Microsoft.EntityFrameworkCore;
@@ -88,6 +90,8 @@ namespace CoffeManagement
             builder.Services.AddScoped<IRecipeRepository, RecipeRepository>();
             builder.Services.AddScoped<IRecipeDetailRepository, RecipeDetailRepository>();
             builder.Services.AddScoped<IIngredientRepository, IngredientRepository>();
+            builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+            builder.Services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
             builder.Services.AddScoped<IIngredientStockRepository, IngredientStockRepository>();
             builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
             builder.Services.AddScoped<IDrinkService, DrinkService>();
@@ -95,6 +99,7 @@ namespace CoffeManagement
             builder.Services.AddScoped<ICustomerService, CustomerService>();
             builder.Services.AddScoped<IStaffService, StaffService>();
             builder.Services.AddScoped<IIngredientService, IngredientService>();
+            builder.Services.AddScoped<IOrderService, OrderService>();
             builder.Services.AddScoped<IPaymentStripeService, PaymentStripeService>();
             builder.Services.AddSingleton<IEmailService, EmailService>();
 

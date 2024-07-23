@@ -19,7 +19,5 @@ public partial class Recipe
 
     public virtual Drink Drink { get; set; }
 
-    public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
-
     public virtual ICollection<RecipeDetail> RecipeDetails { get; set; } = new List<RecipeDetail>();
 }

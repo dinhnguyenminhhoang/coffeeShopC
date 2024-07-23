@@ -19,5 +19,7 @@ public partial class Branch
 
     public DateTime? UpdatedAt { get; set; }
 
+    public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
+
     public virtual ICollection<Staff> Staff { get; set; } = new List<Staff>();
 }

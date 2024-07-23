@@ -11,7 +11,7 @@ public partial class Order
 
     public string Type { get; set; }
 
-    public int StaffId { get; set; }
+    public int? StaffId { get; set; }
 
     public int BranchId { get; set; }
 
@@ -31,11 +31,21 @@ public partial class Order
 
     public double TotalPrice { get; set; }
 
+    public int? StaffCanceledId { get; set; }
+
+    public string CanceledNote { get; set; }
+
     public DateTime? CreatedAt { get; set; }
 
     public DateTime? UpdatedAt { get; set; }
 
+    public virtual Branch Branch { get; set; }
+
     public virtual Customer Customer { get; set; }
 
+    public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
+
     public virtual Staff Staff { get; set; }
+
+    public virtual Staff StaffCanceled { get; set; }
 }

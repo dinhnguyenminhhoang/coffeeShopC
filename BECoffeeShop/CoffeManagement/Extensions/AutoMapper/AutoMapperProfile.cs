@@ -14,6 +14,7 @@ namespace CoffeManagement.Extensions.AutoMapper
             LoadAccountMapperProfile();
             LoadRecipeMapperProfile();
             LoadIngredientMapperProfile();
+            LoadOrderMapperProfile();
         }
     }
 }

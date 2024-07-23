@@ -27,5 +27,5 @@ public partial class OrderDetail
 
     public virtual DrinkSize DrinkSize { get; set; }
 
-    public virtual Recipe Order { get; set; }
+    public virtual Order Order { get; set; }
 }

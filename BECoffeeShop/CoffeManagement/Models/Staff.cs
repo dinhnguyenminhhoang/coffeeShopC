@@ -47,5 +47,7 @@ public partial class Staff
 
     public virtual Branch Branch { get; set; }
 
-    public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
+    public virtual ICollection<Order> OrderStaffCanceleds { get; set; } = new List<Order>();
+
+    public virtual ICollection<Order> OrderStaffs { get; set; } = new List<Order>();
 }

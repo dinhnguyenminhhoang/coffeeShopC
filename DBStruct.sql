@@ -143,7 +143,7 @@ DROP TABLE IF EXISTS [Orders];
 CREATE TABLE [Orders] (
   [Id] INT CONSTRAINT PK_Orders PRIMARY KEY IDENTITY(1, 1),
   [Type] VARCHAR(10) DEFAULT('ODR_OFF'), -- ODR_OFF, ODR_ON
-  [StaffId] INT NOT NULL,
+  [StaffId] INT,
   [BranchId] INT NOT NULL,
   [CustomerId] INT,
   [ShippingAddress] NVARCHAR(255),
@@ -153,10 +153,14 @@ CREATE TABLE [Orders] (
   [StaffNote] NVARCHAR(255),
   [OrderdAt] DateTime DEFAULT(GETDATE()),
   [TotalPrice] FLOAT NOT NULL,
+  [StaffCanceledId] INT,
+  [CanceledNote] NVARCHAR(255),
   [CreatedAt] DateTime DEFAULT(GETDATE()), 
   [UpdatedAt] DateTime DEFAULT(GETDATE()),
+  CONSTRAINT FK_Orders_Branches FOREIGN KEY ([BranchId]) REFERENCES [Branches] ([Id]),
   CONSTRAINT FK_Orders_Staffs FOREIGN KEY ([StaffId]) REFERENCES [Staffs] ([Id]),
-  CONSTRAINT FK_Orders_Customers FOREIGN KEY ([CustomerId]) REFERENCES [Customers] ([Id])
+  CONSTRAINT FK_Orders_Customers FOREIGN KEY ([CustomerId]) REFERENCES [Customers] ([Id]),
+  CONSTRAINT FK_Orders_Staffs_Cancel FOREIGN KEY ([StaffCanceledId]) REFERENCES [Staffs] ([Id]),
 );
 
 DROP TABLE IF EXISTS [OrderDetails];
@@ -169,7 +173,7 @@ CREATE TABLE [OrderDetails] (
   [Price] FLOAT NOT NULL,
   [IngredientCost] FLOAT NOT NULL,
   [Note] NVARCHAR(255),
-  CONSTRAINT FK_OrderDetails_Orders FOREIGN KEY ([OrderId]) REFERENCES [Recipes] ([Id]),
+  CONSTRAINT FK_OrderDetails_Orders FOREIGN KEY ([OrderId]) REFERENCES [Orders] ([Id]),
   CONSTRAINT FK_OrderDetails_Drinks FOREIGN KEY ([DrinkId]) REFERENCES [Drinks] ([Id]),
   CONSTRAINT FK_OrderDetails_DrinkSizes FOREIGN KEY ([DrinkSizeId]) REFERENCES [DrinkSizes] ([Id]),
 );
