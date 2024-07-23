@@ -25,7 +25,22 @@ const updateAccountCustomers = ({ formData }) => {
 const deleteCustomers = ({ customerId }) => {
     return instance.delete(`/Customers/${customerId}`, { headers });
 };
-
+const resetPassword = ({ Password, slug }) => {
+    return instance.post(
+        `/Api/Auth/Customer/ResetPassword`,
+        { Password },
+        {
+            headers: {
+                "Content-Type": "application/json",
+                accept: "*/*",
+                Authorization: `Bearer ${slug}`,
+            },
+        }
+    );
+};
+const forgotPassword = ({ Email }) => {
+    return instance.post(`/Api/Auth/Customer/ForgotPassword`, { Email });
+};
 export {
     getAllCustomers,
     createCustomers,
@@ -33,4 +48,6 @@ export {
     updateCustomers,
     deleteCustomers,
     updateAccountCustomers,
+    resetPassword,
+    forgotPassword,
 };
