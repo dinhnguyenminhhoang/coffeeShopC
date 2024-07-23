@@ -27,6 +27,9 @@ const createDrinkSize = ({ formData }) => {
 const updateDrinkSize = ({ formData }) => {
     return instance.put(`/Drinks/Size`, formData, { headers });
 };
+const updateDrinkRecipe = ({ formData }) => {
+    return instance.put(`/Drinks/Recipe`, formData, { headers });
+};
 export {
     getDrink,
     createDrink,
@@ -35,4 +38,5 @@ export {
     DeleteDrinkSize,
     createDrinkSize,
     updateDrinkSize,
+    updateDrinkRecipe,
 };

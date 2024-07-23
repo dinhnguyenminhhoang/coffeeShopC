@@ -17,13 +17,17 @@ import {
 } from "@//service/drinks";
 import { formatVND } from "@//utils/resuableFuc";
 import DrinksSizeForm from "@//Components/FormManager/DrinksSizeForm";
+import RecipeDetailForm from "../../../Components/FormManager/RecipeDetailForm";
+import { updateDrinkRecipe } from "../../../service/drinks";
 
 const DrinkManager = () => {
     const [drinksData, setDrinksData] = useState([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isModalSizeVisible, setIsModalSizeVisible] = useState(false);
+    const [isModalSizeVisibleRecipe, setIsModalVisibleRecipe] = useState(false);
     const [editingDrink, setEditingDrink] = useState(null);
     const [editingDrinkSize, setEditingDrinkSize] = useState(null);
+    const [editingRecipe, setEditingRecipe] = useState(null);
     const [detailSize, setDetailSize] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
@@ -62,6 +66,10 @@ const DrinkManager = () => {
     const handleEdit = (drinksData) => {
         setEditingDrink(drinksData);
         setIsModalVisible(true);
+    };
+    const handleEditRecipe = (id) => {
+        setEditingRecipe(id);
+        setIsModalVisibleRecipe(true);
     };
     const handleEditSize = (drinksSize) => {
         setEditingDrinkSize(drinksSize);
@@ -175,6 +183,29 @@ const DrinkManager = () => {
         }
         setIsModalSizeVisible(false);
     };
+    const handleSaveReceipe = async (values) => {
+        try {
+            if (editingRecipe) {
+                const res = await updateDrinkRecipe({
+                    formData: values,
+                });
+                if (res.data.Success) {
+                    openNotification({
+                        type: "success",
+                        description: "Edit drinks recipe successfully",
+                    });
+                }
+            }
+        } catch (error) {
+            openNotification({
+                type: "error",
+                message: "Thông báo",
+                error: error,
+            });
+        }
+        fetchDrinks(currentPage, pageSize);
+        setIsModalVisibleRecipe(false);
+    };
     const handleTableChange = (pagination) => {
         setCurrentPage(pagination.current);
         setPageSize(pagination.pageSize);
@@ -228,6 +259,9 @@ const DrinkManager = () => {
                         Detail Size
                     </Button>
                     <Button onClick={() => handleEdit(record)}>Edit</Button>
+                    <Button onClick={() => handleEditRecipe(record.Id)}>
+                        Recipe
+                    </Button>
                     <Popconfirm
                         title={`Confirm delete drinksData ${record.Name}?`}
                         onConfirm={() => handleDelete(record.Id)}
@@ -353,6 +387,19 @@ const DrinkManager = () => {
                     </Modal>
                 </>
             )}
+            <Modal
+                title={editingRecipe ? "Edit Recipe" : "Add Recipe"}
+                visible={isModalSizeVisibleRecipe}
+                footer={null}
+                onCancel={() => setIsModalVisibleRecipe(false)}
+            >
+                <RecipeDetailForm
+                    initialValues={editingRecipe ? editingRecipe : null}
+                    onSave={handleSaveReceipe}
+                    visible={isModalSizeVisibleRecipe}
+                    onCancel={() => setIsModalVisibleRecipe(false)}
+                />
+            </Modal>
         </div>
     );
 };
