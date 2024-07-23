@@ -19,6 +19,7 @@ namespace CoffeManagement.Services.AccountService
         private readonly JwtUtil _jwtUtil;
         private readonly string _staffAccessTokenExpired;
         private readonly string _customerAccessTokenExpired;
+        private readonly string _resetPasswordTokenExpired;
         private readonly string _frontendBaseUrl;
 
         public AuthenticationService(IConfiguration configuration, IHttpContextAccessor httpContextAccessor, IAccountRepository accountRepository, ICustomerRepository customerRepository, IEmailService emailService, JwtUtil jwtUtil)
@@ -31,6 +32,7 @@ namespace CoffeManagement.Services.AccountService
 
             _staffAccessTokenExpired = configuration.GetValue<string>("Jwt:StaffAccessTokenExpired") ?? string.Empty;
             _customerAccessTokenExpired = configuration.GetValue<string>("Jwt:CustomerAccessTokenExpired") ?? string.Empty;
+            _resetPasswordTokenExpired = configuration.GetValue<string>("Jwt:ResetPasswordTokenExpired") ?? string.Empty;
             _frontendBaseUrl = configuration.GetValue<string>("Frontend:BaseUrl") ?? string.Empty;
         }
 
@@ -108,7 +110,7 @@ namespace CoffeManagement.Services.AccountService
                 new(AppClaimTypes.AccountType, AccountType.ACC_CUS.ToString()),
             };
 
-            var token = _jwtUtil.GenerateToken(claims, "5m");
+            var token = _jwtUtil.GenerateToken(claims, _resetPasswordTokenExpired);
 
             // Send email
             await _emailService.SendEmailAsync(new()
