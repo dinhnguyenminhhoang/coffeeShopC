@@ -14,5 +14,8 @@ namespace CoffeManagement.Services.CustomerService
         Task<int> DeleteCustomer(int id);
         Task<int> AddAccountForCustomers(CreateAccountForCustomerRequest request);
         Task<int> UpdateAccountOfCustomers(UpdateAccountOfCustomerRequest request);
+        Task<CustomersDetailResponse> GetProfileCustomer();
+        Task<int> UpdateProfileCustomer(UpdateProfileCustomerRequest request);
+        Task<int> CustomerChangePassword(CustomerChangePasswordRequest request);
     }
 }

@@ -99,7 +99,7 @@ namespace CoffeManagement.Services.AccountService
             // Check existed customer and customer have a account?
             var customerExits = await _customerRepository.GetByEmail(request.Email);
             if (customerExits == null) throw new ConflictException("This Email not registered on system");
-            if (customerExits.Account == null) throw new ConflictException("This Email not have any account");
+            if (customerExits.Account == null) throw new ConflictException("This Customer not have any account");
 
 
             // Generate token

@@ -85,5 +85,35 @@ namespace CoffeManagement.Controllers
 
             return Ok(RenderSuccessResponse(data: result, message: "SUCCESS"));
         }
+
+        [HttpGet("Profile")]
+        //[Authorize(Policy = nameof(AuthPolicy.POL_ADMIN))]
+        [SwaggerOperation(Summary = "Get Profile of Customers")]
+        public async Task<IActionResult> GetProfileCustomer()
+        {
+            var result = await _customersService.GetProfileCustomer();
+
+            return Ok(RenderSuccessResponse(data: result, message: "SUCCESS"));
+        }
+
+        [HttpPut("Profile")]
+        //[Authorize(Policy = nameof(AuthPolicy.POL_ADMIN))]
+        [SwaggerOperation(Summary = "Update Profile of Customers")]
+        public async Task<IActionResult> UpdateProfileCustomer([FromBody] UpdateProfileCustomerRequest request)
+        {
+            var result = await _customersService.UpdateProfileCustomer(request);
+
+            return Ok(RenderSuccessResponse(data: result, message: "SUCCESS"));
+        }
+
+        [HttpPut("Profile/ChangePassword")]
+        //[Authorize(Policy = nameof(AuthPolicy.POL_ADMIN))]
+        [SwaggerOperation(Summary = "Change Password of Customers")]
+        public async Task<IActionResult> ChangePasswordCustomer([FromBody] CustomerChangePasswordRequest request)
+        {
+            var result = await _customersService.CustomerChangePassword(request);
+
+            return Ok(RenderSuccessResponse(data: result, message: "SUCCESS"));
+        }
     }
 }

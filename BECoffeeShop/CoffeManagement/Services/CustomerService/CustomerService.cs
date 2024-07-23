@@ -4,6 +4,7 @@ using CoffeManagement.Common.Pagging;
 using CoffeManagement.DTO.Account;
 using CoffeManagement.DTO.Customer;
 using CoffeManagement.DTO.Paging;
+using CoffeManagement.Infrastructure.Jwt;
 using CoffeManagement.Models;
 using CoffeManagement.Models.Enum;
 using CoffeManagement.Repositories.CustomerRepo;
@@ -143,6 +144,53 @@ namespace CoffeManagement.Services.CustomerService
             await _accountRepository.Update(account);
 
             return account.Id;
+        }
+
+        public async Task<CustomersDetailResponse> GetProfileCustomer()
+        {
+            var phone = _httpContext?.User.Claims.FirstOrDefault(c => c.Type == AppClaimTypes.Phone)?.Value;
+
+            var existedCustomer = await _customerRepository.GetByPhone(phone);
+            if (existedCustomer == null || existedCustomer.IsDeleted == true) throw new NotFoundException("Not found customers.");
+
+            var customerDetail = _mapper.Map<CustomersDetailResponse>(existedCustomer);
+            var account = await _accountRepository.GetById(customerDetail.AccountId);
+            if (account != null) customerDetail.Account = _mapper.Map<AccountResponse>(account);
+
+            return customerDetail;
+        }
+
+        public async Task<int> UpdateProfileCustomer(UpdateProfileCustomerRequest request)
+        {
+            var phone = _httpContext?.User.Claims.FirstOrDefault(c => c.Type == AppClaimTypes.Phone)?.Value;
+
+            var existedCustomer = await _customerRepository.GetByPhone(phone);
+            if (existedCustomer == null || existedCustomer.IsDeleted == true) throw new NotFoundException("Not found customers.");
+
+            _mapper.Map(request, existedCustomer);
+            await _customerRepository.Update(existedCustomer);
+
+            return existedCustomer.Id;
+        }
+
+        public async Task<int> CustomerChangePassword(CustomerChangePasswordRequest request)
+        {
+            var phone = _httpContext?.User.Claims.FirstOrDefault(c => c.Type == AppClaimTypes.Phone)?.Value;
+
+            var existedCustomer = await _customerRepository.GetByPhone(phone);
+            if (existedCustomer == null || existedCustomer.IsDeleted == true) throw new NotFoundException("Not found customers.");
+            if (existedCustomer.Account == null) throw new ConflictException("This Customer not have any account");
+
+
+            // Compare old password
+            if (!BCrypt.Net.BCrypt.Verify(request.OldPassword, existedCustomer.Account.HashedPassword))
+                throw new BadRequestException("Old Password incorrect!");
+
+            // Update new Password
+            existedCustomer.Account.HashedPassword = BCrypt.Net.BCrypt.HashPassword(request.NewPassword);
+            await _customerRepository.Update(existedCustomer);
+
+            return existedCustomer.Id;
         }
     }
 }
