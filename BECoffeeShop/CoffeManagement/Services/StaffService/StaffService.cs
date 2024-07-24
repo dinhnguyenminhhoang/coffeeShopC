@@ -3,7 +3,6 @@ using Azure.Core;
 using CoffeManagement.Common.Exceptions;
 using CoffeManagement.Common.Pagging;
 using CoffeManagement.DTO.Account;
-using CoffeManagement.DTO.Customer;
 using CoffeManagement.DTO.Paging;
 using CoffeManagement.DTO.Staff;
 using CoffeManagement.Models;

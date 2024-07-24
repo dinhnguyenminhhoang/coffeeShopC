@@ -11,5 +11,13 @@ namespace CoffeManagement.Services.OrderService
         Task<int> CustomerCancelOrder(CustomerCancelOrderRequest request);
         Task<PagingListModel<CustomerOrderHistoryResponse>> CustomerOrderHistory(PagingDTO pagingDTO, ListOrderFilter filter);
         Task<CustomerOrderDetailResponse> CustomerOrderDetail(int id);
+
+        // ---------------------------------
+
+        Task<int> StaffCreateOrder(StaffCreateOrderRequest request);
+        Task<int> StaffUpdateOrder(StaffUpdateOrderRequest request);
+        Task<int> StaffCancelOrder(StaffCancelOrderRequest request);
+        Task<PagingListModel<StaffOrderResponse>> StaffOrderList(PagingDTO pagingDTO, ListOrderFilter filter);
+        Task<PagingListModel<StaffOrderResponse>> StaffOrderListAll(PagingDTO pagingDTO, ListOrderFilter filter);
     }
 }

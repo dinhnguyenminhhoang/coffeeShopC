@@ -9,6 +9,8 @@ namespace CoffeManagement.DTO.Order
 
         public string ShippingAddress { get; set; }
 
+        public string Type { get; set; }
+
         public string Status { get; set; }
 
         public string CustomerNote { get; set; }

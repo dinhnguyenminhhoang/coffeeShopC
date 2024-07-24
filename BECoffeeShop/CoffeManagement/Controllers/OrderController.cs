@@ -66,47 +66,57 @@ namespace CoffeManagement.Controllers
 
         //---------------------- Staff ----------------------
 
-        //[HttpPost("Staff/Order")]
-        //[Authorize(Policy = nameof(AuthPolicy.POL_STAFF))]
-        //[SwaggerOperation(Summary = "Create new order by Staff")]
-        //public async Task<IActionResult> StaffCreateOrder([FromBody] StaffCreateOrderRequest request)
-        //{
-        //    return Ok(RenderSuccessResponse(data: 1));
-        //}
+        [HttpPost("Staff/Order")]
+        [Authorize(Policy = nameof(AuthPolicy.POL_STAFF))]
+        [SwaggerOperation(Summary = "Create new order by Staff")]
+        public async Task<IActionResult> StaffCreateOrder([FromBody] StaffCreateOrderRequest request)
+        {
+            var result = await _orderService.StaffCreateOrder(request);
 
-        //[HttpPut("Staff/Update")]
-        //[Authorize(Policy = nameof(AuthPolicy.POL_STAFF))]
-        //[SwaggerOperation(Summary = "Update order by Staff")]
-        //public async Task<IActionResult> StaffUpdateOrder([FromBody] StaffUpdateOrderRequest request)
-        //{
-        //    return Ok(RenderSuccessResponse(data: 1));
-        //}
+            return Ok(RenderSuccessResponse(data: result, message: "SUCCESS"));
+        }
 
-        //[HttpDelete("Staff/Cancel")]
-        //[Authorize(Policy = nameof(AuthPolicy.POL_STAFF))]
-        //[SwaggerOperation(Summary = "Cancel order by Staff")]
-        //public async Task<IActionResult> StaffCancelOrder([FromBody] StaffCancelOrderRequest request)
-        //{
-        //    return Ok(RenderSuccessResponse(data: 1));
-        //}
+        [HttpPut("Staff/Update")]
+        [Authorize(Policy = nameof(AuthPolicy.POL_STAFF))]
+        [SwaggerOperation(Summary = "Update order by Staff (only order in status INIT)")]
+        public async Task<IActionResult> StaffUpdateOrder([FromBody] StaffUpdateOrderRequest request)
+        {
+            var result = await _orderService.StaffUpdateOrder(request);
 
-        //[HttpGet("Staff/List")]
-        //[Authorize(Policy = nameof(AuthPolicy.POL_STAFF))]
-        //[SwaggerOperation(Summary = "List order of Staff")]
-        //public async Task<IActionResult> StaffListOrder([FromQuery] PagingDTO pagingDTO, [FromQuery] ListOrderFilter filter)
-        //{
-        //    return Ok(RenderSuccessResponse(data: 1));
-        //}
+            return Ok(RenderSuccessResponse(data: result, message: "SUCCESS"));
+        }
+
+        [HttpDelete("Staff/Cancel")]
+        [Authorize(Policy = nameof(AuthPolicy.POL_STAFF))]
+        [SwaggerOperation(Summary = "Cancel order by Staff")]
+        public async Task<IActionResult> StaffCancelOrder([FromBody] StaffCancelOrderRequest request)
+        {
+            var result = await _orderService.StaffCancelOrder(request);
+
+            return Ok(RenderSuccessResponse(data: result, message: "SUCCESS"));
+        }
+
+        [HttpGet("Staff/List")]
+        [Authorize(Policy = nameof(AuthPolicy.POL_STAFF))]
+        [SwaggerOperation(Summary = "List order of Staff")]
+        public async Task<IActionResult> StaffListOrder([FromQuery] PagingDTO pagingDTO, [FromQuery] ListOrderFilter filter)
+        {
+            var result = await _orderService.StaffOrderList(pagingDTO, filter);
+
+            return Ok(RenderSuccessResponse(data: result));
+        }
 
         // ---------------------- Staff, Admin ----------------------
 
-        //[HttpGet("List")]
-        //[Authorize(Policy = nameof(AuthPolicy.POL_STAFF))]
-        //[SwaggerOperation(Summary = "List order")]
-        //public async Task<IActionResult> GetListOrder([FromQuery] PagingDTO pagingDTO, [FromQuery] ListOrderFilter filter)
-        //{
-        //    return Ok(RenderSuccessResponse(data: 1));
-        //}
+        [HttpGet("List")]
+        [Authorize(Policy = nameof(AuthPolicy.POL_STAFF))]
+        [SwaggerOperation(Summary = "List all order")]
+        public async Task<IActionResult> GetListOrder([FromQuery] PagingDTO pagingDTO, [FromQuery] ListOrderFilter filter)
+        {
+            var result = await _orderService.StaffOrderListAll(pagingDTO, filter);
+
+            return Ok(RenderSuccessResponse(data: result));
+        }
 
     }
 }

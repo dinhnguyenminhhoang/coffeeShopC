@@ -129,7 +129,7 @@ namespace CoffeManagement.Services.AccountService
 
             return customerExits.Id;
         }
-        
+
         public async Task<int> CustomerResetPassword(CustomerResetPasswordRequest request)
         {
             var isResetPassword = _httpContext?.User.Claims.FirstOrDefault(c => c.Type == AppClaimTypes.ResetPassword)?.Value?.Equals("true") ?? false;
@@ -168,7 +168,7 @@ namespace CoffeManagement.Services.AccountService
                 new(AppClaimTypes.Username, account.Username),
                 new(AppClaimTypes.FullName, staff?.FullName ?? string.Empty),
                 new(AppClaimTypes.Phone, staff ?.Phone ?? string.Empty),
-                new(ClaimTypes.Role, staff?.Position ?? StaffPosition.POS_STAFF.ToString())
+                new(ClaimTypes.Role, GetRoleByPosition(staff?.Position).ToString())
             };
 
             var accessToken = _jwtUtil.GenerateToken(claims, _staffAccessTokenExpired);
@@ -176,5 +176,18 @@ namespace CoffeManagement.Services.AccountService
             return new LoginResponse() { AccessToken = accessToken };
         }
 
+
+        private AuthRole GetRoleByPosition(string? position)
+        {
+            if(position != null)
+            {
+                if (position.Equals(StaffPosition.POS_STAFF.ToString()))
+                    return AuthRole.ROLE_STAFF;
+                else if (position.Equals(StaffPosition.POS_ADMIN.ToString()))
+                    return AuthRole.ROLE_ADMIN;
+            }
+
+            return AuthRole.ROLE_STAFF;
+        }
     }
 }

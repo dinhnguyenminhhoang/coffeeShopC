@@ -2,7 +2,7 @@
 
 namespace CoffeManagement.DTO.Order
 {
-    public class CustomerOrderHistoryResponse
+    public class StaffOrderResponse
     {
         public int Id { get; set; }
 
@@ -29,17 +29,9 @@ namespace CoffeManagement.DTO.Order
 
         // --------------------------------------
 
-        public string CanceledBy
-        {
-            get
-            {
-                if (StaffCanceledId != null && StaffCanceledId > 0)
-                    return "Shop";
-                if (!string.IsNullOrEmpty(CanceledNote))
-                        return "Your";
-                return null;
-            }
-        }
+        public string StaffName { get; set; }
+
+        public string CanceledBy { get; set; }
 
     }
 }
