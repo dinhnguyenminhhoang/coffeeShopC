@@ -31,6 +31,8 @@ import ManagerBill from "./Pages/staff/ManagerBill/ManagerBill";
 import ManagerOrder from "./Pages/staff/ManagerOrder/ManagerOrder";
 import OrderDetailsPage from "./Pages/staff/OrderDetailsPage/OrderDetailsPage";
 import ServiceRatingsPage from "./Pages/staff/ServiceRatingsPage/ServiceRatingsPage";
+import ForgotPassword from "./Pages/Auth/ForgotPassword/ForgotPassword";
+import ResetPassword from "./Pages/Auth/ResetPassword/ResetPassword";
 const App = () => {
     const router = createBrowserRouter(
         createRoutesFromElements(
@@ -38,6 +40,11 @@ const App = () => {
                 <Route path="/login" element={<Login />} />
                 <Route path="/admin/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route
+                    path="/reset-password/:slug"
+                    element={<ResetPassword />}
+                />
                 <Route element={<DefautLayout />}>
                     <Route path="/product/:id" element={<DetailProduct />} />
                     <Route index element={<HomePage />} />
