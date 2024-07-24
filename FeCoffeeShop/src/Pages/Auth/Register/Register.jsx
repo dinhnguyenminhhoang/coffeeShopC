@@ -9,6 +9,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import useNotification from "@/hooks/NotiHook";
 import { customerRegister } from "@//service/auth";
+import { MdOutlineEmail } from "react-icons/md";
 
 const { Title, Text } = Typography;
 
@@ -86,7 +87,25 @@ const Register = () => {
                             placeholder="Tên đăng nhập"
                         />
                     </Form.Item>
-
+                    <Form.Item
+                        name="Email"
+                        rules={[
+                            {
+                                required: true,
+                                message: "Vui lòng nhập email của bạn!",
+                            },
+                            {
+                                type: "email",
+                                message: "Email không hợp lệ!",
+                            },
+                        ]}
+                    >
+                        <Input
+                            prefix={<MdOutlineEmail className="mr-2" />}
+                            className="py-2"
+                            placeholder="Email của bạn"
+                        />
+                    </Form.Item>
                     <Form.Item
                         name="Phone"
                         rules={[

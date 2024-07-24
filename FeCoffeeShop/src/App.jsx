@@ -83,7 +83,7 @@ const App = () => {
                         path="/manager-ingredients-stocks"
                         element={<IngredientsStocksPage />}
                     />
-                    <Route path="/profile/:id" element={<Profille />} />
+                    <Route path="/profile" element={<Profille />} />
                 </Route>
                 <Route element={<AdminLayout />}>
                     <Route path="/manager-staffs" element={<StaffPage />} />

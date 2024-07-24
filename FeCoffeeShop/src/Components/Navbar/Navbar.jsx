@@ -67,7 +67,7 @@ const Navbar = () => {
             <Menu.Item
                 key="profile"
                 icon={<BiUser />}
-                onClick={() => navigator(`/profile/${userData.Id}`)}
+                onClick={() => navigator(`/profile`)}
             >
                 Profile
             </Menu.Item>

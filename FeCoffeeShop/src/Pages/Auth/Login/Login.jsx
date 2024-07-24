@@ -82,7 +82,7 @@ const Login = () => {
                                 message: "Vui lòng nhập tên đăng nhập của bạn!",
                             },
                             {
-                                min: 4,
+                                min: 3,
                                 message: "Tên đăng nhập phải dài hơn 3 ký tự!",
                             },
                         ]}
