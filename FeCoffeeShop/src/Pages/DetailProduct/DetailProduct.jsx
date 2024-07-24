@@ -6,6 +6,7 @@ import { getDrinkById, getDrink } from "@/service/drinks";
 import noImage from "@/assets/website/noimg.jpg";
 import { formatVND, isValidImageUrl } from "@/utils/resuableFuc";
 import Spiner from "@/Components/Spiner/Spiner";
+import useNotification from "../../hooks/NotiHook";
 
 const { Option } = Select;
 
@@ -13,6 +14,8 @@ const DetailProduct = () => {
     const [data, setData] = useState();
     const [selectedSize, setSelectedSize] = useState("");
     const [DrinkCateData, setDrinkCateData] = useState();
+    const [cartInfo, setCartInfo] = useState([]);
+    const openNotification = useNotification();
     const param = useParams();
 
     useEffect(() => {
@@ -38,11 +41,46 @@ const DetailProduct = () => {
         fetchData();
         fetchDataCate();
     }, [param]);
-
+    useEffect(() => {
+        const dataLocal = localStorage.getItem("cartInfo");
+        if (dataLocal) {
+            setCartInfo(JSON.parse(dataLocal));
+        }
+    }, []);
+    useEffect(() => {
+        if (cartInfo.length) {
+            localStorage.setItem("cartInfo", JSON.stringify(cartInfo));
+        }
+    }, [cartInfo]);
     const handleSizeChange = (e) => {
         setSelectedSize(e.target.value);
     };
-
+    const handleAddToCard = () => {
+        if (cartInfo.length) {
+            const checkData = cartInfo.find((card) => card?.Id === data?.Id);
+            if (checkData) {
+                openNotification({
+                    type: "info",
+                    message: "Thông báo",
+                    description: "Sản phẩm đã trong giỏ hàng",
+                });
+            } else {
+                setCartInfo([...cartInfo, data]);
+                openNotification({
+                    type: "success",
+                    message: "Thông báo",
+                    description: "Đã thêm sản phẩm vào giỏ hàng",
+                });
+            }
+        } else {
+            setCartInfo([data]);
+            openNotification({
+                type: "success",
+                message: "Thông báo",
+                description: "Đã thêm sản phẩm vào giỏ hàng",
+            });
+        }
+    };
     return (
         <>
             {data ? (
@@ -114,8 +152,9 @@ const DetailProduct = () => {
                                 icon={<ShoppingCartOutlined />}
                                 size="large"
                                 className="w-full bg-orange-500 hover:bg-orange-600"
+                                onClick={handleAddToCard}
                             >
-                                Đặt giao tận nơi
+                                Thêm vào giõ hàng
                             </Button>
                         </Col>
                     </Row>

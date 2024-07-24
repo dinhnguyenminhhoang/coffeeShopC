@@ -3,6 +3,7 @@ import Logo from "@/assets/website/coffee_logo.png";
 import { FaCoffee, FaUserAlt } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import {
+    BiCartAdd,
     BiLogOut,
     BiRegistered,
     BiSolidRegistered,
@@ -31,6 +32,7 @@ const Navbar = () => {
     const [userData, setUserData] = useState();
     const [isLogger, setisLogger] = useState(false);
     const openNotification = useNotification();
+    const [cartInfo, setCartInfo] = useState([]);
     const navigator = useNavigate();
     useEffect(() => {
         const token = Cookies.get("AccessToken");
@@ -62,6 +64,12 @@ const Navbar = () => {
         setisLogger(false);
         openNotification({ type: "info", description: "Đăng xuất thành công" });
     };
+    useEffect(() => {
+        const cartLocal = localStorage.getItem("cartInfo");
+        if (cartLocal) {
+            setCartInfo(JSON.parse(cartLocal));
+        }
+    }, [localStorage]);
     const menu = (
         <Menu>
             <Menu.Item
@@ -103,11 +111,14 @@ const Navbar = () => {
                             ))}
                         </ul>
                         <button
-                            className="bg-primary/70 px-4 py-2 rounded-full hover:scale-105 duration-200 flex items-center gap-3"
+                            className="bg-primary/70 px-4 py-2 rounded-md hover:scale-105 duration-200 flex items-center gap-3 relative"
                             onClick={() => navigator("/carts")}
                         >
                             Cart
-                            <FaCoffee className="text-xl cursor-pointer" />
+                            <BiCartAdd className="text-xl cursor-pointer" />
+                            {cartInfo?.length ? (
+                                <div className="absolute -top-1 -right-2 bg-[rgba(255,74,74,0.8)] px-2 rounded-full w-2 h-4"></div>
+                            ) : null}
                         </button>
                         {isLogger ? (
                             <Dropdown
