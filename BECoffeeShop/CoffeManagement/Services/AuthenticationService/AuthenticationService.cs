@@ -86,6 +86,7 @@ namespace CoffeManagement.Services.AccountService
                     new()
                     {
                         Phone = request.Phone.Trim(),
+                        Email = request.Email,
                         Address = request.Address.Trim(),
                     }
                 }
