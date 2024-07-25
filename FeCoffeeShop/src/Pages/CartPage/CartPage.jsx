@@ -22,6 +22,7 @@ import { getCustomerProfile } from "../../service/profile";
 import { data } from "autoprefixer";
 import { CustomerCreateOrder } from "../../service/CustomerOrder";
 import CustomerOrderAddressForm from "../../Components/FormManager/CustomerOrderAddressForm";
+import { useNavigate } from "react-router-dom";
 
 const stripePromise = loadStripe(stripeKey);
 
@@ -36,7 +37,7 @@ const CartPage = () => {
     const [branchInfo, setBranchInfo] = useState();
     const [userInfo, setUserInfo] = useState();
     const openNotification = useNotification();
-
+    const navigate = useNavigate();
     useEffect(() => {
         const cartLocal = localStorage.getItem("cartInfo");
         const barnchLocal = localStorage.getItem("branch");
@@ -169,7 +170,16 @@ const CartPage = () => {
     };
 
     const showModal = () => {
-        setIsModalVisible(true);
+        if (!branchInfo?.Id) {
+            openNotification({
+                type: "info",
+                message: "Thông báo",
+                description: `Vui lòng chọn cửa hàng`,
+            });
+            navigate("/branches");
+        } else {
+            setIsModalVisible(true);
+        }
     };
 
     const handleClose = async ({ isSuccess }) => {

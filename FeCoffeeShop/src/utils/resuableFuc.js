@@ -29,6 +29,38 @@ const firebaseConfig = {
 const firebaseUrl = "gs://coffee-8ec85.appspot.com";
 const stripeKey =
     "pk_test_51O2Re5Ch5jfUlQ3sapQzL592oYJdmXdGmYKaQIHXU20LmTrYYVxHNRrrTNbZSrp0R2to70M4F1P4vYpU5aQEVyK1004RjU0FtI";
+
+const ORDERSTATUS = {
+    ODR_INIT: {
+        title: "Đã Tạo đơn",
+        color: "#1890ff", // Xanh dương
+    },
+    ODR_SHIP: {
+        title: "Đã Giao Hàng",
+        color: "#faad14", // Cam
+    },
+    ODR_COML: {
+        title: "Đã Hoàn Thành",
+        color: "#52c41a", // Xanh lá
+    },
+    ODR_CANL: {
+        title: "Đã Hủy",
+        color: "#f5222d", // Đỏ
+    },
+    ODR_FAIL: {
+        title: "Thất Bại",
+        color: "#d9d9d9", // Xám
+    },
+    ODR_SERV: {
+        title: "Đã Phục Vụ",
+        color: "#13c2c2", // Xanh cyan
+    },
+    ODR_COMF: {
+        title: "Đã Xác Nhận",
+        color: "#2f54eb", // Xanh dương đậm
+    },
+};
+
 export {
     getInitials,
     isValidImageUrl,
@@ -36,4 +68,5 @@ export {
     firebaseConfig,
     firebaseUrl,
     stripeKey,
+    ORDERSTATUS,
 };
