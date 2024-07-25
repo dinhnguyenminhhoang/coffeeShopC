@@ -321,7 +321,7 @@ namespace CoffeManagement.Services.OrderService
 
             var existedOrder = await _orderRepository.GetById(request.Id);
             if (existedOrder == null) throw new NotFoundException("Not found Order");
-            if (!existedOrder.Status.Equals(OrderStatus.ODR_COMF.ToString())) throw new ConflictException("Cannot Shipped Order");
+            if (existedOrder.Status.Equals(OrderStatus.ODR_INIT.ToString()) || existedOrder.Status.Equals(OrderStatus.ODR_COML.ToString())) throw new ConflictException("Cannot Shipped Order");
 
             existedOrder.Status = OrderStatus.ODR_FAIL.ToString();
             existedOrder.FailedComment = request.FailedComment;
