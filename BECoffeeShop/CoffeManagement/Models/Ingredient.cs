@@ -20,4 +20,6 @@ public partial class Ingredient
     public DateTime? UpdatedAt { get; set; }
 
     public virtual ICollection<IngredientStock> IngredientStocks { get; set; } = new List<IngredientStock>();
+
+    public virtual ICollection<RecipeDetail> RecipeDetails { get; set; } = new List<RecipeDetail>();
 }

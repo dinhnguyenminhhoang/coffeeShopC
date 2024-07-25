@@ -27,6 +27,8 @@ namespace CoffeManagement.DTO.Order
 
         public string CanceledNote { get; set; }
 
+        public string FailedComment { get; set; }
+
         // --------------------------------------
 
         public string StaffName { get; set; }

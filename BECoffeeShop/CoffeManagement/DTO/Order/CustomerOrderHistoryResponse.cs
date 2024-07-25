@@ -27,6 +27,8 @@ namespace CoffeManagement.DTO.Order
 
         public string CanceledNote { get; set; }
 
+        public string FailedComment { get; set; }
+
         // --------------------------------------
 
         public string CanceledBy
@@ -36,7 +38,7 @@ namespace CoffeManagement.DTO.Order
                 if (StaffCanceledId != null && StaffCanceledId > 0)
                     return "Shop";
                 if (!string.IsNullOrEmpty(CanceledNote))
-                        return "Your";
+                    return "Your";
                 return null;
             }
         }

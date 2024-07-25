@@ -34,10 +34,10 @@ namespace CoffeManagement.Extensions.Jwt
                             throw new UnauthorizedException("Unauthorized");
                         },
 
-                        //OnForbidden = context =>
-                        //{
-                        //    throw new ForbiddenException("Forbidden");
-                        //},
+                        OnForbidden = context =>
+                        {
+                            throw new ForbiddenException("Forbidden");
+                        },
 
                         OnMessageReceived = context =>
                         {

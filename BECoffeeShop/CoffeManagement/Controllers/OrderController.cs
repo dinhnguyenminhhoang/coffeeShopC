@@ -86,6 +86,66 @@ namespace CoffeManagement.Controllers
             return Ok(RenderSuccessResponse(data: result, message: "SUCCESS"));
         }
 
+        [HttpPost("Staff/Comfirm/{id:int}")]
+        [Authorize(Policy = nameof(AuthPolicy.POL_STAFF))]
+        [SwaggerOperation(Summary = "Conmfirm order by Staff")]
+        public async Task<IActionResult> StaffComfirmOrder([FromRoute] int id)
+        {
+            var result = await _orderService.StaffComfirmlOrder(id);
+
+            return Ok(RenderSuccessResponse(data: result, message: "SUCCESS"));
+        }
+        
+        [HttpPost("Staff/Served/{id:int}")]
+        [Authorize(Policy = nameof(AuthPolicy.POL_STAFF))]
+        [SwaggerOperation(Summary = "Served order by Staff")]
+        public async Task<IActionResult> StaffServedOrder([FromRoute] int id)
+        {
+            var result = await _orderService.StaffServedOrder(id);
+
+            return Ok(RenderSuccessResponse(data: result, message: "SUCCESS"));
+        }
+        
+        [HttpPost("Staff/Shipping/{id:int}")]
+        [Authorize(Policy = nameof(AuthPolicy.POL_STAFF))]
+        [SwaggerOperation(Summary = "Shipping order by Staff")]
+        public async Task<IActionResult> StaffShippingOrder([FromRoute] int id)
+        {
+            var result = await _orderService.StaffShippingOrder(id);
+
+            return Ok(RenderSuccessResponse(data: result, message: "SUCCESS"));
+        }
+        
+        [HttpPost("Staff/Shipped/{id:int}")]
+        [Authorize(Policy = nameof(AuthPolicy.POL_STAFF))]
+        [SwaggerOperation(Summary = "Shipped order by Staff")]
+        public async Task<IActionResult> StaffShippedOrder([FromRoute] int id)
+        {
+            var result = await _orderService.StaffShippedOrder(id);
+
+            return Ok(RenderSuccessResponse(data: result, message: "SUCCESS"));
+        }
+        
+        [HttpPost("Staff/Completed/{id:int}")]
+        [Authorize(Policy = nameof(AuthPolicy.POL_STAFF))]
+        [SwaggerOperation(Summary = "Completed order by Staff (affter paid)")]
+        public async Task<IActionResult> StaffCompletedOrder([FromRoute] int id)
+        {
+            var result = await _orderService.StaffCompletedOrder(id);
+
+            return Ok(RenderSuccessResponse(data: result, message: "SUCCESS"));
+        }
+
+        [HttpPost("Staff/Failed")]
+        [Authorize(Policy = nameof(AuthPolicy.POL_STAFF))]
+        [SwaggerOperation(Summary = "Failed order by Staff")]
+        public async Task<IActionResult> StaffFailedOrder([FromBody] StaffFailedOrderRequest request)
+        {
+            var result = await _orderService.StaffFailedOrder(request);
+
+            return Ok(RenderSuccessResponse(data: result, message: "SUCCESS"));
+        }
+        
         [HttpDelete("Staff/Cancel")]
         [Authorize(Policy = nameof(AuthPolicy.POL_STAFF))]
         [SwaggerOperation(Summary = "Cancel order by Staff")]
@@ -94,6 +154,16 @@ namespace CoffeManagement.Controllers
             var result = await _orderService.StaffCancelOrder(request);
 
             return Ok(RenderSuccessResponse(data: result, message: "SUCCESS"));
+        }
+
+        [HttpGet("Staff/Detail/{id:int}")]
+        [Authorize(Policy = nameof(AuthPolicy.POL_STAFF))]
+        [SwaggerOperation(Summary = "Order Detail of Staff")]
+        public async Task<IActionResult> StaffOrderDetail([FromRoute] int id)
+        {
+            var result = await _orderService.StaffOrderDetail(id);
+
+            return Ok(RenderSuccessResponse(data: result));
         }
 
         [HttpGet("Staff/List")]

@@ -39,6 +39,8 @@ public partial class Order
 
     public DateTime? UpdatedAt { get; set; }
 
+    public string FailedComment { get; set; }
+
     public virtual Branch Branch { get; set; }
 
     public virtual Customer Customer { get; set; }

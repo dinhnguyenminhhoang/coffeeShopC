@@ -208,6 +208,7 @@ public partial class DBContext : DbContext
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
             entity.Property(e => e.CustomerNote).HasMaxLength(255);
+            entity.Property(e => e.FailedComment).HasMaxLength(255);
             entity.Property(e => e.OrderdAt)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
@@ -285,6 +286,11 @@ public partial class DBContext : DbContext
 
         modelBuilder.Entity<RecipeDetail>(entity =>
         {
+            entity.HasOne(d => d.Ingredient).WithMany(p => p.RecipeDetails)
+                .HasForeignKey(d => d.IngredientId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_RecipeDetails_Ingredients");
+
             entity.HasOne(d => d.Recipe).WithMany(p => p.RecipeDetails)
                 .HasForeignKey(d => d.RecipeId)
                 .OnDelete(DeleteBehavior.ClientSetNull)

@@ -136,7 +136,8 @@ CREATE TABLE [RecipeDetails] (
   [RecipeId] INT NOT NULL,
   [IngredientId] INT NOT NULL,
   [Amount] FLOAT NOT NULL,
-  CONSTRAINT FK_RecipeDetails_Recipes FOREIGN KEY ([RecipeId]) REFERENCES [Recipes] ([Id])
+  CONSTRAINT FK_RecipeDetails_Recipes FOREIGN KEY ([RecipeId]) REFERENCES [Recipes] ([Id]),
+  CONSTRAINT FK_RecipeDetails_Ingredients FOREIGN KEY ([IngredientId]) REFERENCES [Ingredients] ([Id]),
 );
 
 DROP TABLE IF EXISTS [Orders];
@@ -155,6 +156,7 @@ CREATE TABLE [Orders] (
   [TotalPrice] FLOAT NOT NULL,
   [StaffCanceledId] INT,
   [CanceledNote] NVARCHAR(255),
+  [FailedComment] NVARCHAR(255),
   [CreatedAt] DateTime DEFAULT(GETDATE()), 
   [UpdatedAt] DateTime DEFAULT(GETDATE()),
   CONSTRAINT FK_Orders_Branches FOREIGN KEY ([BranchId]) REFERENCES [Branches] ([Id]),

@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using CoffeManagement.Common.Exceptions;
 using CoffeManagement.Common.Pagging;
-using CoffeManagement.DTO.Customer;
 using CoffeManagement.DTO.Order;
 using CoffeManagement.DTO.Paging;
 using CoffeManagement.Infrastructure.Jwt;
@@ -10,7 +9,7 @@ using CoffeManagement.Models.Enum;
 using CoffeManagement.Repositories.CustomerRepo;
 using CoffeManagement.Repositories.OrderRepo;
 using CoffeManagement.Repositories.StaffRepo;
-using Newtonsoft.Json.Linq;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace CoffeManagement.Services.OrderService
 {
@@ -191,6 +190,155 @@ namespace CoffeManagement.Services.OrderService
             return existedOrder.Id;
         }
 
+        public async Task<int> StaffComfirmlOrder(int id)
+        {
+            var phone = _httpContext?.User.Claims.FirstOrDefault(c => c.Type == AppClaimTypes.Phone)?.Value;
+            var existedStaff = await _staffRepository.GetByPhone(phone);
+            if (existedStaff == null || existedStaff.IsDeleted == true) throw new NotFoundException("Not found Staff.");
+
+            var existedOrder = await _orderRepository.GetById(id);
+            if (existedOrder == null) throw new NotFoundException("Not found Order");
+            if (!existedOrder.Status.Equals(OrderStatus.ODR_INIT.ToString())) throw new ConflictException("Cannot Comfirm Order");
+            if (existedOrder.OrderDetails.Any(od => od.Drink.IsDeleted == true || od.DrinkSize.IsDeleted == true)) throw new ConflictException("Cannot Comfirm Order. Some Drink or Size is deleted");
+
+
+            foreach (var orderDetail in existedOrder.OrderDetails.ToList())
+            {
+                var recipe = orderDetail.Drink.Recipes?.FirstOrDefault();
+                double ingredientCostStandard = 0;
+
+                if (recipe != null)
+                {
+                    foreach (var recipeDetails in recipe.RecipeDetails.ToList())
+                    {
+                        var amountNeeded = recipeDetails.Amount * orderDetail.Quantity;
+                        var ingredientStock = recipeDetails
+                            .Ingredient.IngredientStocks
+                            .Where(ings => ings.Remain >= amountNeeded)
+                            .OrderBy(ings => ings.ExpiredAt)
+                            .FirstOrDefault();
+
+                        if (ingredientStock == null) throw new ConflictException("Not enough ingredient");
+
+                        var RatioOfCostAndAmount = ingredientStock.Cost / ingredientStock.Amount;
+                        ingredientCostStandard += RatioOfCostAndAmount * amountNeeded;
+
+                        ingredientStock.Remain -= amountNeeded;
+                    }
+                }
+
+                orderDetail.IngredientCost = orderDetail.DrinkSize.Ratio * ingredientCostStandard;
+            }
+
+            existedOrder.Status = OrderStatus.ODR_COMF.ToString();
+            existedOrder.UpdatedAt = DateTime.Now;
+
+            await _orderRepository.Update(existedOrder);
+
+            return existedOrder.Id;
+        }
+        
+        public async Task<int> StaffServedOrder(int id)
+        {
+            var phone = _httpContext?.User.Claims.FirstOrDefault(c => c.Type == AppClaimTypes.Phone)?.Value;
+            var existedStaff = await _staffRepository.GetByPhone(phone);
+            if (existedStaff == null || existedStaff.IsDeleted == true) throw new NotFoundException("Not found Staff.");
+
+            var existedOrder = await _orderRepository.GetById(id);
+            if (existedOrder == null) throw new NotFoundException("Not found Order");
+            if (!existedOrder.Status.Equals(OrderStatus.ODR_COMF.ToString())) throw new ConflictException("Cannot Served Order");
+
+            existedOrder.Status = OrderStatus.ODR_SERV.ToString();
+            existedOrder.UpdatedAt = DateTime.Now;
+
+            await _orderRepository.Update(existedOrder);
+
+            return existedOrder.Id;
+        }
+
+        public async Task<int> StaffShippingOrder(int id)
+        {
+            var phone = _httpContext?.User.Claims.FirstOrDefault(c => c.Type == AppClaimTypes.Phone)?.Value;
+            var existedStaff = await _staffRepository.GetByPhone(phone);
+            if (existedStaff == null || existedStaff.IsDeleted == true) throw new NotFoundException("Not found Staff.");
+
+            var existedOrder = await _orderRepository.GetById(id);
+            if (existedOrder == null) throw new NotFoundException("Not found Order");
+            if (!existedOrder.Status.Equals(OrderStatus.ODR_COMF.ToString())) throw new ConflictException("Cannot Ship Order");
+
+            existedOrder.Status = OrderStatus.ODR_SHIP.ToString();
+            existedOrder.UpdatedAt = DateTime.Now;
+
+            await _orderRepository.Update(existedOrder);
+
+            return existedOrder.Id;
+        }
+
+        public async Task<int> StaffShippedOrder(int id)
+        {
+            var phone = _httpContext?.User.Claims.FirstOrDefault(c => c.Type == AppClaimTypes.Phone)?.Value;
+            var existedStaff = await _staffRepository.GetByPhone(phone);
+            if (existedStaff == null || existedStaff.IsDeleted == true) throw new NotFoundException("Not found Staff.");
+
+            var existedOrder = await _orderRepository.GetById(id);
+            if (existedOrder == null) throw new NotFoundException("Not found Order");
+            if (!existedOrder.Status.Equals(OrderStatus.ODR_SHIP.ToString())) throw new ConflictException("Cannot Shipped Order");
+
+            existedOrder.Status = OrderStatus.ODR_SHIPED.ToString();
+            existedOrder.UpdatedAt = DateTime.Now;
+
+            await _orderRepository.Update(existedOrder);
+
+            return existedOrder.Id;
+        }
+
+        public async Task<int> StaffCompletedOrder(int id)
+        {
+            var phone = _httpContext?.User.Claims.FirstOrDefault(c => c.Type == AppClaimTypes.Phone)?.Value;
+            var existedStaff = await _staffRepository.GetByPhone(phone);
+            if (existedStaff == null || existedStaff.IsDeleted == true) throw new NotFoundException("Not found Staff.");
+
+            var existedOrder = await _orderRepository.GetById(id);
+            if (existedOrder == null) throw new NotFoundException("Not found Order");
+            if (!(existedOrder.Status.Equals(OrderStatus.ODR_SERV.ToString()) || existedOrder.Status.Equals(OrderStatus.ODR_SHIPED.ToString()))) throw new ConflictException("Cannot Completed Order");
+
+            existedOrder.Status = OrderStatus.ODR_COML.ToString();
+            existedOrder.UpdatedAt = DateTime.Now;
+
+            await _orderRepository.Update(existedOrder);
+
+            return existedOrder.Id;
+        }
+
+        public async Task<int> StaffFailedOrder(StaffFailedOrderRequest request)
+        {
+            var phone = _httpContext?.User.Claims.FirstOrDefault(c => c.Type == AppClaimTypes.Phone)?.Value;
+            var existedStaff = await _staffRepository.GetByPhone(phone);
+            if (existedStaff == null || existedStaff.IsDeleted == true) throw new NotFoundException("Not found Staff.");
+
+            var existedOrder = await _orderRepository.GetById(request.Id);
+            if (existedOrder == null) throw new NotFoundException("Not found Order");
+            if (!existedOrder.Status.Equals(OrderStatus.ODR_COMF.ToString())) throw new ConflictException("Cannot Shipped Order");
+
+            existedOrder.Status = OrderStatus.ODR_FAIL.ToString();
+            existedOrder.FailedComment = request.FailedComment;
+            existedOrder.UpdatedAt = DateTime.Now;
+
+            await _orderRepository.Update(existedOrder);
+
+            return existedOrder.Id;
+        }
+
+        public async Task<StaffOrderDetailResponse> StaffOrderDetail(int id)
+        {
+            var existedOrder = await _orderRepository.GetById(id);
+            if (existedOrder == null) throw new NotFoundException("Not found Order");
+
+            var orderDetail = _mapper.Map<StaffOrderDetailResponse>(existedOrder);
+
+            return orderDetail;
+        }
+
         public async Task<PagingListModel<StaffOrderResponse>> StaffOrderList(PagingDTO pagingDTO, ListOrderFilter filter)
         {
 
@@ -214,7 +362,7 @@ namespace CoffeManagement.Services.OrderService
 
             return result;
         }
-        
+
         public async Task<PagingListModel<StaffOrderResponse>> StaffOrderListAll(PagingDTO pagingDTO, ListOrderFilter filter)
         {
 

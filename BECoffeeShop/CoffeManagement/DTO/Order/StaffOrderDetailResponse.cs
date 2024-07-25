@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace CoffeManagement.DTO.Order
 {
-    public class CustomerOrderDetailResponse
+    public class StaffOrderDetailResponse
     {
         public int Id { get; set; }
 
@@ -13,7 +13,11 @@ namespace CoffeManagement.DTO.Order
 
         public string Status { get; set; }
 
+        public StaffOrderDetail_Customer Customer { get; set; }
+
         public string CustomerNote { get; set; }
+
+        public StaffOrderDetail_Staff Staff { get; set; }
 
         public string StaffNote { get; set; }
 
@@ -28,27 +32,29 @@ namespace CoffeManagement.DTO.Order
         
         public string FailedComment { get; set; }
 
-        public IEnumerable<CustomerOrderDetail_ItemDetail> OrderDetails { get; set; } = new List<CustomerOrderDetail_ItemDetail>();
+        public IEnumerable<StaffOrderDetail_ItemDetail> OrderDetails { get; set; } = new List<StaffOrderDetail_ItemDetail>();
 
         // --------------------------------------
 
-        public string CanceledBy
-        {
-            get
-            {
-                if (StaffCanceledId != null && StaffCanceledId > 0)
-                    return "Shop";
-                if (!string.IsNullOrEmpty(CanceledNote))
-                    return "Your";
-                return null;
-            }
-        }
+        public StaffOrderDetail_Staff CanceledBy { get; set; }
 
-        public CustomerOrderDetail_Branch Branch { get; set; }
+        public StaffOrderDetail_Branch Branch { get; set; }
 
     }
 
-    public class CustomerOrderDetail_ItemDetail
+    public class StaffOrderDetail_Staff
+    {
+        public int Id { get; set; }
+        public string FullName { get; set; }
+    }
+    
+    public class StaffOrderDetail_Customer
+    {
+        public int Id { get; set; }
+        public string FullName { get; set; }
+    }
+
+    public class StaffOrderDetail_ItemDetail
     {
         public int Id { get; set; }
 
@@ -56,10 +62,10 @@ namespace CoffeManagement.DTO.Order
 
         public double Price { get; set; }
 
-        public CustomerOrderDetail_ItemDetail_Drink Drink { get; set; }
+        public StaffOrderDetail_ItemDetail_Drink Drink { get; set; }
     }
     
-    public class CustomerOrderDetail_ItemDetail_Drink
+    public class StaffOrderDetail_ItemDetail_Drink
     {
         public int Id { get; set; }
 
@@ -74,7 +80,7 @@ namespace CoffeManagement.DTO.Order
         public double Price { get; set; }
     }
 
-    public class CustomerOrderDetail_Branch
+    public class StaffOrderDetail_Branch
     {
         public int Id { get; set; }
         public string Name { get; set; }

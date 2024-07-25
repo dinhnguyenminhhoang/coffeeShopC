@@ -48,6 +48,29 @@ namespace CoffeManagement.Extensions.AutoMapper
                             : src.StaffCanceled != null ? src.StaffCanceled.FullName : "Customer"
                  ));
             CreateMap<Common.Pagging.PagingListModel<Models.Order>, Common.Pagging.PagingListModel<DTO.Order.StaffOrderResponse>>();
+            CreateMap<Models.Order, DTO.Order.StaffOrderDetailResponse>()
+                .ForMember(dest => dest.Customer, otp => otp.MapFrom(src => src.Customer))
+                .ForMember(dest => dest.Staff, otp => otp.MapFrom(src => src.Staff))
+                .ForMember(dest => dest.CanceledBy, otp => otp.MapFrom(src => src.StaffCanceled))
+                .ForMember(dest => dest.OrderDetails, otp => otp.MapFrom(src => src.OrderDetails))
+                .ForMember(dest => dest.Branch, otp => otp.MapFrom(src => new DTO.Order.StaffOrderDetail_Branch()
+                {
+                    Id = src.Branch.Id,
+                    Name = src.Branch.Name,
+                    Address = src.Branch.Address,
+
+                }));
+            CreateMap<Models.OrderDetail, DTO.Order.StaffOrderDetail_ItemDetail>()
+                .ForMember(dest => dest.Drink, otp => otp.MapFrom(src => new DTO.Order.StaffOrderDetail_ItemDetail_Drink()
+                {
+                    Id = src.Drink.Id,
+                    Name = src.Drink.Name,
+                    Description = src.Drink.Description,
+                    Size = src.DrinkSize.Size,
+                    Price = src.Price / src.Quantity,
+                }));
+            CreateMap<Models.Customer, DTO.Order.StaffOrderDetail_Customer>();
+            CreateMap<Models.Staff, DTO.Order.StaffOrderDetail_Staff>();
         }
     }
 }

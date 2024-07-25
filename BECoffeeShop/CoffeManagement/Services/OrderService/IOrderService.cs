@@ -17,6 +17,13 @@ namespace CoffeManagement.Services.OrderService
         Task<int> StaffCreateOrder(StaffCreateOrderRequest request);
         Task<int> StaffUpdateOrder(StaffUpdateOrderRequest request);
         Task<int> StaffCancelOrder(StaffCancelOrderRequest request);
+        Task<int> StaffComfirmlOrder(int id);
+        Task<int> StaffServedOrder(int id);
+        Task<int> StaffShippingOrder(int id);
+        Task<int> StaffShippedOrder(int id);
+        Task<int> StaffCompletedOrder(int id);
+        Task<int> StaffFailedOrder(StaffFailedOrderRequest request);
+        Task<StaffOrderDetailResponse> StaffOrderDetail(int id);
         Task<PagingListModel<StaffOrderResponse>> StaffOrderList(PagingDTO pagingDTO, ListOrderFilter filter);
         Task<PagingListModel<StaffOrderResponse>> StaffOrderListAll(PagingDTO pagingDTO, ListOrderFilter filter);
     }
