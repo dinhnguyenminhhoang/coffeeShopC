@@ -7,7 +7,7 @@ namespace CoffeManagement.Services.CustomerService
 {
     public interface ICustomerService
     {
-        Task<PagingListModel<CustomersResponse>> GetListCustomer(PagingDTO pagingDto);
+        Task<PagingListModel<CustomersResponse>> GetListCustomer(PagingDTO pagingDto, ListCustomerFilter filter);
         Task<int> CreateCustomer(CreateCustomerRequest request);
         Task<int> UpdateCustomer(UpdateCustomerRequest request);
         Task<CustomersDetailResponse> GetCustomerDetail(int id);

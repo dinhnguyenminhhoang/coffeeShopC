@@ -20,9 +20,9 @@ namespace CoffeManagement.Controllers
         [HttpGet]
         // [Authorize(Policy = nameof(AuthPolicy.POL_ADMIN))]
         [SwaggerOperation(Summary = "Get List customers")]
-        public async Task<IActionResult> GetListCustomer([FromQuery] PagingDTO pagingDto)
+        public async Task<IActionResult> GetListCustomer([FromQuery] PagingDTO pagingDto, [FromQuery] ListCustomerFilter filter)
         {
-            var result = await _customersService.GetListCustomer(pagingDto);
+            var result = await _customersService.GetListCustomer(pagingDto, filter);
 
             return Ok(RenderSuccessResponse(result));
         }

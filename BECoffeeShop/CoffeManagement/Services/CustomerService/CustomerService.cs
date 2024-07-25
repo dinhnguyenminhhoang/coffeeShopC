@@ -27,9 +27,17 @@ namespace CoffeManagement.Services.CustomerService
             _accountRepository = accountRepository;
         }
 
-        public async Task<PagingListModel<CustomersResponse>> GetListCustomer([FromQuery] PagingDTO pagingDto)
+        public async Task<PagingListModel<CustomersResponse>> GetListCustomer(PagingDTO pagingDto, ListCustomerFilter filter)
         {
             var customerhQueryable = _customerRepository.GetQueryable().Where(c => c.IsDeleted == false);
+
+            if (filter != null)
+            {
+                if(filter.CustomerName != null)
+                {
+                    customerhQueryable = customerhQueryable.Where(c=> c.FullName.Contains(filter.CustomerName));
+                }
+            }
 
             var pagingList = new PagingListModel<Customer>(customerhQueryable, pagingDto.PageIndex, pagingDto.PageSize);
 
@@ -110,7 +118,7 @@ namespace CoffeManagement.Services.CustomerService
         {
             var existedCustomer = await _customerRepository.GetById(request.CustomerId);
             if (existedCustomer == null || existedCustomer.IsDeleted == true) throw new NotFoundException("Not found customers.");
-            if (existedCustomer.AccountId !=  null && existedCustomer.AccountId > 0) throw new ConflictException("Customers already have Account.");
+            if (existedCustomer.AccountId != null && existedCustomer.AccountId > 0) throw new ConflictException("Customers already have Account.");
 
             var accountExits = await _accountRepository.GetAccountCustomerByUsername(request.Username);
             if (accountExits != null) throw new ConflictException("This username already used, please use another username.");
