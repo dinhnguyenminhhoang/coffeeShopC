@@ -10,6 +10,7 @@ namespace CoffeManagement.Extensions.AutoMapper
                 .ForMember(dest => dest.CategoryName, otp => otp.MapFrom(src => src.Category.Name))
                 .ForMember(dest => dest.MinPrice, otp => otp.MapFrom(src => src.DrinkSizes.OrderBy(ds => ds.Price).FirstOrDefault().Price));
             CreateMap<Models.Drink, DTO.Drink.DrinkDetailResponse>()
+                .ForMember(dest => dest.Category, otp => otp.MapFrom(src => src.Category))
                 .ForMember(dest => dest.DrinksSizes, otp => otp.MapFrom(src => src.DrinkSizes.AsEnumerable()))
                 .ForMember(dest => dest.Recipe, otp => otp.MapFrom(src => src.Recipes.FirstOrDefault()));
             CreateMap<Common.Pagging.PagingListModel<Models.Drink>, Common.Pagging.PagingListModel<DTO.Drink.DrinkResponse>>();
@@ -21,6 +22,7 @@ namespace CoffeManagement.Extensions.AutoMapper
             CreateMap<DTO.Drink.CreateDrinkSizeRequest, Models.DrinkSize>();
             CreateMap<DTO.Drink.UpdateDrinkSizeRequest, Models.DrinkSize>()
                 .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null));
+            CreateMap<Models.Category, DTO.Drink.Category>();
         }
     }
 }

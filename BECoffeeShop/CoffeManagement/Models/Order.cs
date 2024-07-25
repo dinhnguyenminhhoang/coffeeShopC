@@ -41,6 +41,8 @@ public partial class Order
 
     public string FailedComment { get; set; }
 
+    public bool? IsPaid { get; set; }
+
     public virtual Branch Branch { get; set; }
 
     public virtual Customer Customer { get; set; }

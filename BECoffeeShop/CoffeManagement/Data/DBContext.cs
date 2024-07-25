@@ -238,6 +238,7 @@ public partial class DBContext : DbContext
                 .HasColumnType("datetime");
             entity.Property(e => e.CustomerNote).HasMaxLength(255);
             entity.Property(e => e.FailedComment).HasMaxLength(255);
+            entity.Property(e => e.IsPaid).HasDefaultValue(false);
             entity.Property(e => e.OrderdAt)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");

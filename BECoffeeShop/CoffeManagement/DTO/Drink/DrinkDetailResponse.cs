@@ -15,6 +15,8 @@ namespace CoffeManagement.DTO.Drink
 
         public IEnumerable<DrinkSize> DrinksSizes { get; set; } = Enumerable.Empty<DrinkSize>();
 
+        public Category Category { get; set; }
+
         public Recipe Recipe { get; set; }
 
         public DateTime? CreatedAt { get; set; }
@@ -33,7 +35,7 @@ namespace CoffeManagement.DTO.Drink
         public double Price { get; set; }
     }
 
-    public class  Recipe
+    public class Recipe
     {
         public int Id { get; set; }
 
@@ -50,5 +52,14 @@ namespace CoffeManagement.DTO.Drink
         public int IngredientId { get; set; }
 
         public int Amount { get; set; }
+    }
+
+    public class Category
+    {
+        public int Id { get; set; }
+
+        public string Name { get; set; }
+
+        public string Description { get; set; }
     }
 }

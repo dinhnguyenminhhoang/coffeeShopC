@@ -21,6 +21,8 @@ namespace CoffeManagement.DTO.Order
 
         public string StaffNote { get; set; }
 
+        public bool? IsPaid { get; set; }
+
         public DateTime? OrderdAt { get; set; }
 
         public double TotalPrice { get; set; }
@@ -29,7 +31,7 @@ namespace CoffeManagement.DTO.Order
         public int? StaffCanceledId { get; set; }
 
         public string CanceledNote { get; set; }
-        
+
         public string FailedComment { get; set; }
 
         public IEnumerable<StaffOrderDetail_ItemDetail> OrderDetails { get; set; } = new List<StaffOrderDetail_ItemDetail>();
@@ -47,7 +49,7 @@ namespace CoffeManagement.DTO.Order
         public int Id { get; set; }
         public string FullName { get; set; }
     }
-    
+
     public class StaffOrderDetail_Customer
     {
         public int Id { get; set; }
@@ -64,7 +66,7 @@ namespace CoffeManagement.DTO.Order
 
         public StaffOrderDetail_ItemDetail_Drink Drink { get; set; }
     }
-    
+
     public class StaffOrderDetail_ItemDetail_Drink
     {
         public int Id { get; set; }

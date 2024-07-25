@@ -41,6 +41,7 @@ namespace CoffeManagement.Services.OrderService
 
             var order = _mapper.Map<Order>(request);
             order.CustomerId = existedCustomer.Id;
+            order.IsPaid = true;
 
             await _orderRepository.Add(order);
 
@@ -264,7 +265,8 @@ namespace CoffeManagement.Services.OrderService
 
             var existedOrder = await _orderRepository.GetById(id);
             if (existedOrder == null) throw new NotFoundException("Not found Order");
-            if (!existedOrder.Status.Equals(OrderStatus.ODR_COMF.ToString())) throw new ConflictException("Cannot Ship Order");
+            //if (!existedOrder.Status.Equals(OrderStatus.ODR_COMF.ToString())) throw new ConflictException("Cannot Ship Order");
+            if (!(existedOrder.IsPaid ?? false)) throw new ConflictException("Cannot Ship Order");
 
             existedOrder.Status = OrderStatus.ODR_SHIP.ToString();
             existedOrder.UpdatedAt = DateTime.Now;
@@ -303,6 +305,7 @@ namespace CoffeManagement.Services.OrderService
             if (!(existedOrder.Status.Equals(OrderStatus.ODR_SERV.ToString()) || existedOrder.Status.Equals(OrderStatus.ODR_SHIPED.ToString()))) throw new ConflictException("Cannot Completed Order");
 
             existedOrder.Status = OrderStatus.ODR_COML.ToString();
+            existedOrder.IsPaid = true;
             existedOrder.UpdatedAt = DateTime.Now;
 
             await _orderRepository.Update(existedOrder);

@@ -18,6 +18,8 @@ namespace CoffeManagement.DTO.Order
 
         public string CustomerNote { get; set; }
 
+        public bool? IsPaid { get; set; }
+
         public DateTime? OrderdAt { get; set; }
 
         public double TotalPrice { get; set; }
