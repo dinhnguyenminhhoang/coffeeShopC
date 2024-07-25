@@ -33,9 +33,13 @@ namespace CoffeManagement.Services.CustomerService
 
             if (filter != null)
             {
-                if(filter.CustomerName != null)
+                if(!string.IsNullOrEmpty(filter.CustomerName))
                 {
                     customerhQueryable = customerhQueryable.Where(c=> c.FullName.Contains(filter.CustomerName));
+                }
+                if (!string.IsNullOrEmpty(filter.CustomerPhone))
+                {
+                    customerhQueryable = customerhQueryable.Where(c=> c.Phone.Contains(filter.CustomerPhone));
                 }
             }
 
