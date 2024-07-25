@@ -1,26 +1,21 @@
-import React, { useEffect, useState } from "react";
 import Logo from "@/assets/website/coffee_logo.png";
-import { FaCoffee, FaUserAlt } from "react-icons/fa";
-import { Link, useNavigate } from "react-router-dom";
-import {
-    BiCartAdd,
-    BiLogOut,
-    BiRegistered,
-    BiSolidRegistered,
-    BiUser,
-} from "react-icons/bi";
+import useNotification from "@/hooks/NotiHook";
+import { getInitials } from "@/utils/resuableFuc";
 import { Button, Divider, Dropdown, Flex, Menu } from "antd";
-import { PiCashRegister } from "react-icons/pi";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
-import { getInitials } from "@/utils/resuableFuc";
-import useNotification from "@/hooks/NotiHook";
+import React, { useEffect, useState } from "react";
+import { BiCartAdd, BiLogOut, BiUser } from "react-icons/bi";
+import { FaUserAlt } from "react-icons/fa";
+import { PiCashRegister } from "react-icons/pi";
+import { Link, useNavigate } from "react-router-dom";
 const Menus = [
     {
         id: 1,
         name: "Sản phẩm",
         link: "/#ProductShow",
     },
+
     {
         id: 3,
         name: "Liên hệ",
@@ -33,6 +28,7 @@ const Navbar = () => {
     const [isLogger, setisLogger] = useState(false);
     const openNotification = useNotification();
     const [cartInfo, setCartInfo] = useState([]);
+    const [branchInfo, setBranchInfo] = useState({});
     const navigator = useNavigate();
     useEffect(() => {
         const token = Cookies.get("AccessToken");
@@ -66,9 +62,11 @@ const Navbar = () => {
     };
     useEffect(() => {
         const cartLocal = localStorage.getItem("cartInfo");
+        const branchLocal = localStorage.getItem("branch");
         if (cartLocal) {
             setCartInfo(JSON.parse(cartLocal));
         }
+        if (branchLocal) setBranchInfo(JSON.parse(branchLocal));
     }, [localStorage]);
     const menu = (
         <Menu>
@@ -96,7 +94,7 @@ const Navbar = () => {
                             <img src={Logo} alt="Logo" className="w-14" />
                             COFFEE HOUSE
                         </Link>
-                    </div>
+                    </div>{" "}
                     <div className="flex justify-between items-center gap-4">
                         <ul className="hidden sm:flex items-center gap-4">
                             {Menus.map((data, index) => (
@@ -109,6 +107,23 @@ const Navbar = () => {
                                     </a>
                                 </li>
                             ))}
+                            <li>
+                                {branchInfo?.Name ? (
+                                    <a
+                                        href={"/branches"}
+                                        className="inline-block  py-4 px-4 text-white/70 hover:text-white duration-200"
+                                    >
+                                        {`Cửa hàng - ${branchInfo.Name}`}
+                                    </a>
+                                ) : (
+                                    <a
+                                        href={"/branches"}
+                                        className="inline-block  py-4 px-4 text-white/70 hover:text-white duration-200"
+                                    >
+                                        {`Cửa hàng`}
+                                    </a>
+                                )}
+                            </li>
                         </ul>
                         <button
                             className="bg-primary/70 px-4 py-2 rounded-md hover:scale-105 duration-200 flex items-center gap-3 relative"

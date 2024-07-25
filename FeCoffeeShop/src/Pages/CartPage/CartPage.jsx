@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Button, Input, InputNumber, Table, message, Modal } from "antd";
+import React, { useEffect, useState } from "react";
+import { Button, Input, InputNumber, Table, message, Modal, Image } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import { loadStripe } from "@stripe/stripe-js";
 import {
@@ -67,27 +67,32 @@ const CheckoutForm = ({ totalAmount, handleClose, handlePayment }) => {
 const CartPage = () => {
     const [loading, setLoading] = useState(false);
     const [isModalVisible, setIsModalVisible] = useState(false);
-
+    const [cartInfo, setCartInfo] = useState([]);
     const columns = [
         {
             title: "Sản phẩm",
-            dataIndex: "product",
-            key: "product",
+            dataIndex: "Image",
+            key: "Image",
             render: (text, record) => (
                 <div className="flex items-center">
-                    <img
-                        src={record.image}
-                        alt={record.name}
+                    <Image
+                        src={record.Image}
+                        alt={record.Nsame}
+                        width={64}
+                        height={64}
                         className="w-16 h-16 mr-2 rounded-md"
                     />
-                    <span>{record.name}</span>
+                    <div className="flex flex-col gap-2 ml-2">
+                        <span>{record.Name}</span>
+                        <span className="max-w-28">{record.Description}</span>
+                    </div>
                 </div>
             ),
         },
         {
             title: "Đơn giá",
-            dataIndex: "price",
-            key: "price",
+            dataIndex: "DrinksSizes Price",
+            key: "DrinksSizes",
             render: (text) => <span>{formatVND(text)}</span>,
         },
         {
@@ -116,30 +121,14 @@ const CartPage = () => {
             render: () => <Button danger>Xóa</Button>,
         },
     ];
-
-    const data = [
-        {
-            key: "1",
-            image: "https://i.pinimg.com/564x/ea/6b/5c/ea6b5ca45e90494e8fbd8c4388025846.jpg",
-            name: "Dâu Phô Mai Tươi",
-            price: 55000,
-            quantity: 1,
-            total: 55000,
-            priceId: "1",
-        },
-        {
-            key: "2",
-            image: "https://i.pinimg.com/564x/ea/6b/5c/ea6b5ca45e90494e8fbd8c4388025846.jpg",
-            name: "Dâu Phô Mai Tươi",
-            price: 55000,
-            quantity: 2,
-            total: 110000,
-            priceId: "2",
-        },
-    ];
-
-    const totalAmount = data.reduce((sum, item) => sum + item.total, 0);
-
+    useEffect(() => {
+        const cartLocal = localStorage.getItem("cartInfo");
+        if (cartLocal) {
+            setCartInfo(JSON.parse(cartLocal));
+        }
+    }, [localStorage]);
+    // const totalAmount = data.reduce((sum, item) => sum + item.total, 0);
+    console.log(cartInfo);
     const handlePayment = async (stripe, cardElement, amount) => {
         const response = await paymentsTripe({
             formData: {
@@ -179,7 +168,11 @@ const CartPage = () => {
                         className="mr-2 w-full py-2"
                     />
                 </div>
-                <Table columns={columns} dataSource={data} pagination={false} />
+                <Table
+                    columns={columns}
+                    dataSource={cartInfo}
+                    pagination={false}
+                />
                 <div className="flex justify-between items-center mt-8">
                     <span className="text-xl">
                         Tổng thanh toán (2 Sản phẩm):{" "}
@@ -201,7 +194,7 @@ const CartPage = () => {
                     onCancel={handleClose}
                 >
                     <CheckoutForm
-                        totalAmount={totalAmount}
+                        // totalAmount={totalAmount}
                         handleClose={handleClose}
                         handlePayment={handlePayment}
                     />
