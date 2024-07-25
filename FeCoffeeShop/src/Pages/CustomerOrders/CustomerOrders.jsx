@@ -1,11 +1,15 @@
 import useNotification from "@/hooks/NotiHook";
-import { Button, Modal, Popconfirm, Space, Table } from "antd";
+import { Button, Modal, Popconfirm, Select, Space, Table } from "antd";
 import React, { useEffect, useState } from "react";
 import {
     CusotmerGetListOrder,
     CustomerCancelOrder,
 } from "../../service/CustomerOrder";
-import { formatVND, ORDERSTATUS } from "../../utils/resuableFuc";
+import {
+    formatVND,
+    ORDERSTATUS,
+    ORDERSTATUSCUSTOMERARRAY,
+} from "../../utils/resuableFuc";
 import FeedbackCForm from "../../Components/FormManager/FeedbackCForm";
 
 const CustomerOrders = () => {
@@ -14,15 +18,22 @@ const CustomerOrders = () => {
     const [pageSize, setPageSize] = useState(10);
     const [totalCount, setTotalCount] = useState(0);
     const [isFeedback, setIsFeedback] = useState(false);
+    const [selectStatus, setSelectStatus] = useState(
+        ORDERSTATUSCUSTOMERARRAY[0].key
+    );
     const [orderCancelId, setOrderCancelId] = useState();
     const openNotification = useNotification();
     useEffect(() => {
-        fetchListOrder(currentPage, pageSize);
+        fetchListOrder(currentPage, pageSize, selectStatus);
     }, [currentPage, pageSize]);
 
-    const fetchListOrder = async (pageIndex, pageSize) => {
+    const fetchListOrder = async (pageIndex, pageSize, selectStatus) => {
         const response = await CusotmerGetListOrder({
-            listParam: { PageIndex: pageIndex, PageSize: pageSize },
+            listParam: {
+                PageIndex: pageIndex,
+                PageSize: pageSize,
+                Status: selectStatus,
+            },
         });
 
         if (response.data.Success) {
@@ -131,10 +142,23 @@ const CustomerOrders = () => {
             ),
         },
     ];
-
     return (
         <>
             <div className="container mx-auto p-6">
+                <Select
+                    className="mb-2 min-w-52"
+                    value={selectStatus}
+                    onChange={(value) => {
+                        setSelectStatus(value);
+                        fetchListOrder(currentPage, pageSize, value);
+                    }}
+                >
+                    {ORDERSTATUSCUSTOMERARRAY.map((item, index) => (
+                        <Select.Option key={index} value={item.key}>
+                            {item.title}
+                        </Select.Option>
+                    ))}
+                </Select>
                 <Table
                     columns={columns}
                     dataSource={customerOrders?.List}
