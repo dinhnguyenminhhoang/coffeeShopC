@@ -33,6 +33,7 @@ import OrderDetailsPage from "./Pages/staff/OrderDetailsPage/OrderDetailsPage";
 import ServiceRatingsPage from "./Pages/staff/ServiceRatingsPage/ServiceRatingsPage";
 import ForgotPassword from "./Pages/Auth/ForgotPassword/ForgotPassword";
 import ResetPassword from "./Pages/Auth/ResetPassword/ResetPassword";
+import CustomerOrders from "./Pages/CustomerOrders/CustomerOrders";
 const App = () => {
     const router = createBrowserRouter(
         createRoutesFromElements(
@@ -84,6 +85,7 @@ const App = () => {
                         element={<IngredientsStocksPage />}
                     />
                     <Route path="/profile" element={<Profille />} />
+                    <Route path="/orders" element={<CustomerOrders />} />
                 </Route>
                 <Route element={<AdminLayout />}>
                     <Route path="/manager-staffs" element={<StaffPage />} />

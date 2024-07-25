@@ -9,4 +9,24 @@ const headers = {
 const CustomerCreateOrder = ({ formData }) => {
     return instance.post(`/Orders/Cusotmer/Order`, formData, { headers });
 };
-export { CustomerCreateOrder };
+const CusotmerGetListOrder = ({ listParam }) => {
+    return instance.get(`/Orders/Cusotmer/History`, {
+        headers,
+        params: listParam,
+    });
+};
+const CusotmerGetOrderDetail = ({ orderId }) => {
+    return instance.get(`/Orders/Cusotmer/Detail/${orderId}`, { headers });
+};
+const CustomerCancelOrder = ({ formData }) => {
+    return instance.delete(`/Orders/Cusotmer/Cancel`, {
+        headers,
+        data: formData,
+    });
+};
+export {
+    CustomerCreateOrder,
+    CusotmerGetListOrder,
+    CusotmerGetOrderDetail,
+    CustomerCancelOrder,
+};
