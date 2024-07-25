@@ -2,6 +2,6 @@
 {
     public class ListCustomerFilter
     {
-        public string CustomerName { get; set; }
+        public string? CustomerName { get; set; }
     }
 }
