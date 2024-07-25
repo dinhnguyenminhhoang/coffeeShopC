@@ -36,8 +36,8 @@ const ORDERSTATUS = {
         title: "Đã Tạo đơn",
         color: "#1890ff", // Xanh dương
     },
-    ODR_SHIP: {
-        key: "ODR_SHIP",
+    ODR_SHIPED: {
+        key: "ODR_SHIPED",
         title: "Đã Giao Hàng",
         color: "#faad14", // Cam
     },
@@ -66,6 +66,11 @@ const ORDERSTATUS = {
         title: "Đã Xác Nhận",
         color: "#2f54eb", // Xanh dương đậm
     },
+    ODR_SHIP: {
+        key: "ODR_SHIP",
+        title: "Đang Giao Hàng",
+        color: "#faad14", // Cam
+    },
 };
 const ORDERSTATUSARRAY = [
     {
@@ -74,7 +79,55 @@ const ORDERSTATUSARRAY = [
         color: "#1890ff", // Xanh dương
     },
     {
+        key: "ODR_COMF",
+        title: "Đã Xác Nhận",
+        color: "#2f54eb",
+    },
+    {
         key: "ODR_SHIP",
+        title: "Đang Giao Hàng",
+        color: "#faad14",
+    },
+    {
+        key: "ODR_SHIPED",
+        title: "Đã Giao Hàng",
+        color: "#faad14", // Cam
+    },
+    {
+        key: "ODR_COML",
+        title: "Đã Hoàn Thành",
+        color: "#52c41a",
+    },
+
+    {
+        key: "ODR_SERV",
+        title: "Đã Phục Vụ",
+        color: "#13c2c2",
+    },
+    {
+        key: "ODR_CANL",
+        title: "Đã Hủy",
+        color: "#f5222d",
+    },
+    {
+        key: "ODR_FAIL",
+        title: "Thất Bại",
+        color: "#d9d9d9",
+    },
+];
+const ORDERSTAFFSTATUSARRAY = [
+    {
+        key: "ODR_COMF",
+        title: "Đã Xác Nhận",
+        color: "#2f54eb", // Xanh dương đậm
+    },
+    {
+        key: "ODR_SHIP",
+        title: "Đang Giao Hàng",
+        color: "#faad14", // Cam
+    },
+    {
+        key: "ODR_SHIPED",
         title: "Đã Giao Hàng",
         color: "#faad14", // Cam
     },
@@ -84,24 +137,9 @@ const ORDERSTATUSARRAY = [
         color: "#52c41a", // Xanh lá
     },
     {
-        key: "ODR_CANL",
-        title: "Đã Hủy",
-        color: "#f5222d", // Đỏ
-    },
-    {
-        key: "ODR_FAIL",
-        title: "Thất Bại",
-        color: "#d9d9d9", // Xám
-    },
-    {
         key: "ODR_SERV",
         title: "Đã Phục Vụ",
         color: "#13c2c2", // Xanh cyan
-    },
-    {
-        key: "ODR_COMF",
-        title: "Đã Xác Nhận",
-        color: "#2f54eb", // Xanh dương đậm
     },
 ];
 const ORDERSTATUSCUSTOMERARRAY = [
@@ -111,7 +149,7 @@ const ORDERSTATUSCUSTOMERARRAY = [
         color: "#1890ff", // Xanh dương
     },
     {
-        key: "ODR_SHIP",
+        key: "ODR_SHIPED",
         title: "Đã Giao Hàng",
         color: "#faad14", // Cam
     },
@@ -141,4 +179,5 @@ export {
     ORDERSTATUS,
     ORDERSTATUSARRAY,
     ORDERSTATUSCUSTOMERARRAY,
+    ORDERSTAFFSTATUSARRAY,
 };

@@ -7,6 +7,12 @@ const headers = {
     Authorization: `Bearer ${token}`,
 };
 const staffGetListOrder = ({ listParam }) => {
+    return instance.get(`Orders/List`, {
+        headers,
+        params: listParam,
+    });
+};
+const staffGetListStaffOrder = ({ listParam }) => {
     return instance.get(`Orders/Staff/List`, {
         headers,
         params: listParam,
@@ -18,36 +24,54 @@ const staffGetOrderById = ({ orderId }) => {
     });
 };
 const staffFailedOrder = ({ formData }) => {
-    return instance.post(`/Orders/Staff/Failed`, {
+    return instance.post(`/Orders/Staff/Failed`, formData, {
         headers,
-        data: formData,
     });
 };
 const staffCompleteOrder = ({ orderId }) => {
-    return instance.post(`/Orders/Staff/Completed/${orderId}`, {
-        headers,
-        data: formData,
-    });
+    return instance.post(
+        `/Orders/Staff/Completed/${orderId}`,
+        {},
+        {
+            headers,
+        }
+    );
 };
 const staffShippingOrder = ({ orderId }) => {
-    return instance.post(`/Orders/Staff/Shipping/${orderId}`, {
-        headers,
-    });
+    return instance.post(
+        `/Orders/Staff/Shipping/${orderId}`,
+        {},
+        {
+            headers,
+        }
+    );
 };
 const staffServedOrder = ({ orderId }) => {
-    return instance.post(`/Orders/Staff/Served/${orderId}`, {
-        headers,
-    });
+    return instance.post(
+        `/Orders/Staff/Served/${orderId}`,
+        {},
+        {
+            headers,
+        }
+    );
 };
 const staffComfirmOrder = ({ orderId }) => {
-    return instance.post(`/Orders/Staff/Comfirm/${orderId}`, {
-        headers,
-    });
+    return instance.post(
+        `/Orders/Staff/Comfirm/${orderId}`,
+        {},
+        {
+            headers,
+        }
+    );
 };
 const staffShippedOrder = ({ orderId }) => {
-    return instance.post(`/Orders/Staff/Shipped/${orderId}`, {
-        headers,
-    });
+    return instance.post(
+        `/Orders/Staff/Shipped/${orderId}`,
+        {},
+        {
+            headers,
+        }
+    );
 };
 const staffDeleteOrder = ({ formData }) => {
     return instance.delete(`/Orders/Staff/Cancel`, {
@@ -64,5 +88,6 @@ export {
     staffShippingOrder,
     staffServedOrder,
     staffCompleteOrder,
+    staffGetListStaffOrder,
     staffFailedOrder,
 };
