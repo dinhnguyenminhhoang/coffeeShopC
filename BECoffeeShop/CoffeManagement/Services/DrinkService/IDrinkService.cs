@@ -7,7 +7,7 @@ namespace CoffeManagement.Services.DrinkService
 {
     public interface IDrinkService
     {
-        Task<PagingListModel<DrinkResponse>> GetListDrinks(PagingDTO pagingDto);
+        Task<PagingListModel<DrinkResponse>> GetListDrinks(PagingDTO pagingDto, ListDinkFilter filter);
         Task<int> CreateDrinks(CreateDrinkRequest request);
         Task<int> UpdateDrinks(UpdateDrinkRequest request);
         Task<DrinkDetailResponse> GetDrinksDetail(int id);

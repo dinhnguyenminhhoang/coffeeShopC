@@ -30,9 +30,17 @@ namespace CoffeManagement.Services.DrinkService
             _recipeDetailRepository = recipeDetailRepository;
         }
 
-        public async Task<PagingListModel<DrinkResponse>> GetListDrinks([FromQuery] PagingDTO pagingDto)
+        public async Task<PagingListModel<DrinkResponse>> GetListDrinks(PagingDTO pagingDto, ListDinkFilter filter)
         {
             var drinkQueryable = _drinkRepository.GetQueryable();
+
+            if (filter != null)
+            {
+                if(filter.CategoryId != null)
+                {
+                    drinkQueryable = drinkQueryable.Where(d => d.CategoryId == filter.CategoryId);
+                }
+            }
 
             var pagingList = new PagingListModel<Drink>(drinkQueryable, pagingDto.PageIndex, pagingDto.PageSize);
 
@@ -56,34 +64,35 @@ namespace CoffeManagement.Services.DrinkService
 
         public async Task<int> UpdateDrinks(UpdateDrinkRequest request)
         {
-            var drinks = _mapper.Map<Drink>(request);
+            var existedDrink = await _drinkRepository.GetById(request.Id);
+            if (existedDrink == null) throw new NotFoundException("Not found Drinks.");
 
-            await _drinkRepository.Update(drinks);
+            _mapper.Map(request, existedDrink);
+            await _drinkRepository.Update(existedDrink);
 
-            return drinks.Id;
+            return existedDrink.Id;
         }
 
         public async Task<DrinkDetailResponse> GetDrinksDetail(int id)
         {
-            var drink = await _drinkRepository.GetById(id);
+            var existedDrink = await _drinkRepository.GetById(id);
+            if (existedDrink == null) throw new NotFoundException("Not found Drinks.");
 
-            if (drink == null) throw new NotFoundException("Not found Drinks.");
-
-            var drinkDetail = _mapper.Map<DrinkDetailResponse>(drink);
-
+            var drinkDetail = _mapper.Map<DrinkDetailResponse>(existedDrink);
 
             return drinkDetail;
         }
 
         public async Task<int> DeleteDrinksSize(int id)
         {
-            var drinksSize = await _drinksSizeRepository.GetById(id);
+            var existedDrinksSize = await _drinksSizeRepository.GetById(id);
+            if (existedDrinksSize == null) throw new NotFoundException("Not found Drinks Size.");
 
-            if (drinksSize == null) throw new NotFoundException("Not found Drinks Size.");
+            existedDrinksSize.IsDeleted = true;
+            existedDrinksSize.UpdatedAt = DateTime.Now;
+            await _drinksSizeRepository.Update(existedDrinksSize);
 
-            await _drinksSizeRepository.Remove(id);
-
-            return drinksSize.Id;
+            return existedDrinksSize.Id;
         }
 
         public async Task<int> CreateDrinksSize(CreateDrinkSizeRequest request)
@@ -97,21 +106,19 @@ namespace CoffeManagement.Services.DrinkService
 
         public async Task<int> UpdateDrinksSize(UpdateDrinkSizeRequest request)
         {
-            var drinksSizeExist = await _drinksSizeRepository.GetById(request.Id);
+            var existedDrinksSize = await _drinksSizeRepository.GetById(request.Id);
+            if (existedDrinksSize == null) throw new NotFoundException("Not found Drinks Size.");
 
-            if (drinksSizeExist == null) throw new NotFoundException("Not found Drinks Size.");
+            _mapper.Map(request, existedDrinksSize);
+            await _drinksSizeRepository.Update(existedDrinksSize);
 
-            _mapper.Map(request, drinksSizeExist);
-
-            await _drinksSizeRepository.Update(drinksSizeExist);
-
-            return drinksSizeExist.Id;
+            return existedDrinksSize.Id;
         }
 
         public async Task<int> UpdateRecipe(UpdateRecipeRequest request)
         {
             var isDuplicateIngredient = request.RecipeDetails.GroupBy(rd => rd.IngredientId).Any(g => g.Count() > 2);
-            if(isDuplicateIngredient) throw new BadRequestException("Ingredient is duplicate.");
+            if (isDuplicateIngredient) throw new BadRequestException("Ingredient is duplicate.");
 
             var recipeExist = await _recipeRepository.GetById(request.Id);
             if (recipeExist == null) throw new NotFoundException("Not found Recipe.");

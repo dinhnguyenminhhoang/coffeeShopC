@@ -6,17 +6,21 @@ namespace CoffeManagement.Extensions.AutoMapper
     {
         private void LoadDrinkMapperProfile()
         {
-            CreateMap<Models.Drink, DTO.Drink.DrinkResponse>();
+            CreateMap<Models.Drink, DTO.Drink.DrinkResponse>()
+                .ForMember(dest => dest.CategoryName, otp => otp.MapFrom(src => src.Category.Name))
+                .ForMember(dest => dest.MinPrice, otp => otp.MapFrom(src => src.DrinkSizes.OrderBy(ds => ds.Price).FirstOrDefault().Price));
             CreateMap<Models.Drink, DTO.Drink.DrinkDetailResponse>()
                 .ForMember(dest => dest.DrinksSizes, otp => otp.MapFrom(src => src.DrinkSizes.AsEnumerable()))
                 .ForMember(dest => dest.Recipe, otp => otp.MapFrom(src => src.Recipes.FirstOrDefault()));
             CreateMap<Common.Pagging.PagingListModel<Models.Drink>, Common.Pagging.PagingListModel<DTO.Drink.DrinkResponse>>();
             CreateMap<DTO.Drink.CreateDrinkRequest, Models.Drink>();
-            CreateMap<DTO.Drink.UpdateDrinkRequest, Models.Drink>();
+            CreateMap<DTO.Drink.UpdateDrinkRequest, Models.Drink>()
+                .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null));
             CreateMap<Models.DrinkSize, DTO.Drink.DrinkSize>();
             CreateMap<DTO.Drink.DrinkSizeCreate, Models.DrinkSize>();
             CreateMap<DTO.Drink.CreateDrinkSizeRequest, Models.DrinkSize>();
-            CreateMap<DTO.Drink.UpdateDrinkSizeRequest, Models.DrinkSize>();
+            CreateMap<DTO.Drink.UpdateDrinkSizeRequest, Models.DrinkSize>()
+                .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null));
         }
     }
 }

@@ -8,6 +8,8 @@
 
         public string Description { get; set; }
 
+        public int? CategoryId { get; set; }
+
         public required IEnumerable<DrinkSizeCreate> DrinkSizes { get; set; } = Enumerable.Empty<DrinkSizeCreate>();
         
         public required RecipeCreate Recipe { get; set; }

@@ -23,9 +23,9 @@ namespace CoffeManagement.Controllers
         [HttpGet]
         [AllowAnonymous]
         [SwaggerOperation(Summary = "Get List Drinks")]
-        public async Task<IActionResult> GetListDrinks([FromQuery] PagingDTO pagingDto)
+        public async Task<IActionResult> GetListDrinks([FromQuery] PagingDTO pagingDto, [FromQuery] ListDinkFilter filter)
         {
-            var result = await _drinksService.GetListDrinks(pagingDto);
+            var result = await _drinksService.GetListDrinks(pagingDto, filter);
 
             return Ok(RenderSuccessResponse(result));
         }
@@ -58,7 +58,7 @@ namespace CoffeManagement.Controllers
         {
             var result = await _drinksService.UpdateDrinks(request);
 
-            return Ok(RenderSuccessResponse(result));
+            return Ok(RenderSuccessResponse(data: result, message: "SUCCESS"));
         }
 
         [HttpDelete("Size/{id:int}")]
