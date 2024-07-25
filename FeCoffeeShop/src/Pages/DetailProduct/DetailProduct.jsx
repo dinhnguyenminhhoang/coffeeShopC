@@ -6,13 +6,16 @@ import { getDrinkById, getDrink } from "@/service/drinks";
 import noImage from "@/assets/website/noimg.jpg";
 import { formatVND, isValidImageUrl } from "@/utils/resuableFuc";
 import Spiner from "@/Components/Spiner/Spiner";
+import useNotification from "../../hooks/NotiHook";
 
 const { Option } = Select;
 
 const DetailProduct = () => {
     const [data, setData] = useState();
-    const [selectedSize, setSelectedSize] = useState("");
+    const [selectedSize, setSelectedSize] = useState();
     const [DrinkCateData, setDrinkCateData] = useState();
+    const [cartInfo, setCartInfo] = useState([]);
+    const openNotification = useNotification();
     const param = useParams();
 
     useEffect(() => {
@@ -21,9 +24,7 @@ const DetailProduct = () => {
             if (response?.data?.Success) {
                 setData(response.data?.ResultData);
                 if (response.data?.ResultData?.DrinksSizes.length > 0) {
-                    setSelectedSize(
-                        response.data?.ResultData?.DrinksSizes[0].Price
-                    );
+                    setSelectedSize(response.data?.ResultData?.DrinksSizes[0]);
                 }
             }
         };
@@ -38,11 +39,56 @@ const DetailProduct = () => {
         fetchData();
         fetchDataCate();
     }, [param]);
-
+    useEffect(() => {
+        const dataLocal = localStorage.getItem("cartInfo");
+        if (dataLocal) {
+            setCartInfo(JSON.parse(dataLocal));
+        }
+    }, []);
+    useEffect(() => {
+        if (cartInfo.length) {
+            localStorage.setItem("cartInfo", JSON.stringify(cartInfo));
+        }
+    }, [cartInfo]);
     const handleSizeChange = (e) => {
         setSelectedSize(e.target.value);
     };
-
+    const handleAddToCard = () => {
+        const newData = {
+            ...data,
+            DinkSize: { ...selectedSize },
+            quantity: 1,
+            total: selectedSize?.Price,
+        };
+        if (cartInfo.length) {
+            const checkData = cartInfo.find(
+                (card) =>
+                    card?.Id === newData?.Id &&
+                    card?.DinkSize?.Id === newData?.DinkSize?.Id
+            );
+            if (checkData) {
+                openNotification({
+                    type: "info",
+                    message: "Thông báo",
+                    description: "Sản phẩm đã trong giỏ hàng",
+                });
+            } else {
+                setCartInfo([...cartInfo, newData]);
+                openNotification({
+                    type: "success",
+                    message: "Thông báo",
+                    description: "Đã thêm sản phẩm vào giỏ hàng",
+                });
+            }
+        } else {
+            setCartInfo([newData]);
+            openNotification({
+                type: "success",
+                message: "Thông báo",
+                description: "Đã thêm sản phẩm vào giỏ hàng",
+            });
+        }
+    };
     return (
         <>
             {data ? (
@@ -65,7 +111,7 @@ const DetailProduct = () => {
                                 {data.Name}
                             </h1>{" "}
                             <p className="text-xl text-red-500 mb-4">
-                                {formatVND(selectedSize)}{" "}
+                                {formatVND(selectedSize?.Price)}{" "}
                                 {/* Display selected size price */}
                             </p>
                             <div className="mb-4">
@@ -80,7 +126,7 @@ const DetailProduct = () => {
                                     >
                                         {data.DrinksSizes.map((size) => (
                                             <Radio.Button
-                                                value={size.Price}
+                                                value={size}
                                                 key={size.Id}
                                             >
                                                 {`${size.Size} - ${formatVND(
@@ -114,8 +160,9 @@ const DetailProduct = () => {
                                 icon={<ShoppingCartOutlined />}
                                 size="large"
                                 className="w-full bg-orange-500 hover:bg-orange-600"
+                                onClick={handleAddToCard}
                             >
-                                Đặt giao tận nơi
+                                Thêm vào giõ hàng
                             </Button>
                         </Col>
                     </Row>

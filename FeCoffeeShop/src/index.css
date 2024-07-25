@@ -14,18 +14,22 @@
 }
 
 .ant-table-thead > tr > th {
-    background-color: #f0f2f5;
-    color: #001529;
+    background-color: #999;
+    color: #001529 !important;
     font-weight: bold;
     text-align: center;
-    border-bottom: 2px solid #e8e8e8;
+    border: 1px solid #999 !important;
 }
 
 .ant-table-tbody > tr > td {
     text-align: center;
-    border: 1px solid #e8e8e8;
+    border: 1px solid #999 !important;
 }
 
+.gold-type-column {
+    text-align: left;
+    padding-left: 16px;
+}
 /* .container {
     max-width: 1200px;
 } */

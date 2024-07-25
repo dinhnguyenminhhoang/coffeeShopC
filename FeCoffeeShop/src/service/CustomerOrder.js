@@ -6,8 +6,7 @@ const headers = {
     accept: "*/*",
     Authorization: `Bearer ${token}`,
 };
-const paymentsTripe = ({ formData }) => {
-    return instance.post(`/payment/stripe`, formData, { headers });
+const CustomerCreateOrder = ({ formData }) => {
+    return instance.post(`/Orders/Cusotmer/Order`, formData, { headers });
 };
-
-export { paymentsTripe };
+export { CustomerCreateOrder };

@@ -17,7 +17,7 @@ const AdminCustomers = () => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [editingCustomer, setEditingCustomer] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
-    const [pageSize, setPageSize] = useState(1);
+    const [pageSize, setPageSize] = useState(10);
     const [totalCount, setTotalCount] = useState(0);
     const openNotification = useNotification();
 
@@ -123,6 +123,7 @@ const AdminCustomers = () => {
     const columns = [
         { title: "ID", dataIndex: "Id", key: "Id" },
         { title: "FullName", dataIndex: "FullName", key: "FullName" },
+        { title: "Email", dataIndex: "Email", key: "Email" },
         { title: "Phone", dataIndex: "Phone", key: "Phone" },
         { title: "Address", dataIndex: "Address", key: "Address" },
         {
