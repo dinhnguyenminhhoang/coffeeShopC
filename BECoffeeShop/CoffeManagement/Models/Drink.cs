@@ -25,6 +25,8 @@ public partial class Drink
 
     public virtual Category Category { get; set; }
 
+    public virtual ICollection<DrinkRating> DrinkRatings { get; set; } = new List<DrinkRating>();
+
     public virtual ICollection<DrinkSize> DrinkSizes { get; set; } = new List<DrinkSize>();
 
     public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();

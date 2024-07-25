@@ -45,6 +45,8 @@ public partial class Order
 
     public virtual Customer Customer { get; set; }
 
+    public virtual ICollection<DrinkRating> DrinkRatings { get; set; } = new List<DrinkRating>();
+
     public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
 
     public virtual Staff Staff { get; set; }

@@ -67,6 +67,23 @@ CREATE TABLE [DrinkSizes] (
   CONSTRAINT FK_DrinkSizes_Drinks FOREIGN KEY ([DrinkId]) REFERENCES [Drinks] ([Id]),
 );
 
+DROP TABLE IF EXISTS [DrinkRatings];
+CREATE TABLE [DrinkRatings] (
+  [Id] INT CONSTRAINT PK_DrinkRatings PRIMARY KEY IDENTITY(1, 1),
+  [DrinkId] INT NOT NULL,
+  [OrderId] INT NOT NULL,
+  [Rating] DECIMAL(2,1) NOT NULL,
+  [Content] NVARCHAR(MAX) NOT NULL,
+  [FeedbackStaffId] INT,
+  [Feedback] NVARCHAR(MAX),
+  [FeedbackAt] DateTime,
+  [CreatedAt] DateTime DEFAULT(GETDATE()),
+  [UpdatedAt] DateTime DEFAULT(GETDATE()),
+  CONSTRAINT FK_DrinkRatings_Drinks FOREIGN KEY ([DrinkId]) REFERENCES [Drinks] ([Id]),
+  CONSTRAINT FK_DrinkRatings_Orders FOREIGN KEY ([OrderId]) REFERENCES [Orders] ([Id]),
+  CONSTRAINT FK_DrinkRatings_Staffs FOREIGN KEY ([FeedbackStaffId]) REFERENCES [Staffs] ([Id]),
+);
+
 DROP TABLE IF EXISTS [Staffs];
 CREATE TABLE [Staffs] (
   [Id] INT CONSTRAINT PK_Staffs PRIMARY KEY IDENTITY(1, 1),

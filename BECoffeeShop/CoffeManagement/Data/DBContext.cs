@@ -24,6 +24,8 @@ public partial class DBContext : DbContext
 
     public virtual DbSet<Drink> Drinks { get; set; }
 
+    public virtual DbSet<DrinkRating> DrinkRatings { get; set; }
+
     public virtual DbSet<DrinkSize> DrinkSizes { get; set; }
 
     public virtual DbSet<Ingredient> Ingredients { get; set; }
@@ -145,6 +147,33 @@ public partial class DBContext : DbContext
             entity.HasOne(d => d.Category).WithMany(p => p.Drinks)
                 .HasForeignKey(d => d.CategoryId)
                 .HasConstraintName("FK_Drinks_Categories");
+        });
+
+        modelBuilder.Entity<DrinkRating>(entity =>
+        {
+            entity.Property(e => e.Content).IsRequired();
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.FeedbackAt).HasColumnType("datetime");
+            entity.Property(e => e.Rating).HasColumnType("decimal(2, 1)");
+            entity.Property(e => e.UpdatedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+
+            entity.HasOne(d => d.Drink).WithMany(p => p.DrinkRatings)
+                .HasForeignKey(d => d.DrinkId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_DrinkRatings_Drinks");
+
+            entity.HasOne(d => d.FeedbackStaff).WithMany(p => p.DrinkRatings)
+                .HasForeignKey(d => d.FeedbackStaffId)
+                .HasConstraintName("FK_DrinkRatings_Staffs");
+
+            entity.HasOne(d => d.Order).WithMany(p => p.DrinkRatings)
+                .HasForeignKey(d => d.OrderId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_DrinkRatings_Orders");
         });
 
         modelBuilder.Entity<DrinkSize>(entity =>

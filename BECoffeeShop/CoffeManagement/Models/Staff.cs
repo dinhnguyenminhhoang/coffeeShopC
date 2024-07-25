@@ -47,6 +47,8 @@ public partial class Staff
 
     public virtual Branch Branch { get; set; }
 
+    public virtual ICollection<DrinkRating> DrinkRatings { get; set; } = new List<DrinkRating>();
+
     public virtual ICollection<Order> OrderStaffCanceleds { get; set; } = new List<Order>();
 
     public virtual ICollection<Order> OrderStaffs { get; set; } = new List<Order>();

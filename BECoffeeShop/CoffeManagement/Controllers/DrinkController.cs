@@ -63,7 +63,7 @@ namespace CoffeManagement.Controllers
 
         [HttpDelete("Size/{id:int}")]
         //[Authorize(Policy = nameof(AuthPolicy.POL_ADMIN))]
-        [SwaggerOperation(Summary = "Delete Drinks_Size from Drinsk")]
+        [SwaggerOperation(Summary = "Delete Drinks_Size from Drinks")]
         public async Task<IActionResult> DeleteDrinksSize([FromRoute] int id)
         {
             var result = await _drinksService.DeleteDrinksSize(id);
@@ -73,7 +73,7 @@ namespace CoffeManagement.Controllers
 
         [HttpPost("Size")]
         //[Authorize(Policy = nameof(AuthPolicy.POL_ADMIN))]
-        [SwaggerOperation(Summary = "Add Drinks_Size to Drinsk")]
+        [SwaggerOperation(Summary = "Add Drinks_Size to Drinks")]
         public async Task<IActionResult> CreateDrinksSize([FromBody] CreateDrinkSizeRequest request)
         {
             var result = await _drinksService.CreateDrinksSize(request);
