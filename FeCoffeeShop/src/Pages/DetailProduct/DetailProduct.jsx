@@ -12,7 +12,7 @@ const { Option } = Select;
 
 const DetailProduct = () => {
     const [data, setData] = useState();
-    const [selectedSize, setSelectedSize] = useState("");
+    const [selectedSize, setSelectedSize] = useState();
     const [DrinkCateData, setDrinkCateData] = useState();
     const [cartInfo, setCartInfo] = useState([]);
     const openNotification = useNotification();
@@ -24,9 +24,7 @@ const DetailProduct = () => {
             if (response?.data?.Success) {
                 setData(response.data?.ResultData);
                 if (response.data?.ResultData?.DrinksSizes.length > 0) {
-                    setSelectedSize(
-                        response.data?.ResultData?.DrinksSizes[0].Price
-                    );
+                    setSelectedSize(response.data?.ResultData?.DrinksSizes[0]);
                 }
             }
         };
@@ -56,8 +54,18 @@ const DetailProduct = () => {
         setSelectedSize(e.target.value);
     };
     const handleAddToCard = () => {
+        const newData = {
+            ...data,
+            DinkSize: { ...selectedSize },
+            quantity: 1,
+            total: selectedSize?.Price,
+        };
         if (cartInfo.length) {
-            const checkData = cartInfo.find((card) => card?.Id === data?.Id);
+            const checkData = cartInfo.find(
+                (card) =>
+                    card?.Id === newData?.Id &&
+                    card?.DinkSize?.Id === newData?.DinkSize?.Id
+            );
             if (checkData) {
                 openNotification({
                     type: "info",
@@ -65,7 +73,7 @@ const DetailProduct = () => {
                     description: "Sản phẩm đã trong giỏ hàng",
                 });
             } else {
-                setCartInfo([...cartInfo, data]);
+                setCartInfo([...cartInfo, newData]);
                 openNotification({
                     type: "success",
                     message: "Thông báo",
@@ -73,7 +81,7 @@ const DetailProduct = () => {
                 });
             }
         } else {
-            setCartInfo([data]);
+            setCartInfo([newData]);
             openNotification({
                 type: "success",
                 message: "Thông báo",
@@ -103,7 +111,7 @@ const DetailProduct = () => {
                                 {data.Name}
                             </h1>{" "}
                             <p className="text-xl text-red-500 mb-4">
-                                {formatVND(selectedSize)}{" "}
+                                {formatVND(selectedSize?.Price)}{" "}
                                 {/* Display selected size price */}
                             </p>
                             <div className="mb-4">
@@ -118,7 +126,7 @@ const DetailProduct = () => {
                                     >
                                         {data.DrinksSizes.map((size) => (
                                             <Radio.Button
-                                                value={size.Price}
+                                                value={size}
                                                 key={size.Id}
                                             >
                                                 {`${size.Size} - ${formatVND(
