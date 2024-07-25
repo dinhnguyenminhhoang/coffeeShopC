@@ -79,6 +79,9 @@ const staffDeleteOrder = ({ formData }) => {
         data: formData,
     });
 };
+const staffCreateOrder = ({ formData }) => {
+    return instance.post(`/Orders/Staff/Order`, formData, { headers });
+};
 export {
     staffGetListOrder,
     staffGetOrderById,
@@ -87,6 +90,7 @@ export {
     staffShippedOrder,
     staffShippingOrder,
     staffServedOrder,
+    staffCreateOrder,
     staffCompleteOrder,
     staffGetListStaffOrder,
     staffFailedOrder,

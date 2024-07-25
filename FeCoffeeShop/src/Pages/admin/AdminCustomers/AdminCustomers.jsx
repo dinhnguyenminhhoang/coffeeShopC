@@ -27,7 +27,10 @@ const AdminCustomers = () => {
 
     const fetchCustomers = async (pageIndex, pageSize) => {
         const response = await getAllCustomers({
-            listParam: { PageIndex: pageIndex, PageSize: pageSize },
+            listParam: {
+                PageIndex: pageIndex,
+                PageSize: pageSize,
+            },
         });
 
         if (response.data.Success) {

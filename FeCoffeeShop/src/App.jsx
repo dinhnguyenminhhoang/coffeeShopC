@@ -49,7 +49,7 @@ const App = () => {
                 <Route element={<DefautLayout />}>
                     <Route path="/product/:id" element={<DetailProduct />} />
                     <Route index element={<HomePage />} />
-                    <Route path="/carts" element={<CartPage />} />
+                    <Route path="/carts/:role" element={<CartPage />} />
                     <Route path="/branches" element={<Branches />} />
                     {/* order */}
                     <Route

@@ -39,6 +39,7 @@ const Navbar = () => {
                 fullname: data.fullname,
                 phone: data.phone.trim(),
                 username: data.username,
+                role: data.role,
             });
             localStorage.setItem("isLogger", true);
             localStorage.setItem(
@@ -135,7 +136,11 @@ const Navbar = () => {
                         </ul>
                         <button
                             className="bg-primary/70 px-4 py-2 rounded-md hover:scale-105 duration-200 flex items-center gap-3 relative"
-                            onClick={() => navigator("/carts")}
+                            onClick={() => {
+                                userData?.role === "ROLE_STAFF"
+                                    ? navigator("/carts/staff")
+                                    : navigator("/carts/customer");
+                            }}
                         >
                             Cart
                             <BiCartAdd className="text-xl cursor-pointer" />

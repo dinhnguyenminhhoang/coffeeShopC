@@ -3,39 +3,41 @@ import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import {
     Button,
-    Flex,
     Image,
     Input,
     InputNumber,
     Modal,
     Popconfirm,
+    Space,
     Table,
 } from "antd";
 import React, { useEffect, useState } from "react";
 import { FcFeedback } from "react-icons/fc";
+import { useNavigate, useParams } from "react-router-dom";
+import CheckoutForm from "../../Components/FormManager/CheckoutForm";
+import CustomerOrderAddressForm from "../../Components/FormManager/CustomerOrderAddressForm";
+import NoteForm from "../../Components/FormManager/NoteForm";
 import useNotification from "../../hooks/NotiHook";
+import { CustomerCreateOrder } from "../../service/CustomerOrder";
 import { paymentsTripe } from "../../service/payment";
 import { formatVND, stripeKey } from "../../utils/resuableFuc";
-import CheckoutForm from "../../Components/FormManager/CheckoutForm";
-import NoteForm from "../../Components/FormManager/NoteForm";
-import { getCustomerProfile } from "../../service/profile";
-import { data } from "autoprefixer";
-import { CustomerCreateOrder } from "../../service/CustomerOrder";
-import CustomerOrderAddressForm from "../../Components/FormManager/CustomerOrderAddressForm";
-import { useNavigate } from "react-router-dom";
+import CustomerInfoModal from "../../Components/Modal/CustomerInfoForm";
+import { staffCreateOrder } from "../../service/staffOrder";
 
 const stripePromise = loadStripe(stripeKey);
 
 const CartPage = () => {
+    const { role } = useParams();
     const [loading, setLoading] = useState(false);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isFeedbackModalVisible, setIsNoteModalVisible] = useState(false);
     const [isAddressModalVisible, setIsAddressModalVisible] = useState(false);
+    const [isUserModalVisible, setIsUserModalVisible] = useState(false);
+    const [userOrderInfo, setUserOrderInfo] = useState("");
     const [customerNote, setCustomerNote] = useState("");
     const [customerAddress, setCustomerAddress] = useState("");
     const [cartInfo, setCartInfo] = useState([]);
     const [branchInfo, setBranchInfo] = useState();
-    const [userInfo, setUserInfo] = useState();
     const openNotification = useNotification();
     const navigate = useNavigate();
     useEffect(() => {
@@ -45,14 +47,6 @@ const CartPage = () => {
             setCartInfo(JSON.parse(cartLocal));
         }
         if (barnchLocal) setBranchInfo(JSON.parse(barnchLocal));
-        getCustomerProfile()
-            .then((response) => response.data)
-            .then((data) => {
-                if (data?.Success) {
-                    setUserInfo(data?.ResultData);
-                    setCustomerAddress(data?.ResultData?.Address);
-                }
-            });
     }, []);
     const columns = [
         {
@@ -168,8 +162,18 @@ const CartPage = () => {
 
         return { error, paymentIntent };
     };
-
-    const showModal = () => {
+    const showModal = async (type) => {
+        if (role === "staff") {
+            if (!userOrderInfo.Id) {
+                openNotification({
+                    type: "info",
+                    message: "Thông báo",
+                    description: `Vui lòng nhập thông tin khách hàng`,
+                });
+                setIsUserModalVisible(true);
+                return;
+            }
+        }
         if (!branchInfo?.Id) {
             openNotification({
                 type: "info",
@@ -177,38 +181,63 @@ const CartPage = () => {
                 description: `Vui lòng chọn cửa hàng`,
             });
             navigate("/branches");
-        } else {
+            return;
+        }
+        if (type === "online") {
             setIsModalVisible(true);
+        } else if (type === "cashier" && role === "staff") {
+            await fetchCreateOrder("cashier");
         }
     };
-
     const handleClose = async ({ isSuccess }) => {
         setIsModalVisible(false);
         if (isSuccess) {
-            const OrderDetails = cartInfo?.map((drink) => ({
-                DrinkId: drink.Id,
-                DrinkSizeId: drink.DinkSize.Id,
-                Quantity: drink.quantity,
-                Price: drink.total,
-            }));
-            const formData = {
-                BranchId: branchInfo.Id,
-                ShippingAddress: customerAddress,
-                PaymentMethod: "PAY_CCARD",
-                CustomerNote: customerNote,
-                OrderDetails: OrderDetails,
-            };
-            const response = await CustomerCreateOrder({ formData: formData });
-            if (response.data.Success) {
-                openNotification({
-                    type: "success",
-                    message: "Thanh toán",
-                    description: `Vui lòng kiểm tra đơn hàng của bạn - mã đơn ${response.data?.ResultData}`,
-                });
-            }
+            await fetchCreateOrder();
         }
     };
-
+    const fetchCreateOrder = async (type = "online") => {
+        const OrderDetails = cartInfo?.map((drink) => ({
+            DrinkId: drink.Id,
+            DrinkSizeId: drink.DinkSize.Id,
+            Quantity: drink.quantity,
+            Price: drink.total,
+        }));
+        const formData = {
+            BranchId: branchInfo.Id,
+            ShippingAddress: customerAddress,
+            PaymentMethod:
+                type === "online"
+                    ? "PAY_CCARD"
+                    : type === "cashier"
+                    ? "PAY_CASH"
+                    : null,
+            CustomerNote: customerNote,
+            OrderDetails: OrderDetails,
+        };
+        let response;
+        if (role === "staff") {
+            response = await staffCreateOrder({
+                formData: {
+                    ...formData,
+                    CustomerId: userOrderInfo?.Id,
+                    StaffNote: `Đây là đơn hàng của khách ${userOrderInfo?.Email}`,
+                },
+            });
+        } else {
+            response = await CustomerCreateOrder({ formData: formData });
+        }
+        if (response.data.Success) {
+            openNotification({
+                type: "success",
+                message: "Thanh toán",
+                description: `Vui lòng kiểm tra đơn hàng của bạn - mã đơn ${response.data?.ResultData}`,
+            });
+            localStorage.removeItem("cartInfo");
+            if (role === "staff") {
+                navigate("/manager-orders");
+            } else navigate("/orders");
+        }
+    };
     const showNoteModal = () => {
         setIsNoteModalVisible(true);
     };
@@ -275,14 +304,35 @@ const CartPage = () => {
                             </span>
                         </span>
                     </div>
-                    <Button
-                        type="primary"
-                        className="bg-black text-white py-4"
-                        onClick={showModal}
-                        loading={loading}
-                    >
-                        Thanh toán online
-                    </Button>
+                    {role === "staff" ? (
+                        <Space>
+                            <Button
+                                type="primary"
+                                className="bg-black text-white py-4"
+                                onClick={() => showModal("cashier")}
+                                loading={loading}
+                            >
+                                Thanh toán tại quầy
+                            </Button>
+                            <Button
+                                type="primary"
+                                className="bg-black text-white py-4"
+                                onClick={() => showModal("online")}
+                                loading={loading}
+                            >
+                                Thanh toán online
+                            </Button>
+                        </Space>
+                    ) : (
+                        <Button
+                            type="primary"
+                            className="bg-black text-white py-4"
+                            onClick={() => showModal("online")}
+                            loading={loading}
+                        >
+                            Thanh toán online
+                        </Button>
+                    )}
                 </div>
                 <Modal
                     title="Thanh toán"
@@ -318,6 +368,14 @@ const CartPage = () => {
                         setCustomerAddress={setCustomerAddress}
                     />
                 </Modal>
+                {isUserModalVisible ? (
+                    <CustomerInfoModal
+                        customerData={userOrderInfo}
+                        isModalVisible={isUserModalVisible}
+                        setCustomerData={setUserOrderInfo}
+                        setIsModalVisible={setIsUserModalVisible}
+                    />
+                ) : null}
             </div>
         </Elements>
     );
