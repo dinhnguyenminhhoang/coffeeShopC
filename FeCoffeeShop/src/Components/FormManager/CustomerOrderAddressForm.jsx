@@ -28,7 +28,7 @@ const CustomerOrderAddressForm = ({ handleClose, setCustomerAddress }) => {
             >
                 <Input
                     rows={4}
-                    placeholder="Nhập ghi chú của bạn"
+                    placeholder="Nhập địa chỉ của bạn"
                     className="border-slate-500 text-black placeholder:text-slate-900"
                 />
             </Form.Item>

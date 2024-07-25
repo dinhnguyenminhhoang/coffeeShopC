@@ -60,7 +60,7 @@ const CustomerOrders = () => {
                 },
             });
             if (response.data?.Success) {
-                fetchListOrder(currentPage, pageSize);
+                fetchListOrder(currentPage, pageSize, selectStatus);
                 openNotification({
                     type: "success",
                     description: "canel order successfully",
