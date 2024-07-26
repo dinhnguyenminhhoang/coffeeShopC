@@ -27,7 +27,7 @@ const useNotification = () => {
                     ? descriptions[type](error)
                     : descriptions[type]),
             duration,
-            placement: "topRight",
+            placement: "bottomRight",
         });
     };
 

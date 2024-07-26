@@ -9,4 +9,10 @@ const headers = {
 const customerCreateRating = ({ formData }) => {
     return instance.post(`/Rating`, formData, { headers });
 };
-export { customerCreateRating };
+const getListRatingDrink = ({ listParam, drinkId }) => {
+    return instance.get(`/Rating/List/${drinkId}`, {
+        headers: headers,
+        params: listParam,
+    });
+};
+export { customerCreateRating, getListRatingDrink };

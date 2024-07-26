@@ -23,7 +23,7 @@ import CartPage from "./Pages/CartPage/CartPage";
 import CustomerOrderDetailPage from "./Pages/Customer/CustomerOrderDetailPage/CustomerOrderDetailPage";
 import CustomerOrders from "./Pages/Customer/CustomerOrders/CustomerOrders";
 import Profile from "./Pages/Customer/Profille/Profille";
-import DetailProduct from "./Pages/DetailProduct/DetailProduct";
+import DetailDrink from "./Pages/DetailDrink/DetailDrink";
 import HomePage from "./Pages/HomePage/HomePage";
 import PageNotFound from "./Pages/PageNotFound/PageNotFound";
 import ManagerCategories from "./Pages/staff/ManagerCategories/ManagerCategories";
@@ -42,7 +42,7 @@ const App = () => {
                     element={<ResetPassword />}
                 />
                 <Route element={<DefautLayout />}>
-                    <Route path="/product/:id" element={<DetailProduct />} />
+                    <Route path="/product/:id" element={<DetailDrink />} />
                     <Route index element={<HomePage />} />
                     <Route path="/carts/:role" element={<CartPage />} />
                     <Route path="/branches" element={<Branches />} />

@@ -2,18 +2,35 @@ import Spiner from "@/Components/Spiner/Spiner";
 import { getDrink, getDrinkById } from "@/service/drinks";
 import { formatVND } from "@/utils/resuableFuc";
 import { ShoppingCartOutlined } from "@ant-design/icons";
-import { Button, Col, Radio, Row, Tag, Rate, Input, Space } from "antd";
+import {
+    Button,
+    Col,
+    Radio,
+    Row,
+    Tag,
+    Rate,
+    Input,
+    Space,
+    Avatar,
+    List,
+    Pagination,
+} from "antd";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import useNotification from "../../hooks/NotiHook";
+import { getListRatingDrink } from "../../service/rating";
 
 const { TextArea } = Input;
 
-const DetailProduct = () => {
+const DetailDrink = () => {
     const [data, setData] = useState();
     const [selectedSize, setSelectedSize] = useState();
-    const [DrinkCateData, setDrinkCateData] = useState();
+    const [DrinkCateData, setDrinkCateData] = useState([]);
+    const [dataRating, setDataRating] = useState([]);
     const [cartInfo, setCartInfo] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalCount, setTotalCount] = useState(0);
+    const pageSize = 4;
     const openNotification = useNotification();
     const navigate = useNavigate();
     const param = useParams();
@@ -28,21 +45,43 @@ const DetailProduct = () => {
                 }
             }
         };
+        fetchData();
+    }, [param]);
+
+    useEffect(() => {
         const fetchDataCate = async () => {
-            const response = await getDrink({
-                listParam: {
-                    PageIndex: 1,
-                    PageSize: 6,
-                    CategoryId: data?.Category?.Id,
-                },
-            });
-            if (response?.data?.Success) {
-                setDrinkCateData(response.data?.ResultData?.List);
+            if (data?.Category?.Id) {
+                const response = await getDrink({
+                    listParam: {
+                        PageIndex: 1,
+                        PageSize: 6,
+                        CategoryId: data?.Category?.Id,
+                    },
+                });
+                if (response?.data?.Success) {
+                    setDrinkCateData(response.data?.ResultData?.List);
+                }
             }
         };
-        fetchData();
         fetchDataCate();
-    }, [param]);
+    }, [data]);
+
+    useEffect(() => {
+        const fetchDataRating = async () => {
+            const response = await getListRatingDrink({
+                listParam: {
+                    PageIndex: currentPage,
+                    PageSize: pageSize,
+                },
+                drinkId: param.id,
+            });
+            if (response?.data?.Success) {
+                setDataRating(response.data?.ResultData?.List);
+                setTotalCount(response.data?.ResultData?.Paging?.TotalCount);
+            }
+        };
+        fetchDataRating();
+    }, [param, currentPage]);
 
     useEffect(() => {
         const dataLocal = localStorage.getItem("cartInfo");
@@ -64,38 +103,33 @@ const DetailProduct = () => {
     const handleAddToCard = () => {
         const newData = {
             ...data,
-            DinkSize: { ...selectedSize },
+            DrinkSize: { ...selectedSize },
             quantity: 1,
             total: selectedSize?.Price,
         };
-        if (cartInfo.length) {
-            const checkData = cartInfo.find(
-                (card) =>
-                    card?.Id === newData?.Id &&
-                    card?.DinkSize?.Id === newData?.DinkSize?.Id
-            );
-            if (checkData) {
-                openNotification({
-                    type: "info",
-                    message: "Thông báo",
-                    description: "Sản phẩm đã trong giỏ hàng",
-                });
-            } else {
-                setCartInfo([...cartInfo, newData]);
-                openNotification({
-                    type: "success",
-                    message: "Thông báo",
-                    description: "Đã thêm sản phẩm vào giỏ hàng",
-                });
-            }
+        const checkData = cartInfo.find(
+            (card) =>
+                card?.Id === newData?.Id &&
+                card?.DrinkSize?.Id === newData?.DrinkSize?.Id
+        );
+        if (checkData) {
+            openNotification({
+                type: "info",
+                message: "Thông báo",
+                description: "Sản phẩm đã trong giỏ hàng",
+            });
         } else {
-            setCartInfo([newData]);
+            setCartInfo([...cartInfo, newData]);
             openNotification({
                 type: "success",
                 message: "Thông báo",
                 description: "Đã thêm sản phẩm vào giỏ hàng",
             });
         }
+    };
+
+    const onPageChange = (page) => {
+        setCurrentPage(page);
     };
 
     return (
@@ -118,10 +152,9 @@ const DetailProduct = () => {
                         <Col xs={24} md={12}>
                             <h1 className="text-2xl font-bold mb-2">
                                 {data.Name}
-                            </h1>{" "}
+                            </h1>
                             <p className="text-xl text-red-500 mb-4">
-                                {formatVND(selectedSize?.Price)}{" "}
-                                {/* Display selected size price */}
+                                {formatVND(selectedSize?.Price)}
                             </p>
                             <div className="mb-4">
                                 <span className="block mb-2">
@@ -205,6 +238,61 @@ const DetailProduct = () => {
                                 : null}
                         </Row>
                     </div>
+                    <div className="mt-8">
+                        <h2 className="text-xl font-bold mb-4">
+                            Đánh giá sản phẩm
+                        </h2>
+                        {dataRating?.length ? (
+                            <>
+                                <List
+                                    itemLayout="horizontal"
+                                    dataSource={dataRating}
+                                    renderItem={(rating) => (
+                                        <List.Item>
+                                            <List.Item.Meta
+                                                avatar={
+                                                    <Avatar>
+                                                        {rating?.Customer?.FullName.charAt(
+                                                            0
+                                                        )}
+                                                    </Avatar>
+                                                }
+                                                title={
+                                                    <Space>
+                                                        <span>
+                                                            {
+                                                                rating?.Customer
+                                                                    .FullName
+                                                            }
+                                                        </span>
+                                                        <Rate
+                                                            disabled
+                                                            value={
+                                                                rating?.Rating
+                                                            }
+                                                        />
+                                                    </Space>
+                                                }
+                                                description={
+                                                    <p>{rating?.Content}</p>
+                                                }
+                                            />
+                                        </List.Item>
+                                    )}
+                                />
+                                <Pagination
+                                    current={currentPage}
+                                    pageSize={pageSize}
+                                    total={totalCount}
+                                    onChange={onPageChange}
+                                    showSizeChanger={false}
+                                    className="mt-8 flex justify-center"
+                                />
+                            </>
+                        ) : (
+                            <p>Chưa có đánh giá nào.</p>
+                        )}
+                    </div>
                 </div>
             ) : (
                 <Spiner />
@@ -213,4 +301,4 @@ const DetailProduct = () => {
     );
 };
 
-export default DetailProduct;
+export default DetailDrink;
