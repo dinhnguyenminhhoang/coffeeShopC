@@ -16,25 +16,24 @@ import DrinkManager from "./Pages/admin/DrinkManager/DrinkManager";
 import IngredientsStocksPage from "./Pages/admin/IngredientsStocksPage/IngredientsStocksPage";
 import PaymentDetailsPage from "./Pages/admin/PaymentDetails/PaymentDetails";
 import StaffPage from "./Pages/admin/StaffPage/StaffPage";
+import ForgotPassword from "./Pages/Auth/ForgotPassword/ForgotPassword";
 import Login from "./Pages/Auth/Login/Login";
 import Register from "./Pages/Auth/Register/Register";
+import ResetPassword from "./Pages/Auth/ResetPassword/ResetPassword";
 import Branches from "./Pages/Branches/Branches";
 import CartPage from "./Pages/CartPage/CartPage";
+import CustomerOrderDetailPage from "./Pages/CustomerOrderDetailPage/CustomerOrderDetailPage";
+import CustomerOrders from "./Pages/CustomerOrders/CustomerOrders";
 import DetailProduct from "./Pages/DetailProduct/DetailProduct";
-import DrinkMenuDetailsPage from "./Pages/DrinkMenuDetailsPage/DrinkMenuDetailsPage";
 import HomePage from "./Pages/HomePage/HomePage";
-import OrderDrinkDetailsPage from "./Pages/OrderDrinkDetails/OrderDrinkDetails";
 import PageNotFound from "./Pages/PageNotFound/PageNotFound";
 import Profille from "./Pages/Profille/Profille";
 import DrinkRatingsPage from "./Pages/staff/DrinkRatings/DrinkRatings";
 import ManagerBill from "./Pages/staff/ManagerBill/ManagerBill";
+import ManagerCategories from "./Pages/staff/ManagerCategories/ManagerCategories";
 import ManagerOrder from "./Pages/staff/ManagerOrder/ManagerOrder";
 import OrderDetailsPage from "./Pages/staff/OrderDetailsPage/OrderDetailsPage";
 import ServiceRatingsPage from "./Pages/staff/ServiceRatingsPage/ServiceRatingsPage";
-import ForgotPassword from "./Pages/Auth/ForgotPassword/ForgotPassword";
-import ResetPassword from "./Pages/Auth/ResetPassword/ResetPassword";
-import CustomerOrders from "./Pages/CustomerOrders/CustomerOrders";
-import ManagerCategories from "./Pages/staff/ManagerCategories/ManagerCategories";
 const App = () => {
     const router = createBrowserRouter(
         createRoutesFromElements(
@@ -54,21 +53,17 @@ const App = () => {
                     <Route path="/branches" element={<Branches />} />
                     {/* order */}
                     <Route
-                        path="/order-detail/:id"
+                        path="/manager-order-detail/:id"
                         element={<OrderDetailsPage />}
                     />
                     <Route
-                        path="/order-drink/:id"
-                        element={<OrderDrinkDetailsPage />}
+                        path="/order-drink/:orderId"
+                        element={<CustomerOrderDetailPage />}
                     />
                     {/* drink */}
                     <Route
                         path="/drink-rating"
                         element={<DrinkRatingsPage />}
-                    />
-                    <Route
-                        path="/drink-menu-detail"
-                        element={<DrinkMenuDetailsPage />}
                     />
                     <Route
                         path="/payment-detail"
