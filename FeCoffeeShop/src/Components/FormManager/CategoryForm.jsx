@@ -1,22 +1,29 @@
-import React from "react";
-import { Form, Input, Button } from "antd";
+import { Button, Form, Input } from "antd";
+import React, { useEffect } from "react";
+import { getCategoriesDetaiil } from "../../service/category";
 
-const CategoryForm = ({ initialValues, onSave, onCancel }) => {
+const CategoryForm = ({ initialValues, onSave, onCancel, isModalVisible }) => {
     const [form] = Form.useForm();
 
     const handleFinish = (values) => {
         onSave(values);
     };
+    useEffect(() => {
+        if (initialValues) {
+            getCategoriesDetaiil({ CategoryId: initialValues })
+                .then((response) => response.data)
+                .then((data) => {
+                    if (data.Success) {
+                        form.setFieldsValue(data.ResultData);
+                    }
+                });
+        } else form.resetFields();
+    }, [initialValues, isModalVisible]);
 
     return (
-        <Form
-            form={form}
-            initialValues={initialValues}
-            onFinish={handleFinish}
-            layout="vertical"
-        >
+        <Form form={form} onFinish={handleFinish} layout="vertical">
             <Form.Item
-                name="name"
+                name="Name"
                 label="Name"
                 rules={[
                     {
@@ -28,7 +35,7 @@ const CategoryForm = ({ initialValues, onSave, onCancel }) => {
                 <Input />
             </Form.Item>
             <Form.Item
-                name="description"
+                name="Description"
                 label="Description"
                 rules={[
                     {
@@ -39,11 +46,11 @@ const CategoryForm = ({ initialValues, onSave, onCancel }) => {
             >
                 <Input />
             </Form.Item>
-            <Form.Item>
+            <Form.Item className="flex justify-end">
                 <Button type="primary" htmlType="submit">
                     Save
                 </Button>
-                <Button onClick={onCancel} style={{ marginLeft: "8px" }}>
+                <Button onClick={onCancel} className="ml-2">
                     Cancel
                 </Button>
             </Form.Item>

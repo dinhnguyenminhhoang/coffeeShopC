@@ -34,6 +34,7 @@ import ServiceRatingsPage from "./Pages/staff/ServiceRatingsPage/ServiceRatingsP
 import ForgotPassword from "./Pages/Auth/ForgotPassword/ForgotPassword";
 import ResetPassword from "./Pages/Auth/ResetPassword/ResetPassword";
 import CustomerOrders from "./Pages/CustomerOrders/CustomerOrders";
+import ManagerCategories from "./Pages/staff/ManagerCategories/ManagerCategories";
 const App = () => {
     const router = createBrowserRouter(
         createRoutesFromElements(
@@ -108,6 +109,10 @@ const App = () => {
                     <Route
                         path="/manager-ingredients"
                         element={<AdminIngredientsPage />}
+                    />
+                    <Route
+                        path="/manager-categories"
+                        element={<ManagerCategories />}
                     />
                 </Route>
                 <Route path="*" element={<PageNotFound />} />
