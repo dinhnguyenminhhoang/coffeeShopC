@@ -26,6 +26,7 @@ namespace CoffeManagement.Extensions.AutoMapper
                 {
                     Id = src.Drink.Id,
                     Name = src.Drink.Name,
+                    Image = src.Drink.Image,
                     Description = src.Drink.Description,
                     Size = src.DrinkSize.Size,
                     Price = src.Price / src.Quantity,
@@ -65,6 +66,7 @@ namespace CoffeManagement.Extensions.AutoMapper
                 {
                     Id = src.Drink.Id,
                     Name = src.Drink.Name,
+                    Image = src.Drink.Image,
                     Description = src.Drink.Description,
                     Size = src.DrinkSize.Size,
                     Price = src.Price / src.Quantity,
