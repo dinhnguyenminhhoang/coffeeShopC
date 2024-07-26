@@ -1,7 +1,5 @@
-import Spiner from "@/Components/Spiner/Spiner";
 import { getDrink, getDrinkById } from "@/service/drinks";
 import { formatVND } from "@/utils/resuableFuc";
-import { ShoppingCartOutlined } from "@ant-design/icons";
 import {
     Button,
     Col,
@@ -15,11 +13,16 @@ import {
     List,
     Pagination,
 } from "antd";
-import React, { useEffect, useState } from "react";
+import React, { lazy, Suspense, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import useNotification from "../../hooks/NotiHook";
 import { getListRatingDrink } from "../../service/rating";
-
+import Spiner from "../../Components/Spiner/Spiner";
+import SpinerCpn from "../../Components/Spiner/SpinerCpn";
+const DrinkInfo = lazy(() => import("@/Components/Drinks/DrinkInfo/DrinkInfo"));
+const CategoriesDrink = lazy(() =>
+    import("@/Components/Drinks/CategoriesDrink/CategoriesDrink")
+);
 const { TextArea } = Input;
 
 const DetailDrink = () => {
@@ -136,60 +139,14 @@ const DetailDrink = () => {
         <>
             {data ? (
                 <div className="container max-w-[1200px] mx-auto p-4">
-                    <Row gutter={[16, 16]}>
-                        <Col xs={24} md={12}>
-                            <div className="relative">
-                                <img
-                                    src={data.Image}
-                                    alt="Product"
-                                    className="w-full max-h-[600px] rounded-md"
-                                />
-                                <Tag className="absolute top-4 left-4 bg-red-500 text-white px-2 py-1">
-                                    BEST SELLER
-                                </Tag>
-                            </div>
-                        </Col>
-                        <Col xs={24} md={12}>
-                            <h1 className="text-2xl font-bold mb-2">
-                                {data.Name}
-                            </h1>
-                            <p className="text-xl text-red-500 mb-4">
-                                {formatVND(selectedSize?.Price)}
-                            </p>
-                            <div className="mb-4">
-                                <span className="block mb-2">
-                                    Chọn size (bắt buộc):
-                                </span>
-                                {data?.DrinksSizes.length ? (
-                                    <Radio.Group
-                                        value={selectedSize}
-                                        onChange={handleSizeChange}
-                                        className="mb-4"
-                                    >
-                                        {data.DrinksSizes.map((size) => (
-                                            <Radio.Button
-                                                value={size}
-                                                key={size.Id}
-                                            >
-                                                {`${size.Size} - ${formatVND(
-                                                    size.Price
-                                                )}`}
-                                            </Radio.Button>
-                                        ))}
-                                    </Radio.Group>
-                                ) : null}
-                            </div>
-                            <Button
-                                type="primary"
-                                icon={<ShoppingCartOutlined />}
-                                size="large"
-                                className="w-full bg-orange-500 hover:bg-orange-600"
-                                onClick={handleAddToCard}
-                            >
-                                Thêm vào giỏ hàng
-                            </Button>
-                        </Col>
-                    </Row>
+                    <Suspense fallback={<Spiner />}>
+                        <DrinkInfo
+                            data={data}
+                            handleAddToCard={handleAddToCard}
+                            handleSizeChange={handleSizeChange}
+                            selectedSize={selectedSize}
+                        />
+                    </Suspense>
                     <div className="mt-8">
                         <h2 className="text-xl font-bold mb-4">
                             Mô tả sản phẩm
@@ -198,99 +155,75 @@ const DetailDrink = () => {
                         <h2 className="text-xl font-bold mb-4">
                             Sản phẩm liên quan
                         </h2>
-                        <Row gutter={[16, 16]}>
-                            {DrinkCateData?.length
-                                ? DrinkCateData.map((item, index) => (
-                                      <Col
-                                          onClick={() => {
-                                              setData();
-                                              navigate(`/product/${item.Id}`);
-                                          }}
-                                          key={index}
-                                          xs={12}
-                                          sm={8}
-                                          lg={4}
-                                          className="hover:pt-1 hover:transition-all duration-300 cursor-pointer"
-                                      >
-                                          <div className="text-start">
-                                              <img
-                                                  src={item?.Image}
-                                                  alt={item?.name}
-                                                  className="w-full hover:rounded-md hover:transition-all duration-300 mb-2 h-[240px] border shadow-md"
-                                              />
-                                              <Space>
-                                                  <p>{item?.Name}</p>
-                                                  <Rate
-                                                      disabled
-                                                      value={
-                                                          item?.AverageRating ||
-                                                          5
-                                                      }
-                                                      className="text-sm"
-                                                  />
-                                              </Space>
-                                              <p className="text-red-500">
-                                                  {formatVND(item?.MinPrice)}
-                                              </p>
-                                          </div>
-                                      </Col>
-                                  ))
-                                : null}
-                        </Row>
+                        {DrinkCateData?.length ? (
+                            <Suspense fallback={<SpinerCpn />}>
+                                <CategoriesDrink
+                                    DrinkCateData={DrinkCateData}
+                                    setData={setData}
+                                />
+                            </Suspense>
+                        ) : (
+                            <SpinerCpn />
+                        )}
                     </div>
                     <div className="mt-8">
                         <h2 className="text-xl font-bold mb-4">
                             Đánh giá sản phẩm
                         </h2>
-                        {dataRating?.length ? (
-                            <>
-                                <List
-                                    itemLayout="horizontal"
-                                    dataSource={dataRating}
-                                    renderItem={(rating) => (
-                                        <List.Item>
-                                            <List.Item.Meta
-                                                avatar={
-                                                    <Avatar>
-                                                        {rating?.Customer?.FullName.charAt(
-                                                            0
-                                                        )}
-                                                    </Avatar>
-                                                }
-                                                title={
-                                                    <Space>
-                                                        <span>
-                                                            {
-                                                                rating?.Customer
-                                                                    .FullName
-                                                            }
-                                                        </span>
-                                                        <Rate
-                                                            disabled
-                                                            value={
-                                                                rating?.Rating
-                                                            }
-                                                        />
-                                                    </Space>
-                                                }
-                                                description={
-                                                    <p>{rating?.Content}</p>
-                                                }
-                                            />
-                                        </List.Item>
-                                    )}
-                                />
-                                <Pagination
-                                    current={currentPage}
-                                    pageSize={pageSize}
-                                    total={totalCount}
-                                    onChange={onPageChange}
-                                    showSizeChanger={false}
-                                    className="mt-8 flex justify-center"
-                                />
-                            </>
+                        {dataRating ? (
+                            dataRating?.length ? (
+                                <>
+                                    <List
+                                        itemLayout="horizontal"
+                                        dataSource={dataRating}
+                                        renderItem={(rating) => (
+                                            <List.Item>
+                                                <List.Item.Meta
+                                                    avatar={
+                                                        <Avatar>
+                                                            {rating?.Customer?.FullName.charAt(
+                                                                0
+                                                            )}
+                                                        </Avatar>
+                                                    }
+                                                    title={
+                                                        <Space>
+                                                            <span>
+                                                                {
+                                                                    rating
+                                                                        ?.Customer
+                                                                        .FullName
+                                                                }
+                                                            </span>
+                                                            <Rate
+                                                                disabled
+                                                                value={
+                                                                    rating?.Rating
+                                                                }
+                                                            />
+                                                        </Space>
+                                                    }
+                                                    description={
+                                                        <p>{rating?.Content}</p>
+                                                    }
+                                                />
+                                            </List.Item>
+                                        )}
+                                    />
+                                    <Pagination
+                                        current={currentPage}
+                                        pageSize={pageSize}
+                                        total={totalCount}
+                                        onChange={onPageChange}
+                                        showSizeChanger={false}
+                                        className="mt-8 flex justify-center"
+                                    />
+                                </>
+                            ) : (
+                                <p>Chưa có đánh giá nào.</p>
+                            )
                         ) : (
-                            <p>Chưa có đánh giá nào.</p>
+                            <SpinerCpn />
                         )}
                     </div>
                 </div>

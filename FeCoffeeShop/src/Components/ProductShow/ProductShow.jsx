@@ -2,6 +2,7 @@ import { getDrink } from "@/service/drinks";
 import { Col, Pagination, Row, Spin } from "antd";
 import React, { useEffect, useState } from "react";
 import ProductCard from "../ProductCard/ProductCard";
+import SpinerCpn from "../Spiner/SpinerCpn";
 
 const ProductShow = () => {
     const [drinkData, setDrinkData] = useState([]);
@@ -40,24 +41,40 @@ const ProductShow = () => {
                             Đặt món ngay
                         </h1>
                     </div>
-                    <Row gutter={[16, 16]} data-aos="zoom-in" className="px-20">
-                        {drinkData?.map((product) => (
-                            <Col key={product.Id} xs={24} sm={12} md={8} lg={6}>
-                                <ProductCard
-                                    product={product}
-                                    loading={loading}
-                                />
-                            </Col>
-                        ))}
-                    </Row>
-                    <Pagination
-                        current={currentPage}
-                        pageSize={pageSize}
-                        total={totalCount}
-                        onChange={onPageChange}
-                        showSizeChanger={false} // Optionally hide size changer
-                        className="mt-8 flex justify-center"
-                    />
+                    {drinkData?.length ? (
+                        <>
+                            <Row
+                                gutter={[16, 16]}
+                                data-aos="zoom-in"
+                                className="px-20"
+                            >
+                                {drinkData?.map((product) => (
+                                    <Col
+                                        key={product.Id}
+                                        xs={24}
+                                        sm={12}
+                                        md={8}
+                                        lg={6}
+                                    >
+                                        <ProductCard
+                                            product={product}
+                                            loading={loading}
+                                        />
+                                    </Col>
+                                ))}
+                            </Row>
+                            <Pagination
+                                current={currentPage}
+                                pageSize={pageSize}
+                                total={totalCount}
+                                onChange={onPageChange}
+                                showSizeChanger={false} // Optionally hide size changer
+                                className="mt-8 flex justify-center"
+                            />
+                        </>
+                    ) : (
+                        <SpinerCpn />
+                    )}
                 </div>
             </div>
         </>
