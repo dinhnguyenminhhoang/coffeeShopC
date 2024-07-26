@@ -13,5 +13,7 @@
         public string CategoryName { get; set; }
 
         public double MinPrice { get; set; }
+
+        public double AverageRating { get; set; }
     }
 }

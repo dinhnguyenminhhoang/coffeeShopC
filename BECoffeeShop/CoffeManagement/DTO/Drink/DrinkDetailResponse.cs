@@ -13,6 +13,8 @@ namespace CoffeManagement.DTO.Drink
 
         public string Description { get; set; }
 
+        public double AverageRating { get; set; }
+
         public IEnumerable<DrinkSize> DrinksSizes { get; set; } = Enumerable.Empty<DrinkSize>();
 
         public Category Category { get; set; }
