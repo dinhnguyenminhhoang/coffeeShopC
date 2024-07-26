@@ -65,7 +65,7 @@ const CartPage = () => {
                     <div className="flex flex-col gap-2 ml-2 items-start">
                         <span>Tên: {record.Name}</span>
                         <span className="max-w-28">
-                            Size: {record?.DinkSize?.Size}
+                            Size: {record?.DrinkSize?.Size}
                         </span>
                     </div>
                 </div>
@@ -73,9 +73,9 @@ const CartPage = () => {
         },
         {
             title: "Đơn giá",
-            dataIndex: "DinkSize",
+            dataIndex: "DrinkSize",
             key: "Price",
-            render: (dinkSize) => <span>{formatVND(dinkSize.Price)}</span>,
+            render: (DrinkSize) => <span>{formatVND(DrinkSize?.Price)}</span>,
         },
         {
             title: "Số lượng",
@@ -91,10 +91,11 @@ const CartPage = () => {
                         const newData = cartInfo.map((item) => {
                             if (
                                 item.Id === record.Id &&
-                                item?.DinkSize?.Size === record?.DinkSize?.Size
+                                item?.DrinkSize?.Size ===
+                                    record?.DrinkSize?.Size
                             ) {
                                 item.quantity = value;
-                                item.total = item.DinkSize.Price * value;
+                                item.total = item.DrinkSize.Price * value;
                             }
                             return item;
                         });
@@ -127,7 +128,8 @@ const CartPage = () => {
                         const newData = cartInfo.filter(
                             (item) =>
                                 item.Id === record.Id &&
-                                item?.DinkSize?.Size !== record?.DinkSize?.Size
+                                item?.DrinkSize?.Size !==
+                                    record?.DrinkSize?.Size
                         );
                         setCartInfo(newData);
                         localStorage.setItem(
@@ -198,7 +200,7 @@ const CartPage = () => {
     const fetchCreateOrder = async (type = "online") => {
         const OrderDetails = cartInfo?.map((drink) => ({
             DrinkId: drink.Id,
-            DrinkSizeId: drink.DinkSize.Id,
+            DrinkSizeId: drink.DrinkSize.Id,
             Quantity: drink.quantity,
             Price: drink.total,
         }));

@@ -1,9 +1,8 @@
-import React from "react";
-import { Button, Card, Spin } from "antd";
-import { useNavigate } from "react-router-dom";
-import noImg from "@/assets/website/noimg.jpg";
-import { isValidImageUrl } from "@/utils/resuableFuc";
 import { HeartOutlined } from "@ant-design/icons";
+import { Button, Card, Space, Rate } from "antd";
+import React from "react";
+import { useNavigate } from "react-router-dom";
+
 const { Meta } = Card;
 
 const ProductCard = ({ product, loading }) => {
@@ -30,7 +29,19 @@ const ProductCard = ({ product, loading }) => {
             }
             className="rounded-lg overflow-hidden shadow-lg"
         >
-            <Meta title={product.Name} description={product.Description} />
+            <div className="flex flex-col gap-1">
+                <Space align="center">
+                    <span className="text-[16px]">{product.Name}</span>
+                    <Rate
+                        disabled
+                        value={product.AverageRating || 5}
+                        className="text-sm"
+                    />
+                </Space>
+                <span className="text-slate-500 text-xs">
+                    {product.Description}
+                </span>
+            </div>
             <Button
                 type="primary"
                 className="mt-4 w-full bg-red-500 hover:bg-red-600"

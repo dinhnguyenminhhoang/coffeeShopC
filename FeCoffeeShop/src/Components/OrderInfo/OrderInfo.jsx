@@ -1,7 +1,7 @@
 import { Card, Descriptions, Table } from "antd";
 import React from "react";
 
-const OrderInfo = ({ order }) => {
+const OrderInfo = ({ order, type }) => {
     const columns = [
         {
             title: "ID",
@@ -52,45 +52,55 @@ const OrderInfo = ({ order }) => {
     ];
     return (
         <div className="p-6 bg-gray-100 min-h-screen">
-            <Card title="Order Detail" className="mb-6">
+            <Card title="Order Detail" className="mb-6 text-2xl font-medium">
                 <Descriptions bordered>
-                    <Descriptions.Item label="Order ID">
-                        {order?.Id}
+                    {type === "staff" ? (
+                        <>
+                            <Descriptions.Item label="Customer ID">
+                                #{order?.Customer?.Id}
+                            </Descriptions.Item>{" "}
+                            <Descriptions.Item label="Tên Khách hàng">
+                                {order?.Customer?.FullName}
+                            </Descriptions.Item>
+                        </>
+                    ) : null}
+                    <Descriptions.Item label="Mã đơn">
+                        #{order?.Id}
                     </Descriptions.Item>
-                    <Descriptions.Item label="Shipping Address">
+                    <Descriptions.Item label="Địa chỉ giao hàng">
                         {order?.ShippingAddress}
                     </Descriptions.Item>
-                    <Descriptions.Item label="Order Type">
+                    <Descriptions.Item label="Loại đơn">
                         {order?.Type}
                     </Descriptions.Item>
-                    <Descriptions.Item label="Status">
+                    <Descriptions.Item label="Trạng thái">
                         {order?.Status}
                     </Descriptions.Item>
-                    <Descriptions.Item label="Customer Note">
+                    <Descriptions.Item label="Ghi chú của khách">
                         {order?.CustomerNote || "N/A"}
                     </Descriptions.Item>
-                    <Descriptions.Item label="Staff Note">
+                    <Descriptions.Item label="Ghi chú của nhân viên">
                         {order?.StaffNote || "N/A"}
                     </Descriptions.Item>
                     <Descriptions.Item label="Is Paid">
                         {order?.IsPaid ? "Yes" : "No"}
                     </Descriptions.Item>
-                    <Descriptions.Item label="Order Date">
+                    <Descriptions.Item label="Ngày tạo">
                         {new Date(order.OrderdAt).toLocaleString("vi-VN")}
                     </Descriptions.Item>
-                    <Descriptions.Item label="Total Price">
+                    <Descriptions.Item label="Tổng tiền">
                         {order?.TotalPrice}
                     </Descriptions.Item>
-                    <Descriptions.Item label="Canceled Note">
+                    <Descriptions.Item label="Ghi chú hủy đơn(nếu có)">
                         {order?.CanceledNote || "N/A"}
                     </Descriptions.Item>
-                    <Descriptions.Item label="Failed Comment">
+                    <Descriptions.Item label="Ghi chú đơn thất bại(nếu có)">
                         {order?.FailedComment || "N/A"}
                     </Descriptions.Item>
-                    <Descriptions.Item label="Branch Name">
+                    <Descriptions.Item label="Chi nhánh">
                         {order?.Branch?.Name}
                     </Descriptions.Item>
-                    <Descriptions.Item label="Branch Address">
+                    <Descriptions.Item label="Địa chỉ chi nhánh">
                         {order?.Branch?.Address}
                     </Descriptions.Item>
                 </Descriptions>

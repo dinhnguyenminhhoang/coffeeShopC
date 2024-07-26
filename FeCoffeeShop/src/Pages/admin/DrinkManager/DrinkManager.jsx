@@ -1,11 +1,5 @@
-import useNotification from "@/hooks/NotiHook";
-import { Button, Flex, Image, Modal, Popconfirm, Space, Table } from "antd";
-import React, { useEffect, useState } from "react";
-import { BiEdit } from "react-icons/bi";
-import { BsBack } from "react-icons/bs";
-import { MdDelete } from "react-icons/md";
-import DrinkForm from "@//Components/FormManager/DrinkForm";
-import { deleteBranches } from "@//service/branchs";
+import DrinkForm from "@/Components/FormManager/DrinkForm";
+import DrinksSizeForm from "@/Components/FormManager/DrinksSizeForm";
 import {
     createDrink,
     createDrinkSize,
@@ -16,10 +10,14 @@ import {
     updateDrinkSize,
 } from "@//service/drinks";
 import { formatVND } from "@//utils/resuableFuc";
-import DrinksSizeForm from "@//Components/FormManager/DrinksSizeForm";
+import useNotification from "@/hooks/NotiHook";
+import { Button, Flex, Image, Modal, Popconfirm, Space, Table } from "antd";
+import React, { useEffect, useState } from "react";
+import { BiEdit } from "react-icons/bi";
+import { BsBack } from "react-icons/bs";
+import { MdDelete } from "react-icons/md";
 import RecipeDetailForm from "../../../Components/FormManager/RecipeDetailForm";
 import { updateDrinkRecipe } from "../../../service/drinks";
-import { TbReceiptEuro } from "react-icons/tb";
 
 const DrinkManager = () => {
     const [drinksData, setDrinksData] = useState([]);
@@ -258,6 +256,11 @@ const DrinkManager = () => {
 
         { title: "Description", dataIndex: "Description", key: "Description" },
         {
+            title: "Category",
+            dataIndex: "CategoryName",
+            key: "CategoryName",
+        },
+        {
             title: "Actions",
             key: "actions",
             render: (text, record) => (
@@ -354,9 +357,6 @@ const DrinkManager = () => {
                             {
                                 title: "Amount",
                                 dataIndex: "Amount",
-                                render: (text) => (
-                                    <span>{formatVND(text)}</span>
-                                ),
                                 key: "Amount",
                             },
                         ]}

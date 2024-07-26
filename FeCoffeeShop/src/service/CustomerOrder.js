@@ -24,7 +24,7 @@ const CustomerCancelOrder = ({ formData }) => {
         data: formData,
     });
 };
-const getCustomerOrderDetail = ({ listParam, orderId }) => {
+const getCustomerOrderDetail = ({ orderId }) => {
     return instance.get(`/Orders/Cusotmer/Detail/${orderId}`, { headers });
 };
 export {
