@@ -1,18 +1,33 @@
 import useNotification from "@/hooks/NotiHook";
-import { Button, Modal, Popconfirm, Select, Space, Table } from "antd";
+import {
+    Button,
+    Modal,
+    Popconfirm,
+    Rate,
+    Select,
+    Space,
+    Table,
+    Input,
+} from "antd";
 import React, { useEffect, useState } from "react";
 import {
     CusotmerGetListOrder,
     CustomerCancelOrder,
-} from "../../service/CustomerOrder";
+} from "../../../service/CustomerOrder";
 import {
     formatVND,
     ORDERSTATUS,
     ORDERSTATUSCUSTOMERARRAY,
-} from "../../utils/resuableFuc";
-import FeedbackCForm from "../../Components/FormManager/FeedbackCForm";
+} from "../../../utils/resuableFuc";
+import FeedbackCForm from "../../../Components/FormManager/FeedbackCForm";
 import { BsArrowRight } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
+import { SlStar } from "react-icons/sl";
+import { BiSolidStar } from "react-icons/bi";
+import CustomerRattingModal from "../../../Components/Modal/CustomerRattingModal";
+import { customerCreateRating } from "../../../service/rating";
+
+const { TextArea } = Input;
 
 const CustomerOrders = () => {
     const navigator = useNavigate();
@@ -21,11 +36,14 @@ const CustomerOrders = () => {
     const [pageSize, setPageSize] = useState(10);
     const [totalCount, setTotalCount] = useState(0);
     const [isFeedback, setIsFeedback] = useState(false);
+    const [isReviewModalVisible, setIsReviewModalVisible] = useState(false);
+    const [selectedOrderRatting, setSelectedOrderRatting] = useState(null);
     const [selectStatus, setSelectStatus] = useState(
         ORDERSTATUSCUSTOMERARRAY[0].key
     );
     const [orderCancelId, setOrderCancelId] = useState();
     const openNotification = useNotification();
+
     useEffect(() => {
         fetchListOrder(currentPage, pageSize, selectStatus);
     }, [currentPage, pageSize]);
@@ -54,6 +72,7 @@ const CustomerOrders = () => {
         setIsFeedback(true);
         setOrderCancelId(orderId);
     };
+
     const onSave = async (value) => {
         try {
             const response = await CustomerCancelOrder({
@@ -66,7 +85,7 @@ const CustomerOrders = () => {
                 fetchListOrder(currentPage, pageSize, selectStatus);
                 openNotification({
                     type: "success",
-                    description: "canel order successfully",
+                    description: "Cancel order successfully",
                 });
             }
         } catch (error) {
@@ -77,9 +96,37 @@ const CustomerOrders = () => {
             });
         }
     };
+
     const handleTableChange = (pagination) => {
         setCurrentPage(pagination.current);
         setPageSize(pagination.pageSize);
+    };
+
+    const handleReviewSubmit = async (rating, review, selectedDrinks) => {
+        if (selectedDrinks?.length) {
+            for (const drinkId of selectedDrinks) {
+                await customerCreateRating({
+                    formData: {
+                        DrinkId: drinkId,
+                        OrderId: selectedOrderRatting.Id,
+                        Rating: rating,
+                        Content: review,
+                    },
+                });
+            }
+            openNotification({
+                type: "success",
+                message: "Thông báo",
+                description: "Đánh giá của bạn đã được gửi",
+            });
+            setIsReviewModalVisible(false);
+        } else {
+            openNotification({
+                type: "error",
+                message: "Thông báo",
+                description: "Vui lòng chọn ít nhất một sản phẩm để đánh giá",
+            });
+        }
     };
 
     const columns = [
@@ -131,8 +178,19 @@ const CustomerOrders = () => {
             render: (text, record) => (
                 <Space>
                     <Button
+                        icon={<BiSolidStar className="text-yellow-400" />}
+                        disabled={record.Status !== "ODR_COML"}
+                        onClick={() => {
+                            setSelectedOrderRatting(record);
+                            setIsReviewModalVisible(true);
+                        }}
+                    >
+                        Đánh giá
+                    </Button>
+                    <Button
                         icon={<BsArrowRight />}
                         onClick={() => navigator(`/order-drink/${record.Id}`)}
+                        iconPosition="end"
                     >
                         Xem chi tiết
                     </Button>
@@ -185,13 +243,19 @@ const CustomerOrders = () => {
                 title="Feedback"
                 visible={isFeedback}
                 footer={null}
-                onCancel={() => setIsFeedback(true)}
+                onCancel={() => setIsFeedback(false)}
             >
                 <FeedbackCForm
                     handleClose={() => setIsFeedback(false)}
                     onSave={onSave}
                 />
             </Modal>
+            <CustomerRattingModal
+                initalData={selectedOrderRatting}
+                onClose={() => setIsReviewModalVisible(false)}
+                onSave={handleReviewSubmit}
+                isVisible={isReviewModalVisible}
+            />
         </>
     );
 };

@@ -56,13 +56,11 @@ const SidebarAdmin = () => {
         { path: "/manager-customers", label: "MANAGER CUSTOMER" },
         { path: "/manager-drinks", label: "MANAGER DRINKS" },
         { path: "/manager-branches", label: "MANAGER BRANCHES" },
-        { path: "/manager-recipes", label: "MANAGER RECIPES" },
         { path: "/manager-vouchers", label: "MANAGER VOUCHERS" },
         { path: "/manager-ingredients", label: "MANAGER INGREDIENTS" },
     ];
     const staffLinks = [
         { path: "/manager-orders", label: "STAFF ORDER" },
-        { path: "/manager-bills", label: "STAFF BILL" },
         { path: "/manager-categories", label: "STAFF CATEGORIES" },
     ];
     return userData ? (

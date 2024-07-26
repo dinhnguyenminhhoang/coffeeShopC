@@ -2,10 +2,10 @@ import { Button, Input, InputNumber, Popconfirm, Table } from "antd";
 import React, { useEffect, useState } from "react";
 import { IoSearchOutline } from "react-icons/io5";
 import { useNavigate, useParams } from "react-router-dom";
-import useNotification from "../../hooks/NotiHook";
-import { formatVND } from "../../utils/resuableFuc";
-import { getCustomerOrderDetail } from "../../service/CustomerOrder";
-import OrderInfo from "../../Components/OrderInfo/OrderInfo";
+import useNotification from "../../../hooks/NotiHook";
+import { formatVND } from "../../../utils/resuableFuc";
+import { getCustomerOrderDetail } from "../../../service/CustomerOrder";
+import OrderInfo from "../../../Components/OrderInfo/OrderInfo";
 const CustomerOrderDetailPage = () => {
     const openNotification = useNotification();
     const { orderId } = useParams();

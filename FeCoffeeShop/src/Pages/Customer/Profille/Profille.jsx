@@ -19,12 +19,12 @@ import { BiLock } from "react-icons/bi";
 import { BsBack, BsThreeDotsVertical } from "react-icons/bs";
 import { RiInformationLine } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
-import useNotification from "../../hooks/NotiHook";
+import useNotification from "../../../hooks/NotiHook";
 import {
     customerChangePassword,
     customerUpdateInfo,
     getCustomerProfile,
-} from "../../service/profile";
+} from "../../../service/profile";
 const { Title } = Typography;
 
 const Profile = () => {

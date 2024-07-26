@@ -149,8 +149,8 @@ const ORDERSTATUSCUSTOMERARRAY = [
         color: "#1890ff", // Xanh dương
     },
     {
-        key: "ODR_SHIPED",
-        title: "Đã Giao Hàng",
+        key: "ODR_SHIP",
+        title: "Giao Hàng",
         color: "#faad14", // Cam
     },
     {

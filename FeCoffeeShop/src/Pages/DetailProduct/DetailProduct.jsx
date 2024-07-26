@@ -1,14 +1,13 @@
-import React, { useEffect, useState } from "react";
-import { Button, Select, Radio, Tag, Row, Col } from "antd";
-import { ShoppingCartOutlined } from "@ant-design/icons";
-import { useParams } from "react-router-dom";
-import { getDrinkById, getDrink } from "@/service/drinks";
-import noImage from "@/assets/website/noimg.jpg";
-import { formatVND, isValidImageUrl } from "@/utils/resuableFuc";
 import Spiner from "@/Components/Spiner/Spiner";
+import { getDrink, getDrinkById } from "@/service/drinks";
+import { formatVND } from "@/utils/resuableFuc";
+import { ShoppingCartOutlined } from "@ant-design/icons";
+import { Button, Col, Radio, Row, Tag, Rate, Input, Space } from "antd";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import useNotification from "../../hooks/NotiHook";
 
-const { Option } = Select;
+const { TextArea } = Input;
 
 const DetailProduct = () => {
     const [data, setData] = useState();
@@ -16,6 +15,7 @@ const DetailProduct = () => {
     const [DrinkCateData, setDrinkCateData] = useState();
     const [cartInfo, setCartInfo] = useState([]);
     const openNotification = useNotification();
+    const navigate = useNavigate();
     const param = useParams();
 
     useEffect(() => {
@@ -30,7 +30,11 @@ const DetailProduct = () => {
         };
         const fetchDataCate = async () => {
             const response = await getDrink({
-                listParam: { PageIndex: 1, PageSize: 6 },
+                listParam: {
+                    PageIndex: 1,
+                    PageSize: 6,
+                    CategoryId: data?.Category?.Id,
+                },
             });
             if (response?.data?.Success) {
                 setDrinkCateData(response.data?.ResultData?.List);
@@ -39,20 +43,24 @@ const DetailProduct = () => {
         fetchData();
         fetchDataCate();
     }, [param]);
+
     useEffect(() => {
         const dataLocal = localStorage.getItem("cartInfo");
         if (dataLocal) {
             setCartInfo(JSON.parse(dataLocal));
         }
     }, []);
+
     useEffect(() => {
         if (cartInfo.length) {
             localStorage.setItem("cartInfo", JSON.stringify(cartInfo));
         }
     }, [cartInfo]);
+
     const handleSizeChange = (e) => {
         setSelectedSize(e.target.value);
     };
+
     const handleAddToCard = () => {
         const newData = {
             ...data,
@@ -89,6 +97,7 @@ const DetailProduct = () => {
             });
         }
     };
+
     return (
         <>
             {data ? (
@@ -137,24 +146,6 @@ const DetailProduct = () => {
                                     </Radio.Group>
                                 ) : null}
                             </div>
-                            <div className="mb-4">
-                                <span className="block mb-2">Topping:</span>
-                                <Select
-                                    mode="multiple"
-                                    style={{ width: "100%" }}
-                                    placeholder="Chọn topping"
-                                >
-                                    <Option value="Trân châu trắng">
-                                        Trân châu trắng + 10.000 đ
-                                    </Option>
-                                    <Option value="Sốt Caramel">
-                                        Sốt Caramel + 10.000 đ
-                                    </Option>
-                                    <Option value="Shot Espresso">
-                                        Shot Espresso + 10.000 đ
-                                    </Option>
-                                </Select>
-                            </div>
                             <Button
                                 type="primary"
                                 icon={<ShoppingCartOutlined />}
@@ -162,7 +153,7 @@ const DetailProduct = () => {
                                 className="w-full bg-orange-500 hover:bg-orange-600"
                                 onClick={handleAddToCard}
                             >
-                                Thêm vào giõ hàng
+                                Thêm vào giỏ hàng
                             </Button>
                         </Col>
                     </Row>
@@ -177,16 +168,36 @@ const DetailProduct = () => {
                         <Row gutter={[16, 16]}>
                             {DrinkCateData?.length
                                 ? DrinkCateData.map((item, index) => (
-                                      <Col key={index} xs={12} sm={8} lg={4}>
-                                          <div className="text-center">
+                                      <Col
+                                          onClick={() => {
+                                              setData();
+                                              navigate(`/product/${item.Id}`);
+                                          }}
+                                          key={index}
+                                          xs={12}
+                                          sm={8}
+                                          lg={4}
+                                          className="hover:pt-1 hover:transition-all duration-300 cursor-pointer"
+                                      >
+                                          <div className="text-start">
                                               <img
-                                                  src={item.Image}
-                                                  alt={item.name}
-                                                  className="w-full rounded-md mb-2 h-[240px] border shadow-md"
+                                                  src={item?.Image}
+                                                  alt={item?.name}
+                                                  className="w-full hover:rounded-md hover:transition-all duration-300 mb-2 h-[240px] border shadow-md"
                                               />
-                                              <p>{item.name}</p>
+                                              <Space>
+                                                  <p>{item?.Name}</p>
+                                                  <Rate
+                                                      disabled
+                                                      value={
+                                                          item?.AverageRating ||
+                                                          5
+                                                      }
+                                                      className="text-sm"
+                                                  />
+                                              </Space>
                                               <p className="text-red-500">
-                                                  {item.Name}
+                                                  {formatVND(item?.MinPrice)}
                                               </p>
                                           </div>
                                       </Col>

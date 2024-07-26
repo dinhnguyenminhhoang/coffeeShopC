@@ -10,11 +10,9 @@ import DefautLayout from "./Layout/DefautLayout";
 import AdminBranches from "./Pages/admin/AdminBranches/AdminBranches";
 import AdminCustomers from "./Pages/admin/AdminCustomers/AdminCustomers";
 import AdminIngredientsPage from "./Pages/admin/AdminIngredientsPage/AdminIngredientsPage";
-import AdminRecipes from "./Pages/admin/AdminRecipes/AdminRecipes";
 import AdminVouchers from "./Pages/admin/AdminVouchers/AdminVouchers";
 import DrinkManager from "./Pages/admin/DrinkManager/DrinkManager";
 import IngredientsStocksPage from "./Pages/admin/IngredientsStocksPage/IngredientsStocksPage";
-import PaymentDetailsPage from "./Pages/admin/PaymentDetails/PaymentDetails";
 import StaffPage from "./Pages/admin/StaffPage/StaffPage";
 import ForgotPassword from "./Pages/Auth/ForgotPassword/ForgotPassword";
 import Login from "./Pages/Auth/Login/Login";
@@ -22,18 +20,15 @@ import Register from "./Pages/Auth/Register/Register";
 import ResetPassword from "./Pages/Auth/ResetPassword/ResetPassword";
 import Branches from "./Pages/Branches/Branches";
 import CartPage from "./Pages/CartPage/CartPage";
-import CustomerOrderDetailPage from "./Pages/CustomerOrderDetailPage/CustomerOrderDetailPage";
-import CustomerOrders from "./Pages/CustomerOrders/CustomerOrders";
+import CustomerOrderDetailPage from "./Pages/Customer/CustomerOrderDetailPage/CustomerOrderDetailPage";
+import CustomerOrders from "./Pages/Customer/CustomerOrders/CustomerOrders";
+import Profile from "./Pages/Customer/Profille/Profille";
 import DetailProduct from "./Pages/DetailProduct/DetailProduct";
 import HomePage from "./Pages/HomePage/HomePage";
 import PageNotFound from "./Pages/PageNotFound/PageNotFound";
-import Profille from "./Pages/Profille/Profille";
-import DrinkRatingsPage from "./Pages/staff/DrinkRatings/DrinkRatings";
-import ManagerBill from "./Pages/staff/ManagerBill/ManagerBill";
 import ManagerCategories from "./Pages/staff/ManagerCategories/ManagerCategories";
 import ManagerOrder from "./Pages/staff/ManagerOrder/ManagerOrder";
 import ManagerOrderDetailPage from "./Pages/staff/ManagerOrderDetailPage/ManagerOrderDetailPage";
-import ServiceRatingsPage from "./Pages/staff/ServiceRatingsPage/ServiceRatingsPage";
 const App = () => {
     const router = createBrowserRouter(
         createRoutesFromElements(
@@ -59,26 +54,11 @@ const App = () => {
                         path="/manager-order-drink/:orderId"
                         element={<ManagerOrderDetailPage />}
                     />
-                    {/* drink */}
-                    <Route
-                        path="/drink-rating"
-                        element={<DrinkRatingsPage />}
-                    />
-                    <Route
-                        path="/payment-detail"
-                        element={<PaymentDetailsPage />}
-                    />
-                    {/* service */}
-                    <Route
-                        path="/service-rating"
-                        element={<ServiceRatingsPage />}
-                    />
-                    {/* voucher */}
                     <Route
                         path="/manager-ingredients-stocks"
                         element={<IngredientsStocksPage />}
                     />
-                    <Route path="/profile" element={<Profille />} />
+                    <Route path="/profile" element={<Profile />} />
                     <Route path="/orders" element={<CustomerOrders />} />
                 </Route>
                 <Route element={<AdminLayout />}>
@@ -92,9 +72,7 @@ const App = () => {
                         path="/manager-customers"
                         element={<AdminCustomers />}
                     />
-                    <Route path="/manager-bills" element={<ManagerBill />} />
                     <Route path="/manager-orders" element={<ManagerOrder />} />
-                    <Route path="/manager-recipes" element={<AdminRecipes />} />
                     <Route
                         path="/manager-vouchers"
                         element={<AdminVouchers />}
