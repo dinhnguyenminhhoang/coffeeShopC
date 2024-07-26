@@ -19,6 +19,8 @@ import {
     ORDERSTATUSARRAY,
 } from "../../../utils/resuableFuc";
 import { BiFilter, BiFilterAlt } from "react-icons/bi";
+import { BsArrowRight } from "react-icons/bs";
+import { useNavigate } from "react-router-dom";
 
 const ManagerOrder = () => {
     const [staffOrders, setStaffOrder] = useState([]);
@@ -29,7 +31,7 @@ const ManagerOrder = () => {
     const [selectStatusMap, setSelectStatusMap] = useState(ORDERSTATUSARRAY[0]);
     const [orderCancelId, setOrderCancelId] = useState();
     const openNotification = useNotification();
-
+    const navigator = useNavigate();
     useEffect(() => {
         fetchListOrder(currentPage, pageSize, ORDERSTATUSARRAY[0].key);
     }, [currentPage, pageSize]);
@@ -178,6 +180,15 @@ const ManagerOrder = () => {
             key: "actions",
             render: (text, record) => (
                 <Space>
+                    <Button
+                        onClick={() =>
+                            navigator(`/manager-order-drink/${record.Id}`)
+                        }
+                        icon={<BsArrowRight />}
+                        iconPosition="end"
+                    >
+                        Chi tiết
+                    </Button>
                     <Popconfirm
                         title={`Bạn có chắc chắn hủy đơn hàng #${record.Id} không ?`}
                         onConfirm={() => handleCancelOrder(record.Id, "cancel")}

@@ -11,16 +11,12 @@ const CustomerOrderDetailPage = () => {
     const { orderId } = useParams();
     const [orderDetail, setOrderDetail] = useState([]);
     const navigate = useNavigate();
-    const [currentPage, setCurrentPage] = useState(1);
-    const [pageSize, setPageSize] = useState(10);
-    const [totalCount, setTotalCount] = useState(0);
     useEffect(() => {
-        fetchOrderDetail(currentPage, pageSize);
-    }, [currentPage, pageSize]);
+        fetchOrderDetail();
+    }, []);
 
-    const fetchOrderDetail = async (pageIndex, pageSize) => {
+    const fetchOrderDetail = async () => {
         const response = await getCustomerOrderDetail({
-            listParam: { PageIndex: pageIndex, PageSize: pageSize },
             orderId: orderId,
         });
 
@@ -35,7 +31,6 @@ const CustomerOrderDetailPage = () => {
         }
     };
 
-    // const totalAmount = orderDetail.reduce((sum, item) => sum + item.total, 0);
     return <OrderInfo order={orderDetail} />;
 };
 

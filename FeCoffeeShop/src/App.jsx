@@ -32,7 +32,7 @@ import DrinkRatingsPage from "./Pages/staff/DrinkRatings/DrinkRatings";
 import ManagerBill from "./Pages/staff/ManagerBill/ManagerBill";
 import ManagerCategories from "./Pages/staff/ManagerCategories/ManagerCategories";
 import ManagerOrder from "./Pages/staff/ManagerOrder/ManagerOrder";
-import OrderDetailsPage from "./Pages/staff/OrderDetailsPage/OrderDetailsPage";
+import ManagerOrderDetailPage from "./Pages/staff/ManagerOrderDetailPage/ManagerOrderDetailPage";
 import ServiceRatingsPage from "./Pages/staff/ServiceRatingsPage/ServiceRatingsPage";
 const App = () => {
     const router = createBrowserRouter(
@@ -51,14 +51,13 @@ const App = () => {
                     <Route index element={<HomePage />} />
                     <Route path="/carts/:role" element={<CartPage />} />
                     <Route path="/branches" element={<Branches />} />
-                    {/* order */}
-                    <Route
-                        path="/manager-order-detail/:id"
-                        element={<OrderDetailsPage />}
-                    />
                     <Route
                         path="/order-drink/:orderId"
                         element={<CustomerOrderDetailPage />}
+                    />
+                    <Route
+                        path="/manager-order-drink/:orderId"
+                        element={<ManagerOrderDetailPage />}
                     />
                     {/* drink */}
                     <Route
@@ -75,7 +74,6 @@ const App = () => {
                         element={<ServiceRatingsPage />}
                     />
                     {/* voucher */}
-
                     <Route
                         path="/manager-ingredients-stocks"
                         element={<IngredientsStocksPage />}
