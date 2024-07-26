@@ -1,34 +1,36 @@
-import BrachesFrom from "@/Components/FormManager/BrachesFrom";
 import useNotification from "@/hooks/NotiHook";
-import {
-    createBranches,
-    deleteBranches,
-    getAllBranches,
-    updateBranches,
-} from "@/service/branchs";
 import { Button, Modal, Popconfirm, Space, Table } from "antd";
+import axios from "axios";
 import React, { useEffect, useState } from "react";
+import BrachesFrom from "@/Components/FormManager/BrachesFrom";
+import {
+    createCategory,
+    deleteCategory,
+    getAllCategories,
+    updateCategory,
+} from "../../../service/category";
+import CategoryForm from "../../../Components/FormManager/CategoryForm";
 
-const AdminBranches = () => {
-    const [branch, setBranch] = useState([]);
+const ManagerCategories = () => {
+    const [categoryData, setCategoryData] = useState([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
-    const [editingBranch, setEditingBranch] = useState(null);
+    const [editingCategory, setEditingCategory] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [totalCount, setTotalCount] = useState(0);
     const openNotification = useNotification();
 
     useEffect(() => {
-        fetchBranches(currentPage, pageSize);
+        fetchCategores(currentPage, pageSize);
     }, [currentPage, pageSize]);
 
-    const fetchBranches = async (pageIndex, pageSize) => {
-        const response = await getAllBranches({
+    const fetchCategores = async (pageIndex, pageSize) => {
+        const response = await getAllCategories({
             listParam: { PageIndex: pageIndex, PageSize: pageSize },
         });
 
         if (response.data.Success) {
-            setBranch(response.data.ResultData);
+            setCategoryData(response.data.ResultData);
             setTotalCount(response.data.ResultData.Paging.TotalCount);
         } else {
             openNotification({
@@ -39,23 +41,23 @@ const AdminBranches = () => {
     };
 
     const handleAdd = () => {
-        setEditingBranch(null);
+        setEditingCategory(null);
         setIsModalVisible(true);
     };
 
-    const handleEdit = (branch) => {
-        setEditingBranch(branch);
+    const handleEdit = (categoryData) => {
+        setEditingCategory(categoryData);
         setIsModalVisible(true);
     };
 
-    const handleDelete = async (branchesid) => {
+    const handleDelete = async (CategoryId) => {
         try {
-            const response = await deleteBranches({ branchesid: branchesid });
+            const response = await deleteCategory({ CategoryId: CategoryId });
             if (response.data?.Success) {
-                fetchBranches(currentPage, pageSize);
+                fetchCategores(currentPage, pageSize);
                 openNotification({
                     type: "success",
-                    description: "delete branch successfully",
+                    description: "delete category successfully",
                 });
             }
         } catch (error) {
@@ -69,22 +71,22 @@ const AdminBranches = () => {
 
     const handleSave = async (values) => {
         try {
-            if (editingBranch) {
-                const res = await updateBranches({
-                    formData: { ...values, Id: editingBranch.Id },
+            if (editingCategory) {
+                const res = await updateCategory({
+                    formData: { ...values, Id: editingCategory.Id },
                 });
                 if (res.data.Success) {
                     openNotification({
                         type: "success",
-                        description: "Edit  branch successfully",
+                        description: "Edit  category successfully",
                     });
                 }
             } else {
-                const res = await createBranches({ formData: values });
+                const res = await createCategory({ formData: values });
                 if (res.data.Success) {
                     openNotification({
                         type: "success",
-                        description: "Create branch successfully",
+                        description: "Create categorysuccessfully",
                     });
                 }
             }
@@ -95,7 +97,7 @@ const AdminBranches = () => {
                 error: error,
             });
         }
-        fetchBranches(currentPage, pageSize);
+        fetchCategores(currentPage, pageSize);
         setIsModalVisible(false);
     };
 
@@ -107,7 +109,8 @@ const AdminBranches = () => {
     const columns = [
         { title: "ID", dataIndex: "Id", key: "Id" },
         { title: "Name", dataIndex: "Name", key: "Name" },
-        { title: "Address", dataIndex: "Address", key: "Address" },
+        { title: "Description", dataIndex: "Description", key: "Description" },
+        { title: "Amount Drink", dataIndex: "AmountDrink", key: "AmountDrink" },
         {
             title: "Actions",
             key: "actions",
@@ -115,7 +118,7 @@ const AdminBranches = () => {
                 <Space>
                     <Button onClick={() => handleEdit(record)}>Edit</Button>
                     <Popconfirm
-                        title={`Confirm delete branch ${record.Name}?`}
+                        title={`Confirm delete categoryData ${record.Name}?`}
                         onConfirm={() => handleDelete(record.Id)}
                         onCancel={() => {}}
                         okText="Yes"
@@ -131,11 +134,11 @@ const AdminBranches = () => {
     return (
         <div className="container mx-auto p-6">
             <Button type="primary" onClick={handleAdd} className="mb-4">
-                Add Branch
+                Add Category
             </Button>
             <Table
                 columns={columns}
-                dataSource={branch?.List}
+                dataSource={categoryData?.List}
                 rowKey="Id"
                 pagination={{
                     current: currentPage,
@@ -146,19 +149,22 @@ const AdminBranches = () => {
                 onChange={handleTableChange}
             />
             <Modal
-                title={editingBranch ? "Edit Branch" : "Add Branch"}
+                title={editingCategory ? "Edit Category" : "Add Category"}
                 visible={isModalVisible}
                 footer={null}
                 onCancel={() => setIsModalVisible(false)}
             >
-                <BrachesFrom
-                    initialValues={editingBranch?.Id ? editingBranch.Id : null}
+                <CategoryForm
+                    initialValues={
+                        editingCategory?.Id ? editingCategory.Id : null
+                    }
                     onSave={handleSave}
                     onCancel={() => setIsModalVisible(false)}
+                    isModalVisible={isModalVisible}
                 />
             </Modal>
         </div>
     );
 };
 
-export default AdminBranches;
+export default ManagerCategories;

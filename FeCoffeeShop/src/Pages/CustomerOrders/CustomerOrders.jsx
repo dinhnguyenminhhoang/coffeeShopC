@@ -11,8 +11,11 @@ import {
     ORDERSTATUSCUSTOMERARRAY,
 } from "../../utils/resuableFuc";
 import FeedbackCForm from "../../Components/FormManager/FeedbackCForm";
+import { BsArrowRight } from "react-icons/bs";
+import { useNavigate } from "react-router-dom";
 
 const CustomerOrders = () => {
+    const navigator = useNavigate();
     const [customerOrders, setCustomerOrder] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
@@ -127,6 +130,12 @@ const CustomerOrders = () => {
             key: "actions",
             render: (text, record) => (
                 <Space>
+                    <Button
+                        icon={<BsArrowRight />}
+                        onClick={() => navigator(`/order-drink/${record.Id}`)}
+                    >
+                        Xem chi tiết
+                    </Button>
                     <Popconfirm
                         title={`Bạn có chắc chắn hủy đơn hàng #${record.Id} không ?`}
                         onConfirm={() => handleCancelOrder(record.Id)}
