@@ -384,6 +384,8 @@ public partial class DBContext : DbContext
 
         modelBuilder.Entity<Voucher>(entity =>
         {
+            entity.HasIndex(e => e.Code, "UQ__Vouchers__A25C5AA748EAE60A").IsUnique();
+
             entity.Property(e => e.Code)
                 .IsRequired()
                 .HasMaxLength(10)

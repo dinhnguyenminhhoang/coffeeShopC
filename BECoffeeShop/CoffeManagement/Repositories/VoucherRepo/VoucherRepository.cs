@@ -15,6 +15,11 @@ namespace CoffeManagement.Repositories.VoucherRepo
             _dbSet = context.Set<Voucher>();
         }
 
+        public Task<Voucher?> GetByCode(string code)
+        {
+            return _dbSet.Where(v => v.Code == code).FirstOrDefaultAsync();
+        }
+
         public IQueryable<Voucher> GetQueryable()
         {
             return _dbSet.AsQueryable();

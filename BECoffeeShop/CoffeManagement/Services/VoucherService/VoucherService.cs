@@ -1,13 +1,10 @@
 ﻿using AutoMapper;
 using CoffeManagement.Common.Exceptions;
 using CoffeManagement.Common.Pagging;
-using CoffeManagement.DTO.Branch;
-using CoffeManagement.DTO.Drink;
 using CoffeManagement.DTO.Paging;
 using CoffeManagement.DTO.Voucher;
 using CoffeManagement.Models;
 using CoffeManagement.Models.Enum;
-using CoffeManagement.Repositories.RatingRepo;
 using CoffeManagement.Repositories.VoucherRepo;
 
 namespace CoffeManagement.Services.VoucherService
@@ -27,6 +24,9 @@ namespace CoffeManagement.Services.VoucherService
 
         public async Task<int> CreateVoucher(CreateVoucherRequest request)
         {
+            var existedVocher = await _voucherRepository.GetByCode(request.Code);
+            if (existedVocher != null) throw new BadRequestException("This Code already existed.");
+
             var voucher = _mapper.Map<Voucher>(request);
             voucher.VoucherApplies = request.ListDrink.Select(drinkId => new VoucherApply { DrinkId = drinkId }).ToList();
 
@@ -40,6 +40,9 @@ namespace CoffeManagement.Services.VoucherService
             var existedVocher = await _voucherRepository.GetById(request.Id);
             if (existedVocher == null) throw new NotFoundException("Not found Voucher");
             if (existedVocher.Staus.Equals(VoucherStatus.VOUC_USING.ToString())) throw new ConflictException("Cannot Update voucher. Because this Vocher is using");
+
+            var otherExistedVocher = await _voucherRepository.GetByCode(request.Code);
+            if (otherExistedVocher != null && otherExistedVocher.Id != existedVocher.Id) throw new BadRequestException("This Code already existed.");
 
             foreach (var drinkId in request.ListDrink)
             {
