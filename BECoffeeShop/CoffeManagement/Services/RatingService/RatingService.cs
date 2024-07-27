@@ -99,6 +99,17 @@ namespace CoffeManagement.Services.RatingService
             return detailDrinksRating;
         }
 
+        public async Task<PagingListModel<DrinkRatingResponse>> DrinksRatingListAll(PagingDTO pagingDTO)
+        {
+            var drinkRatingQueryable = _drinkRatingRepository.GetQueryable();
+            drinkRatingQueryable = drinkRatingQueryable.OrderByDescending(dr => dr.CreatedAt);
+
+            var pagingList = new PagingListModel<DrinkRating>(drinkRatingQueryable, pagingDTO.PageIndex, pagingDTO.PageSize);
+            var result = _mapper.Map<PagingListModel<DrinkRatingResponse>>(pagingList);
+
+            return result;
+        }
+
         public async Task<PagingListModel<DrinkRatingResponse>> DrinksRatingList(int drinkId, PagingDTO pagingDTO)
         {
             var existedDrink = await _drinRepository.GetById(drinkId);

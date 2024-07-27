@@ -51,6 +51,16 @@ namespace CoffeManagement.Controllers
             return Ok(RenderSuccessResponse(data: result, message: "SUCCESS"));
         }
 
+        [HttpGet("List")]
+        //[Authorize(Policy = nameof(AuthPolicy.POL_STAFF))]
+        [SwaggerOperation(Summary = "List off All Rating")]
+        public async Task<IActionResult> DrinksRatingListAll([FromQuery] PagingDTO pagingDTO)
+        {
+            var result = await _ratingService.DrinksRatingListAll(pagingDTO);
+
+            return Ok(RenderSuccessResponse(data: result));
+        }
+
         [HttpGet("List/{drinkId:int}")]
         [AllowAnonymous]
         [SwaggerOperation(Summary = "List the Rating of Drink")]

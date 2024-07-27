@@ -10,6 +10,7 @@ namespace CoffeManagement.Services.RatingService
         Task<int> CreateDrinksRating(CreateDrinkRatingRequest request);
         Task<int> UpdateDrinksRating(UpdateDrinkRatingRequest request);
         Task<int> FeedbackDrinksRating(FeedbackDrinkRatingRequest request);
+        Task<PagingListModel<DrinkRatingResponse>> DrinksRatingListAll(PagingDTO pagingDTO);
         Task<PagingListModel<DrinkRatingResponse>> DrinksRatingList(int drinkId, PagingDTO pagingDTO);
         Task<DrinkRatingDetailResponse> DetailDrinksRating(int id);
     }
