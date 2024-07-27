@@ -241,6 +241,7 @@ public partial class DBContext : DbContext
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
             entity.Property(e => e.CustomerNote).HasMaxLength(255);
+            entity.Property(e => e.Discount).HasDefaultValue(0.0);
             entity.Property(e => e.FailedComment).HasMaxLength(255);
             entity.Property(e => e.IsPaid).HasDefaultValue(false);
             entity.Property(e => e.OrderdAt)
@@ -280,6 +281,10 @@ public partial class DBContext : DbContext
             entity.HasOne(d => d.Staff).WithMany(p => p.OrderStaffs)
                 .HasForeignKey(d => d.StaffId)
                 .HasConstraintName("FK_Orders_Staffs");
+
+            entity.HasOne(d => d.Voucher).WithMany(p => p.Orders)
+                .HasForeignKey(d => d.VoucherId)
+                .HasConstraintName("FK_Orders_Vouchers");
         });
 
         modelBuilder.Entity<OrderDetail>(entity =>

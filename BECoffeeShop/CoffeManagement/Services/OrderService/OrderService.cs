@@ -9,7 +9,7 @@ using CoffeManagement.Models.Enum;
 using CoffeManagement.Repositories.CustomerRepo;
 using CoffeManagement.Repositories.OrderRepo;
 using CoffeManagement.Repositories.StaffRepo;
-using Microsoft.AspNetCore.Http.HttpResults;
+using CoffeManagement.Repositories.VoucherRepo;
 
 namespace CoffeManagement.Services.OrderService
 {
@@ -22,8 +22,9 @@ namespace CoffeManagement.Services.OrderService
         private readonly IStaffRepository _staffRepository;
         private readonly IOrderRepository _orderRepository;
         private readonly IOrderDetailRepository _orderDetailRepository;
+        private readonly IVoucherRepository _voucherRepository;
 
-        public OrderService(IHttpContextAccessor httpContextAccessor, IMapper mapper, IOrderRepository orderRepository, IOrderDetailRepository orderDetailRepository, IStaffRepository staffRepository, ICustomerRepository customerRepository)
+        public OrderService(IHttpContextAccessor httpContextAccessor, IMapper mapper, IOrderRepository orderRepository, IOrderDetailRepository orderDetailRepository, IStaffRepository staffRepository, ICustomerRepository customerRepository, IVoucherRepository voucherRepository)
         {
             _httpContext = httpContextAccessor.HttpContext;
             _mapper = mapper;
@@ -31,6 +32,7 @@ namespace CoffeManagement.Services.OrderService
             _orderDetailRepository = orderDetailRepository;
             _customerRepository = customerRepository;
             _staffRepository = staffRepository;
+            _voucherRepository = voucherRepository;
         }
 
         public async Task<int> CustomerCreateOrder(CustomerCreateOrderRequest request)
@@ -39,11 +41,35 @@ namespace CoffeManagement.Services.OrderService
             var existedCustomer = await _customerRepository.GetByPhone(phone);
             if (existedCustomer == null || existedCustomer.IsDeleted == true) throw new NotFoundException("Not found customers.");
 
+            Voucher? existedVoucher = null;
+            bool isApplyVoucher = false;
+            if (!string.IsNullOrEmpty(request.VoucherCode))
+            {
+                existedVoucher = await _voucherRepository.GetByCode(request.VoucherCode);
+                if (existedVoucher == null) throw new NotFoundException("Not found voucher.");
+                if (existedVoucher.Remain <= 0 || existedVoucher.ExpiredAt < DateTime.Now) throw new BadRequestException("Voucher has expired.");
+                foreach (var orderDetail in request.OrderDetails)
+                {
+                    if(existedVoucher.VoucherApplies.Any(va => va.DrinkId == orderDetail.DrinkId)){
+                        isApplyVoucher = true;
+                        break;
+                    }
+                }
+                if (!isApplyVoucher) throw new BadRequestException("Cannot Apply this Voucher.");
+            }
+
             var order = _mapper.Map<Order>(request);
             order.CustomerId = existedCustomer.Id;
             order.IsPaid = true;
-
+            if (isApplyVoucher)
+            {
+                order.VoucherId = existedVoucher.Id;
+                order.Discount = existedVoucher.Discount;
+            }
             await _orderRepository.Add(order);
+
+            existedVoucher.Remain = existedVoucher.Remain - 1;
+            await _voucherRepository.Update(existedVoucher);
 
             return order.Id;
         }
@@ -120,10 +146,36 @@ namespace CoffeManagement.Services.OrderService
             var existedStaff = await _staffRepository.GetByPhone(phone);
             if (existedStaff == null || existedStaff.IsDeleted == true) throw new NotFoundException("Not found Staff.");
 
+            Voucher? existedVoucher = null;
+            bool isApplyVoucher = false;
+            if (!string.IsNullOrEmpty(request.VoucherCode))
+            {
+                existedVoucher = await _voucherRepository.GetByCode(request.VoucherCode);
+                if (existedVoucher == null) throw new NotFoundException("Not found voucher.");
+                if (existedVoucher.Remain <= 0 || existedVoucher.ExpiredAt < DateTime.Now) throw new BadRequestException("Voucher has expired.");
+                foreach (var orderDetail in request.OrderDetails)
+                {
+                    if (existedVoucher.VoucherApplies.Any(va => va.DrinkId == orderDetail.DrinkId))
+                    {
+                        isApplyVoucher = true;
+                        break;
+                    }
+                }
+                if (!isApplyVoucher) throw new BadRequestException("Cannot Apply this Voucher.");
+            }
+
             var order = _mapper.Map<Order>(request);
             order.StaffId = existedStaff.Id;
+            if (isApplyVoucher)
+            {
+                order.VoucherId = existedVoucher.Id;
+                order.Discount = existedVoucher.Discount;
+            }
 
             await _orderRepository.Add(order);
+
+            existedVoucher.Remain = existedVoucher.Remain - 1;
+            await _voucherRepository.Update(existedVoucher);
 
             return order.Id;
         }
@@ -138,6 +190,23 @@ namespace CoffeManagement.Services.OrderService
             if (existedOrder == null) throw new NotFoundException("Not found Order");
             if (!existedOrder.Status.Equals(OrderStatus.ODR_INIT.ToString())) throw new ConflictException("Cannot Update Order");
 
+            Voucher? existedVoucher = null;
+                bool isApplyVoucher = false;
+            if (!string.IsNullOrEmpty(request.VoucherCode))
+            {
+                existedVoucher = await _voucherRepository.GetByCode(request.VoucherCode);
+                if (existedVoucher == null) throw new NotFoundException("Not found voucher.");
+                if (existedVoucher.Remain <= 0 || existedVoucher.ExpiredAt < DateTime.Now) throw new BadRequestException("Voucher has expired.");
+                foreach (var orderDetail in request.OrderDetails)
+                {
+                    if (existedVoucher.VoucherApplies.Any(va => va.DrinkId == orderDetail.DrinkId))
+                    {
+                        isApplyVoucher = true;
+                        break;
+                    }
+                }
+                if (!isApplyVoucher) throw new BadRequestException("Cannot Apply this Voucher.");
+            }
 
             foreach (var orderDetail in request.OrderDetails)
             {
@@ -166,7 +235,15 @@ namespace CoffeManagement.Services.OrderService
 
             _mapper.Map(request, existedOrder);
             existedOrder.TotalPrice = existedOrder.OrderDetails.Sum(od => od.Price);
+            if (isApplyVoucher)
+            {
+                existedOrder.VoucherId = existedVoucher.Id;
+                existedOrder.Discount = existedVoucher.Discount;
+            }
             await _orderRepository.Update(existedOrder);
+
+            existedVoucher.Remain = existedVoucher.Remain - 1;
+            await _voucherRepository.Update(existedVoucher);
 
             return existedOrder.Id;
         }
@@ -238,7 +315,7 @@ namespace CoffeManagement.Services.OrderService
 
             return existedOrder.Id;
         }
-        
+
         public async Task<int> StaffServedOrder(int id)
         {
             var phone = _httpContext?.User.Claims.FirstOrDefault(c => c.Type == AppClaimTypes.Phone)?.Value;
@@ -265,7 +342,6 @@ namespace CoffeManagement.Services.OrderService
 
             var existedOrder = await _orderRepository.GetById(id);
             if (existedOrder == null) throw new NotFoundException("Not found Order");
-            //if (!existedOrder.Status.Equals(OrderStatus.ODR_COMF.ToString())) throw new ConflictException("Cannot Ship Order");
             if (!(existedOrder.IsPaid ?? false)) throw new ConflictException("Cannot Ship Order");
 
             existedOrder.Status = OrderStatus.ODR_SHIP.ToString();

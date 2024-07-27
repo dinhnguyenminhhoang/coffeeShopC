@@ -164,6 +164,7 @@ CREATE TABLE [Orders] (
   [StaffId] INT,
   [BranchId] INT NOT NULL,
   [CustomerId] INT,
+  [VoucherId] INT,
   [ShippingAddress] NVARCHAR(255),
   [Status] VARCHAR(10) DEFAULT('ODR_INIT'), -- ODR_INIT, ODR_COMF, ODR_COML, ODR_CANL, ODR_SERV, ODR_SHIP, ODR_SHIPED, ODR_FAIL
   [PaymentMethod] VARCHAR(10) DEFAULT('PAY_CASH'), -- PAY_CASH, PAY_CCARD, PAY_INTBK
@@ -171,6 +172,7 @@ CREATE TABLE [Orders] (
   [CustomerNote] NVARCHAR(255),
   [StaffNote] NVARCHAR(255),
   [OrderdAt] DateTime DEFAULT(GETDATE()),
+  [Discount] FLOAT DEFAULT(0),
   [TotalPrice] FLOAT NOT NULL,
   [StaffCanceledId] INT,
   [CanceledNote] NVARCHAR(255),
@@ -180,6 +182,7 @@ CREATE TABLE [Orders] (
   CONSTRAINT FK_Orders_Branches FOREIGN KEY ([BranchId]) REFERENCES [Branches] ([Id]),
   CONSTRAINT FK_Orders_Staffs FOREIGN KEY ([StaffId]) REFERENCES [Staffs] ([Id]),
   CONSTRAINT FK_Orders_Customers FOREIGN KEY ([CustomerId]) REFERENCES [Customers] ([Id]),
+  CONSTRAINT FK_Orders_Vouchers FOREIGN KEY ([VoucherId]) REFERENCES [Vouchers] ([Id]),
   CONSTRAINT FK_Orders_Staffs_Cancel FOREIGN KEY ([StaffCanceledId]) REFERENCES [Staffs] ([Id]),
 );
 

@@ -9,6 +9,8 @@ namespace CoffeManagement.DTO.Order
 
         public int? CustomerId { get; set; }
 
+        public string? VoucherCode { get; set; }
+
         public string PaymentMethod { get; set; }
 
         public string CustomerNote { get; set; }

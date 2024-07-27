@@ -8,6 +8,8 @@ namespace CoffeManagement.DTO.Order
     {
         public int BranchId { get; set; }
 
+        public string? VoucherCode { get; set; }
+
         public string ShippingAddress { get; set; }
 
         public string PaymentMethod { get; set; }

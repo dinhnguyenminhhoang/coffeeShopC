@@ -25,5 +25,7 @@ public partial class Voucher
 
     public DateTime? UpdatedAt { get; set; }
 
+    public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
+
     public virtual ICollection<VoucherApply> VoucherApplies { get; set; } = new List<VoucherApply>();
 }

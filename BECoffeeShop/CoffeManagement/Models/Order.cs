@@ -43,6 +43,10 @@ public partial class Order
 
     public bool? IsPaid { get; set; }
 
+    public int? VoucherId { get; set; }
+
+    public double? Discount { get; set; }
+
     public virtual Branch Branch { get; set; }
 
     public virtual Customer Customer { get; set; }
@@ -54,4 +58,6 @@ public partial class Order
     public virtual Staff Staff { get; set; }
 
     public virtual Staff StaffCanceled { get; set; }
+
+    public virtual Voucher Voucher { get; set; }
 }

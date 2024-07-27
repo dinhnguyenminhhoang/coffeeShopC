@@ -21,6 +21,8 @@ namespace CoffeManagement.DTO.Order
 
         public DateTime? OrderdAt { get; set; }
 
+        public double Discount { get; set; }
+
         public double TotalPrice { get; set; }
 
         [JsonIgnore]
