@@ -6,6 +6,8 @@ namespace CoffeManagement.DTO.Voucher
     {
         public int Id { get; set; }
 
+        public string Code { get; set; }
+
         public double Discount { get; set; }
 
         public int Amount { get; set; }

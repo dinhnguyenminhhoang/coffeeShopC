@@ -384,6 +384,10 @@ public partial class DBContext : DbContext
 
         modelBuilder.Entity<Voucher>(entity =>
         {
+            entity.Property(e => e.Code)
+                .IsRequired()
+                .HasMaxLength(10)
+                .IsUnicode(false);
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");

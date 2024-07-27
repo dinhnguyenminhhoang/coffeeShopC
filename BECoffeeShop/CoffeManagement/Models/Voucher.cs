@@ -9,6 +9,8 @@ public partial class Voucher
 {
     public int Id { get; set; }
 
+    public string Code { get; set; }
+
     public string Staus { get; set; }
 
     public double Discount { get; set; }

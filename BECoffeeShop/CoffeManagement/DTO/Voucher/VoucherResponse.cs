@@ -3,6 +3,8 @@
     public class VoucherResponse
     {
         public int Id { get; set; }
+        
+        public string Code { get; set; }
 
         public string Staus { get; set; }
 
