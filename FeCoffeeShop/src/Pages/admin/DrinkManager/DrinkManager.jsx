@@ -17,7 +17,7 @@ import { BiEdit } from "react-icons/bi";
 import { BsBack } from "react-icons/bs";
 import { MdDelete } from "react-icons/md";
 import RecipeDetailForm from "../../../Components/FormManager/RecipeDetailForm";
-import { updateDrinkRecipe } from "../../../service/drinks";
+import { DeleteDrink, updateDrinkRecipe } from "../../../service/drinks";
 
 const DrinkManager = () => {
     const [drinksData, setDrinksData] = useState([]);
@@ -74,23 +74,23 @@ const DrinkManager = () => {
         setEditingDrinkSize(drinksSize);
         setIsModalSizeVisible(true);
     };
-    const handleDelete = async (branchesid) => {
-        // try {
-        //     const response = await deleteBranches({ branchesid: branchesid });
-        //     if (response.data?.Success) {
-        //         fetchDrinks(currentPage, pageSize);
-        //         openNotification({
-        //             type: "success",
-        //             description: "delete drinksData successfully",
-        //         });
-        //     }
-        // } catch (error) {
-        //     openNotification({
-        //         type: "error",
-        //         message: "Thông báo",
-        //         error: error,
-        //     });
-        // }
+    const handleDelete = async (drinkId) => {
+        try {
+            const response = await DeleteDrink({ drinkId: drinkId });
+            if (response.data?.Success) {
+                fetchDrinks(currentPage, pageSize);
+                openNotification({
+                    type: "success",
+                    description: "delete drinks successfully",
+                });
+            }
+        } catch (error) {
+            openNotification({
+                type: "error",
+                message: "Thông báo",
+                error: error,
+            });
+        }
     };
     const handleDeleteSzie = async (drinkSizeId) => {
         try {
@@ -271,7 +271,7 @@ const DrinkManager = () => {
                     <Button onClick={() => handleEdit(record)}>Edit</Button>
 
                     <Popconfirm
-                        title={`Confirm delete drinksData ${record.Name}?`}
+                        title={`Confirm delete drink${record.Name}?`}
                         onConfirm={() => handleDelete(record.Id)}
                         onCancel={() => {}}
                         okText="Yes"

@@ -32,7 +32,7 @@ import ManagerOrder from "./Pages/staff/ManagerOrder/ManagerOrder";
 import ManagerOrderDetailPage from "./Pages/staff/ManagerOrderDetailPage/ManagerOrderDetailPage";
 const App = () => {
     const token = Cookies.get("AccessToken");
-    const userDecode = jwtDecode(token);
+    const userDecode = token?.length ? jwtDecode(token) : "";
     const router = createBrowserRouter(
         createRoutesFromElements(
             <Route path="/">
