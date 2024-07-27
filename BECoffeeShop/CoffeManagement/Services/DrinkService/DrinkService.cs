@@ -32,11 +32,11 @@ namespace CoffeManagement.Services.DrinkService
 
         public async Task<PagingListModel<DrinkResponse>> GetListDrinks(PagingDTO pagingDto, ListDinkFilter filter)
         {
-            var drinkQueryable = _drinkRepository.GetQueryable();
+            var drinkQueryable = _drinkRepository.GetQueryable().Where(d => d.IsDeleted == false);
 
             if (filter != null)
             {
-                if(filter.CategoryId != null)
+                if (filter.CategoryId != null)
                 {
                     drinkQueryable = drinkQueryable.Where(d => d.CategoryId == filter.CategoryId);
                 }
@@ -65,7 +65,7 @@ namespace CoffeManagement.Services.DrinkService
         public async Task<int> UpdateDrinks(UpdateDrinkRequest request)
         {
             var existedDrink = await _drinkRepository.GetById(request.Id);
-            if (existedDrink == null) throw new NotFoundException("Not found Drinks.");
+            if (existedDrink == null || existedDrink.IsDeleted == true) throw new NotFoundException("Not found Drinks.");
 
             _mapper.Map(request, existedDrink);
             await _drinkRepository.Update(existedDrink);
@@ -76,23 +76,23 @@ namespace CoffeManagement.Services.DrinkService
         public async Task<DrinkDetailResponse> GetDrinksDetail(int id)
         {
             var existedDrink = await _drinkRepository.GetById(id);
-            if (existedDrink == null) throw new NotFoundException("Not found Drinks.");
+            if (existedDrink == null || existedDrink.IsDeleted == true) throw new NotFoundException("Not found Drinks.");
 
             var drinkDetail = _mapper.Map<DrinkDetailResponse>(existedDrink);
 
             return drinkDetail;
         }
 
-        public async Task<int> DeleteDrinksSize(int id)
+        public async Task<int> DeleteDrink(int id)
         {
-            var existedDrinksSize = await _drinksSizeRepository.GetById(id);
-            if (existedDrinksSize == null) throw new NotFoundException("Not found Drinks Size.");
+            var existedDrinks = await _drinkRepository.GetById(id);
+            if (existedDrinks == null || existedDrinks.IsDeleted == true) throw new NotFoundException("Not found Drinks.");
 
-            existedDrinksSize.IsDeleted = true;
-            existedDrinksSize.UpdatedAt = DateTime.Now;
-            await _drinksSizeRepository.Update(existedDrinksSize);
+            existedDrinks.IsDeleted = true;
+            existedDrinks.UpdatedAt = DateTime.Now;
+            await _drinkRepository.Update(existedDrinks);
 
-            return existedDrinksSize.Id;
+            return existedDrinks.Id;
         }
 
         public async Task<int> CreateDrinksSize(CreateDrinkSizeRequest request)
@@ -107,13 +107,26 @@ namespace CoffeManagement.Services.DrinkService
         public async Task<int> UpdateDrinksSize(UpdateDrinkSizeRequest request)
         {
             var existedDrinksSize = await _drinksSizeRepository.GetById(request.Id);
-            if (existedDrinksSize == null) throw new NotFoundException("Not found Drinks Size.");
+            if (existedDrinksSize == null || existedDrinksSize.IsDeleted == true) throw new NotFoundException("Not found Drinks Size.");
 
             _mapper.Map(request, existedDrinksSize);
             await _drinksSizeRepository.Update(existedDrinksSize);
 
             return existedDrinksSize.Id;
         }
+
+        public async Task<int> DeleteDrinksSize(int id)
+        {
+            var existedDrinksSize = await _drinksSizeRepository.GetById(id);
+            if (existedDrinksSize == null || existedDrinksSize.IsDeleted == true) throw new NotFoundException("Not found Drinks Size.");
+
+            existedDrinksSize.IsDeleted = true;
+            existedDrinksSize.UpdatedAt = DateTime.Now;
+            await _drinksSizeRepository.Update(existedDrinksSize);
+
+            return existedDrinksSize.Id;
+        }
+
 
         public async Task<int> UpdateRecipe(UpdateRecipeRequest request)
         {

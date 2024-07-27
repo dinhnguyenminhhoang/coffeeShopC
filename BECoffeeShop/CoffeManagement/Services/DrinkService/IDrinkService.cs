@@ -11,6 +11,7 @@ namespace CoffeManagement.Services.DrinkService
         Task<int> CreateDrinks(CreateDrinkRequest request);
         Task<int> UpdateDrinks(UpdateDrinkRequest request);
         Task<DrinkDetailResponse> GetDrinksDetail(int id);
+        Task<int> DeleteDrink(int id);
         Task<int> DeleteDrinksSize(int id);
         Task<int> CreateDrinksSize(CreateDrinkSizeRequest request);
         Task<int> UpdateDrinksSize(UpdateDrinkSizeRequest request);

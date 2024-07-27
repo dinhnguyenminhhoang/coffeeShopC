@@ -61,6 +61,16 @@ namespace CoffeManagement.Controllers
             return Ok(RenderSuccessResponse(data: result, message: "SUCCESS"));
         }
 
+        [HttpDelete("{id:int}")]
+        //[Authorize(Policy = nameof(AuthPolicy.POL_ADMIN))]
+        [SwaggerOperation(Summary = "Delete Drink")]
+        public async Task<IActionResult> DeleteDrink([FromRoute] int id)
+        {
+            var result = await _drinksService.DeleteDrink(id);
+
+            return Ok(RenderSuccessResponse(data: result, message: "SUCCESS"));
+        }
+        
         [HttpDelete("Size/{id:int}")]
         //[Authorize(Policy = nameof(AuthPolicy.POL_ADMIN))]
         [SwaggerOperation(Summary = "Delete Drinks_Size from Drinks")]
