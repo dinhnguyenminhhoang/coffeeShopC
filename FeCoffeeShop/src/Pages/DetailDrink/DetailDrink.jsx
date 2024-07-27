@@ -16,7 +16,7 @@ import {
 import React, { lazy, Suspense, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import useNotification from "../../hooks/NotiHook";
-import { getListRatingDrink } from "../../service/rating";
+import { getDetailRating, getListRatingDrink } from "../../service/rating";
 import Spiner from "../../Components/Spiner/Spiner";
 import SpinerCpn from "../../Components/Spiner/SpinerCpn";
 const DrinkInfo = lazy(() => import("@/Components/Drinks/DrinkInfo/DrinkInfo"));
@@ -30,6 +30,7 @@ const DetailDrink = () => {
     const [selectedSize, setSelectedSize] = useState();
     const [DrinkCateData, setDrinkCateData] = useState([]);
     const [dataRating, setDataRating] = useState([]);
+    const [dataFeedBack, setDataFeedBack] = useState([]);
     const [cartInfo, setCartInfo] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalCount, setTotalCount] = useState(0);
@@ -80,6 +81,16 @@ const DetailDrink = () => {
             });
             if (response?.data?.Success) {
                 setDataRating(response.data?.ResultData?.List);
+                const feedbackTemp = [];
+                response.data?.ResultData?.List?.map(async (rating) => {
+                    if (rating?.HasFeedback) {
+                        const res = await getDetailRating(rating?.Id);
+                        if (res?.data?.Success) {
+                            feedbackTemp.push(res.data?.ResultData);
+                        }
+                    }
+                });
+                setDataFeedBack(feedbackTemp);
                 setTotalCount(response.data?.ResultData?.Paging?.TotalCount);
             }
         };
@@ -92,7 +103,24 @@ const DetailDrink = () => {
             setCartInfo(JSON.parse(dataLocal));
         }
     }, []);
+    const feedbackMap = new Map();
+    dataFeedBack.forEach((feedback) => {
+        feedbackMap.set(feedback.Id, feedback);
+    });
 
+    const mergedData = dataRating.map((rating) => {
+        const feedback = feedbackMap.get(rating.Id);
+        return {
+            ...rating,
+            Feedback: feedback ? feedback.Feedback : null,
+        };
+    });
+
+    // Filter out duplicates
+    const uniqueMergedData = mergedData.filter(
+        (item, index, self) => index === self.findIndex((t) => t.Id === item.Id)
+    );
+    console.log("uniqueMergedData", uniqueMergedData);
     useEffect(() => {
         if (cartInfo.length) {
             localStorage.setItem("cartInfo", JSON.stringify(cartInfo));
@@ -170,43 +198,86 @@ const DetailDrink = () => {
                         <h2 className="text-xl font-bold mb-4">
                             Đánh giá sản phẩm
                         </h2>
-                        {dataRating ? (
-                            dataRating?.length ? (
+                        {uniqueMergedData?.length ? (
+                            uniqueMergedData?.length ? (
                                 <>
                                     <List
                                         itemLayout="horizontal"
-                                        dataSource={dataRating}
+                                        dataSource={uniqueMergedData}
                                         renderItem={(rating) => (
                                             <List.Item>
-                                                <List.Item.Meta
-                                                    avatar={
-                                                        <Avatar>
-                                                            {rating?.Customer?.FullName.charAt(
-                                                                0
-                                                            )}
-                                                        </Avatar>
-                                                    }
-                                                    title={
-                                                        <Space>
-                                                            <span>
-                                                                {
-                                                                    rating
-                                                                        ?.Customer
-                                                                        .FullName
-                                                                }
-                                                            </span>
-                                                            <Rate
-                                                                disabled
-                                                                value={
-                                                                    rating?.Rating
-                                                                }
-                                                            />
-                                                        </Space>
-                                                    }
-                                                    description={
-                                                        <p>{rating?.Content}</p>
-                                                    }
-                                                />
+                                                <div className="flex flex-col w-full gap-2">
+                                                    <List.Item.Meta
+                                                        avatar={
+                                                            <Avatar>
+                                                                {rating?.Customer?.FullName.charAt(
+                                                                    0
+                                                                )}
+                                                            </Avatar>
+                                                        }
+                                                        title={
+                                                            <Space>
+                                                                <span>
+                                                                    {
+                                                                        rating
+                                                                            ?.Customer
+                                                                            ?.FullName
+                                                                    }
+                                                                </span>
+                                                                <Rate
+                                                                    disabled
+                                                                    value={
+                                                                        rating?.Rating
+                                                                    }
+                                                                />
+                                                            </Space>
+                                                        }
+                                                        description={
+                                                            <>
+                                                                <p className="text-black font-bold">
+                                                                    {
+                                                                        rating?.Content
+                                                                    }
+                                                                </p>
+                                                            </>
+                                                        }
+                                                    />
+                                                    {rating?.Feedback ? (
+                                                        <List.Item.Meta
+                                                            className="ml-10 py-2"
+                                                            avatar={
+                                                                <Avatar>
+                                                                    {rating?.Feedback?.Staff?.FullName.charAt(
+                                                                        0
+                                                                    )}
+                                                                </Avatar>
+                                                            }
+                                                            title={
+                                                                <Space>
+                                                                    <span>
+                                                                        {
+                                                                            rating
+                                                                                ?.Feedback
+                                                                                ?.Staff
+                                                                                ?.FullName
+                                                                        }
+                                                                    </span>
+                                                                </Space>
+                                                            }
+                                                            description={
+                                                                <>
+                                                                    <p className="text-black font-bold">
+                                                                        {
+                                                                            rating
+                                                                                ?.Feedback
+                                                                                ?.FeedbackContent
+                                                                        }
+                                                                    </p>
+                                                                </>
+                                                            }
+                                                        />
+                                                    ) : null}
+                                                </div>
                                             </List.Item>
                                         )}
                                     />

@@ -21,6 +21,9 @@ const getDrinkById = ({ drinkId }) => {
 const DeleteDrinkSize = ({ drinkSizeId }) => {
     return instance.delete(`/Drinks/Size/${drinkSizeId}`, { headers });
 };
+const DeleteDrink = ({ drinkId }) => {
+    return instance.delete(`/Drinks/${drinkId}`, { headers });
+};
 const createDrinkSize = ({ formData }) => {
     return instance.post("/Drinks/Size", formData, { headers });
 };
@@ -38,5 +41,6 @@ export {
     DeleteDrinkSize,
     createDrinkSize,
     updateDrinkSize,
+    DeleteDrink,
     updateDrinkRecipe,
 };

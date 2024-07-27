@@ -62,6 +62,7 @@ const SidebarAdmin = () => {
     const staffLinks = [
         { path: "/manager-orders", label: "STAFF ORDER" },
         { path: "/manager-categories", label: "STAFF CATEGORIES" },
+        { path: "/manager-ratings", label: "STAFF RATINGS" },
     ];
     return userData ? (
         <Layout className="flex-none pt-3 border-r border-[#ccc] min-h-screen">
