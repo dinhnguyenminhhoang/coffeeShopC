@@ -127,9 +127,8 @@ const CartPage = () => {
                     onConfirm={() => {
                         const newData = cartInfo.filter(
                             (item) =>
-                                item.Id === record.Id &&
-                                item?.DrinkSize?.Size !==
-                                    record?.DrinkSize?.Size
+                                item.Id !== record.Id ||
+                                item.DrinkSize.Id !== record.DrinkSize.Id
                         );
                         setCartInfo(newData);
                         localStorage.setItem(
@@ -143,7 +142,7 @@ const CartPage = () => {
             ),
         },
     ];
-
+    console.log(cartInfo);
     const totalAmount = cartInfo.reduce((sum, item) => sum + item.total, 0);
 
     const handlePayment = async (stripe, cardElement) => {

@@ -1,3 +1,5 @@
+import Cookies from "js-cookie";
+import { jwtDecode } from "jwt-decode";
 import React from "react";
 import {
     createBrowserRouter,
@@ -12,7 +14,6 @@ import AdminCustomers from "./Pages/admin/AdminCustomers/AdminCustomers";
 import AdminIngredientsPage from "./Pages/admin/AdminIngredientsPage/AdminIngredientsPage";
 import AdminVouchers from "./Pages/admin/AdminVouchers/AdminVouchers";
 import DrinkManager from "./Pages/admin/DrinkManager/DrinkManager";
-import IngredientsStocksPage from "./Pages/admin/IngredientsStocksPage/IngredientsStocksPage";
 import StaffPage from "./Pages/admin/StaffPage/StaffPage";
 import ForgotPassword from "./Pages/Auth/ForgotPassword/ForgotPassword";
 import Login from "./Pages/Auth/Login/Login";
@@ -30,6 +31,8 @@ import ManagerCategories from "./Pages/staff/ManagerCategories/ManagerCategories
 import ManagerOrder from "./Pages/staff/ManagerOrder/ManagerOrder";
 import ManagerOrderDetailPage from "./Pages/staff/ManagerOrderDetailPage/ManagerOrderDetailPage";
 const App = () => {
+    const token = Cookies.get("AccessToken");
+    const userDecode = jwtDecode(token);
     const router = createBrowserRouter(
         createRoutesFromElements(
             <Route path="/">
@@ -54,37 +57,48 @@ const App = () => {
                         path="/manager-order-drink/:orderId"
                         element={<ManagerOrderDetailPage />}
                     />
-                    <Route
-                        path="/manager-ingredients-stocks"
-                        element={<IngredientsStocksPage />}
-                    />
+
                     <Route path="/profile" element={<Profile />} />
                     <Route path="/orders" element={<CustomerOrders />} />
                 </Route>
                 <Route element={<AdminLayout />}>
-                    <Route path="/manager-staffs" element={<StaffPage />} />
-                    <Route path="/manager-drinks" element={<DrinkManager />} />
-                    <Route
-                        path="/manager-branches"
-                        element={<AdminBranches />}
-                    />
-                    <Route
-                        path="/manager-customers"
-                        element={<AdminCustomers />}
-                    />
-                    <Route path="/manager-orders" element={<ManagerOrder />} />
-                    <Route
-                        path="/manager-vouchers"
-                        element={<AdminVouchers />}
-                    />
-                    <Route
-                        path="/manager-ingredients"
-                        element={<AdminIngredientsPage />}
-                    />
-                    <Route
-                        path="/manager-categories"
-                        element={<ManagerCategories />}
-                    />
+                    {userDecode?.role === "ROLE_STAFF" ||
+                    userDecode?.role === "ROLE_ADMIN" ? (
+                        <>
+                            <Route
+                                path="/manager-staffs"
+                                element={<StaffPage />}
+                            />
+                            <Route
+                                path="/manager-drinks"
+                                element={<DrinkManager />}
+                            />
+                            <Route
+                                path="/manager-branches"
+                                element={<AdminBranches />}
+                            />
+                            <Route
+                                path="/manager-customers"
+                                element={<AdminCustomers />}
+                            />
+                            <Route
+                                path="/manager-orders"
+                                element={<ManagerOrder />}
+                            />
+                            <Route
+                                path="/manager-vouchers"
+                                element={<AdminVouchers />}
+                            />
+                            <Route
+                                path="/manager-ingredients"
+                                element={<AdminIngredientsPage />}
+                            />
+                            <Route
+                                path="/manager-categories"
+                                element={<ManagerCategories />}
+                            />
+                        </>
+                    ) : null}
                 </Route>
                 <Route path="*" element={<PageNotFound />} />
             </Route>
