@@ -42,6 +42,10 @@ public partial class DBContext : DbContext
 
     public virtual DbSet<Staff> Staffs { get; set; }
 
+    public virtual DbSet<Voucher> Vouchers { get; set; }
+
+    public virtual DbSet<VoucherApply> VoucherApplies { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Account>(entity =>
@@ -376,6 +380,33 @@ public partial class DBContext : DbContext
                 .HasForeignKey(d => d.BranchId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Staffs_Branchs");
+        });
+
+        modelBuilder.Entity<Voucher>(entity =>
+        {
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.ExpiredAt).HasColumnType("datetime");
+            entity.Property(e => e.Staus)
+                .HasMaxLength(10)
+                .IsUnicode(false)
+                .HasDefaultValue("VOUC_INIT");
+            entity.Property(e => e.UpdatedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+        });
+
+        modelBuilder.Entity<VoucherApply>(entity =>
+        {
+            entity.HasOne(d => d.Drink).WithMany(p => p.VoucherApplies)
+                .HasForeignKey(d => d.DrinkId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_VoucherApplies_Drinks");
+
+            entity.HasOne(d => d.Voucher).WithMany(p => p.VoucherApplies)
+                .HasForeignKey(d => d.VoucherId)
+                .HasConstraintName("FK_VoucherApplies_Vouchers");
         });
 
         OnModelCreatingPartial(modelBuilder);

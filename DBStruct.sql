@@ -198,4 +198,26 @@ CREATE TABLE [OrderDetails] (
   CONSTRAINT FK_OrderDetails_DrinkSizes FOREIGN KEY ([DrinkSizeId]) REFERENCES [DrinkSizes] ([Id]),
 );
 
+
+DROP TABLE IF EXISTS [Vouchers];
+CREATE TABLE [Vouchers] (
+  [Id] INT CONSTRAINT PK_Vouchers PRIMARY KEY IDENTITY(1, 1),
+  [Staus] VARCHAR(10) DEFAULT('VOUC_INIT'), -- VOUC_INIT, VOUC_USING
+  [Discount] FLOAT NOT NULL,
+  [Amount] INT NOT NULL,
+  [Remain] Int NOT NULL,
+  [ExpiredAt] DateTime NOT NULL,
+  [CreatedAt] DateTime DEFAULT(GETDATE()), 
+  [UpdatedAt] DateTime DEFAULT(GETDATE()),
+);
+
+DROP TABLE IF EXISTS [VoucherApplies];
+CREATE TABLE [VoucherApplies] (
+  [Id] INT CONSTRAINT PK_VoucherApplies PRIMARY KEY IDENTITY(1, 1),
+  [VoucherId] INT NOT NULL,
+  [DrinkId] Int NOT NULL,
+  CONSTRAINT FK_VoucherApplies_Vouchers FOREIGN KEY ([VoucherId]) REFERENCES [Vouchers] ([Id]) ON DELETE CASCADE,
+  CONSTRAINT FK_VoucherApplies_Drinks FOREIGN KEY ([DrinkId]) REFERENCES [Drinks] ([Id]),
+);
+
 -- TRIGGERS -- 

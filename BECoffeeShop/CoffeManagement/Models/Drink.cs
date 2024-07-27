@@ -32,4 +32,6 @@ public partial class Drink
     public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
 
     public virtual ICollection<Recipe> Recipes { get; set; } = new List<Recipe>();
+
+    public virtual ICollection<VoucherApply> VoucherApplies { get; set; } = new List<VoucherApply>();
 }
