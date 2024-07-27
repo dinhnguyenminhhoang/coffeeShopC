@@ -15,4 +15,20 @@ const getListRatingDrink = ({ listParam, drinkId }) => {
         params: listParam,
     });
 };
-export { customerCreateRating, getListRatingDrink };
+const getListRatting = (params) => {
+    return instance.get(`/Rating/List`, { params, headers });
+};
+
+const getDetailRating = (id) => {
+    return instance.get(`/Rating/Detail/${id}`, { headers });
+};
+const feedBackForRatng = (formData) => {
+    return instance.put("/Rating/Feedback", formData, { headers });
+};
+export {
+    customerCreateRating,
+    getListRatingDrink,
+    getListRatting,
+    feedBackForRatng,
+    getDetailRating,
+};

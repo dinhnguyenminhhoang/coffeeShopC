@@ -30,6 +30,7 @@ import PageNotFound from "./Pages/PageNotFound/PageNotFound";
 import ManagerCategories from "./Pages/staff/ManagerCategories/ManagerCategories";
 import ManagerOrder from "./Pages/staff/ManagerOrder/ManagerOrder";
 import ManagerOrderDetailPage from "./Pages/staff/ManagerOrderDetailPage/ManagerOrderDetailPage";
+import ManagerRating from "./Pages/staff/ManagerRating/ManagerRating";
 const App = () => {
     const token = Cookies.get("AccessToken");
     const userDecode = token?.length ? jwtDecode(token) : "";
@@ -65,6 +66,10 @@ const App = () => {
                     {userDecode?.role === "ROLE_STAFF" ||
                     userDecode?.role === "ROLE_ADMIN" ? (
                         <>
+                            <Route
+                                path="/manager-ratings"
+                                element={<ManagerRating />}
+                            />
                             <Route
                                 path="/manager-staffs"
                                 element={<StaffPage />}
