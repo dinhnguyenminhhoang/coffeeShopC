@@ -69,9 +69,12 @@ namespace CoffeManagement.Services.OrderService
             }
             await _orderRepository.Add(order);
 
-            existedVoucher.Remain = existedVoucher.Remain - 1;
-            existedVoucher.Staus = VoucherStatus.VOUC_USING.ToString();
-            await _voucherRepository.Update(existedVoucher);
+            if (isApplyVoucher)
+            {
+                existedVoucher.Remain = existedVoucher.Remain - 1;
+                existedVoucher.Staus = VoucherStatus.VOUC_USING.ToString();
+                await _voucherRepository.Update(existedVoucher);
+            }
 
             return order.Id;
         }
@@ -176,9 +179,12 @@ namespace CoffeManagement.Services.OrderService
 
             await _orderRepository.Add(order);
 
-            existedVoucher.Remain = existedVoucher.Remain - 1;
-            existedVoucher.Staus = VoucherStatus.VOUC_USING.ToString();
-            await _voucherRepository.Update(existedVoucher);
+            if (isApplyVoucher)
+            {
+                existedVoucher.Remain = existedVoucher.Remain - 1;
+                existedVoucher.Staus = VoucherStatus.VOUC_USING.ToString();
+                await _voucherRepository.Update(existedVoucher);
+            }
 
             return order.Id;
         }
@@ -245,9 +251,12 @@ namespace CoffeManagement.Services.OrderService
             }
             await _orderRepository.Update(existedOrder);
 
-            existedVoucher.Remain = existedVoucher.Remain - 1;
-            existedVoucher.Staus = VoucherStatus.VOUC_USING.ToString();
-            await _voucherRepository.Update(existedVoucher);
+            if (isApplyVoucher)
+            {
+                existedVoucher.Remain = existedVoucher.Remain - 1;
+                existedVoucher.Staus = VoucherStatus.VOUC_USING.ToString();
+                await _voucherRepository.Update(existedVoucher);
+            }
 
             return existedOrder.Id;
         }
