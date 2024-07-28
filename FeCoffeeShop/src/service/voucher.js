@@ -22,6 +22,7 @@ const updateVouchers = ({ formData }) => {
 const deleteVouchers = ({ Vouchersid }) => {
     return instance.delete(`/Vouchers/${Vouchersid}`, { headers });
 };
+
 export {
     getListVouchers,
     getVouchersDetaiil,
