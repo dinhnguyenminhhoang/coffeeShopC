@@ -50,7 +50,8 @@ namespace CoffeManagement.Services.OrderService
                 if (existedVoucher.Remain <= 0 || existedVoucher.ExpiredAt < DateTime.Now) throw new BadRequestException("Voucher has expired.");
                 foreach (var orderDetail in request.OrderDetails)
                 {
-                    if(existedVoucher.VoucherApplies.Any(va => va.DrinkId == orderDetail.DrinkId)){
+                    if (existedVoucher.VoucherApplies.Any(va => va.DrinkId == orderDetail.DrinkId))
+                    {
                         isApplyVoucher = true;
                         break;
                     }
@@ -69,6 +70,7 @@ namespace CoffeManagement.Services.OrderService
             await _orderRepository.Add(order);
 
             existedVoucher.Remain = existedVoucher.Remain - 1;
+            existedVoucher.Staus = VoucherStatus.VOUC_USING.ToString();
             await _voucherRepository.Update(existedVoucher);
 
             return order.Id;
@@ -175,6 +177,7 @@ namespace CoffeManagement.Services.OrderService
             await _orderRepository.Add(order);
 
             existedVoucher.Remain = existedVoucher.Remain - 1;
+            existedVoucher.Staus = VoucherStatus.VOUC_USING.ToString();
             await _voucherRepository.Update(existedVoucher);
 
             return order.Id;
@@ -191,7 +194,7 @@ namespace CoffeManagement.Services.OrderService
             if (!existedOrder.Status.Equals(OrderStatus.ODR_INIT.ToString())) throw new ConflictException("Cannot Update Order");
 
             Voucher? existedVoucher = null;
-                bool isApplyVoucher = false;
+            bool isApplyVoucher = false;
             if (!string.IsNullOrEmpty(request.VoucherCode))
             {
                 existedVoucher = await _voucherRepository.GetByCode(request.VoucherCode);
@@ -243,6 +246,7 @@ namespace CoffeManagement.Services.OrderService
             await _orderRepository.Update(existedOrder);
 
             existedVoucher.Remain = existedVoucher.Remain - 1;
+            existedVoucher.Staus = VoucherStatus.VOUC_USING.ToString();
             await _voucherRepository.Update(existedVoucher);
 
             return existedOrder.Id;
