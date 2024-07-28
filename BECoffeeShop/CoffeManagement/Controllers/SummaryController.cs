@@ -58,6 +58,50 @@ namespace CoffeManagement.Controllers
 
             return Ok(RenderSuccessResponse(result));
         }
+        
+        
+        [HttpGet("Chart/AmountSoldOfCategory")]
+        [AllowAnonymous]
+        [SwaggerOperation(Summary = "Get Data Amount Sold Of Category")]
+        public async Task<IActionResult> GetAmountSoldOfCategory_Chart([FromQuery] SummaryFilter filter)
+        {
+            var result = await _summaryService.GetAmountSoldOfCategory_Chart(filter);
+
+            return Ok(RenderSuccessResponse(result));
+        }
+        
+        
+        [HttpGet("Chart/Overview")]
+        [AllowAnonymous]
+        [SwaggerOperation(Summary = "Get Data Overview for Chart")]
+        public async Task<IActionResult> GetOverview_Chart([FromQuery] SummaryFilter filter)
+        {
+            var result = await _summaryService.GetOverview_Chart(filter);
+
+            return Ok(RenderSuccessResponse(result));
+        }
+        
+        
+        [HttpGet("Chart/Orders")]
+        [AllowAnonymous]
+        [SwaggerOperation(Summary = "Get Data Order for Chart")]
+        public async Task<IActionResult> GetOrders_Chart([FromQuery] SummaryFilter filter)
+        {
+            var result = await _summaryService.GetOrders_Chart(filter);
+
+            return Ok(RenderSuccessResponse(result));
+        }
+        
+        
+        [HttpGet("Chart/RevenueAndProfit")]
+        [AllowAnonymous]
+        [SwaggerOperation(Summary = "Get Data Revenue and Profit for Chart")]
+        public async Task<IActionResult> GetRevenueAndProfit_Chart([FromQuery] SummaryFilter filter)
+        {
+            var result = await _summaryService.GetRevenueAndProfit_Chart(filter);
+
+            return Ok(RenderSuccessResponse(result));
+        }
 
     }
 }

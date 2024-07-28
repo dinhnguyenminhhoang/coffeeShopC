@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CoffeManagement.DTO.Summary;
+using CoffeManagement.Models;
 using CoffeManagement.Models.Enum;
 using CoffeManagement.Repositories.BranchRepo;
 using CoffeManagement.Repositories.CategoryRepo;
@@ -89,13 +90,13 @@ namespace CoffeManagement.Services.SummaryService
             // Profit
             var thisWeekProfit = thisWeekOrderList
                 .Where(o => o.Status.Equals(OrderStatus.ODR_COML.ToString()))
-                .SelectMany(o => o.OrderDetails)
-                .Sum(od => od.Price * od.Quantity - od.TotalIngredientCost);
+                .Select(o => new { OrderProfit = o.OrderDetails.Sum(od => od.Price * od.Quantity - od.TotalIngredientCost) - o.Discount })
+                .Sum(o => o.OrderProfit) ?? 0;
 
             var lastWeekProfit = lastWeekOrderList
                 .Where(o => o.Status.Equals(OrderStatus.ODR_COML.ToString()))
-                .SelectMany(o => o.OrderDetails)
-                .Sum(od => od.Price * od.Quantity - od.TotalIngredientCost);
+                .Select(o => new { OrderProfit = o.OrderDetails.Sum(od => od.Price * od.Quantity - od.TotalIngredientCost) - o.Discount })
+                .Sum(o => o.OrderProfit) ?? 0;
 
 
             double revenueGrowthPercentage = CalculateGrowthPercentage(lastWeekRevenue, thisWeekRevenue);
@@ -253,24 +254,257 @@ namespace CoffeManagement.Services.SummaryService
             return recentOrders;
         }
 
-        public Task<object> GetAmountSoldOfCategory_Chart(SummaryFilter filter)
+        public async Task<object> GetAmountSoldOfCategory_Chart(SummaryFilter filter)
         {
-            throw new NotImplementedException();
+            var query = _orderDetailRepository.GetQueryable();
+
+
+            if (filter.BranchId != null)
+            {
+                query = query.Where(o => o.Order.BranchId == filter.BranchId);
+            }
+
+            query = query.Where(od => od.Order.Status.Equals(OrderStatus.ODR_COML.ToString()));
+
+            if (filter.StartDate != null)
+                query = query.Where(o => o.Order.CreatedAt >= filter.StartDate);
+
+            if (filter.EndDate != null)
+                query = query.Where(o => o.Order.CreatedAt <= filter.EndDate);
+
+            var amountSolds = query.GroupBy(od => od.Drink.CategoryId)
+                .Select(group => new
+                {
+                    CategoryId = group.Key,
+                    AmountSold = group.Sum(od => od.Quantity)
+                })
+                .OrderByDescending(result => result.AmountSold)
+                .Join(
+                    _categoryRepository.GetQueryable(),
+                    topSellCategory => topSellCategory.CategoryId,
+                    category => category.Id,
+                    (topSellCategory, category) => new
+                    {
+                        Name = category.Name,
+                        Value = topSellCategory.AmountSold,
+                    })
+                .ToList();
+
+
+            if (filter.Limit < amountSolds.Count())
+            {
+                var result = amountSolds.Take(filter.Limit - 1).ToList();
+                int totalAmountSoldOthers = amountSolds.Skip(filter.Limit - 1).Sum(item => item.Value);
+                result.Add(new { Name = "Others", Value = totalAmountSoldOthers });
+                return result;
+            }
+            else
+            {
+                var result = amountSolds.Take(filter.Limit).ToList();
+                return result;
+            }
         }
 
-        public Task<object> GetOverview_Chart(SummaryFilter filter)
+        public async Task<object> GetOverview_Chart(SummaryFilter filter)
         {
-            throw new NotImplementedException();
+            IQueryable<Order> query = _orderRepository.GetQueryable();
+            IQueryable<TinyOrder> tinyQuery;
+            IEnumerable<IGrouping<string, TinyOrder>> groupQuery;
+            TimeSpan dateDifference;
+
+            if (filter.BranchId != null)
+            {
+                query = query.Where(o => o.BranchId == filter.BranchId);
+            }
+
+            if (filter.StartDate != null)
+                query = query.Where(o => o.CreatedAt >= filter.StartDate);
+
+            if (filter.EndDate != null)
+                query = query.Where(o => o.CreatedAt <= filter.EndDate);
+
+
+            tinyQuery = query.Select(o => new TinyOrder
+            {
+                Status = o.Status,
+                CreatedAt = o.CreatedAt ?? DateTime.Now,
+                Revenue = o.TotalPrice - (o.Discount ?? 0),
+                Profit = o.TotalPrice - (o.Discount ?? 0) - o.OrderDetails.Sum(od => od.TotalIngredientCost),
+            });
+
+
+            if (filter.StartDate != null && filter.EndDate == null)
+                dateDifference = DateTime.Now - filter.StartDate.Value;
+            else if (filter.StartDate == null && filter.EndDate != null)
+                dateDifference = filter.EndDate.Value - (new DateTime());
+            else if (filter.StartDate != null && filter.EndDate != null)
+                dateDifference = filter.EndDate.Value - filter.StartDate.Value;
+            else
+                dateDifference = DateTime.Now - (new DateTime());
+
+            if (dateDifference.TotalDays <= 7)
+            {
+                groupQuery = tinyQuery.AsEnumerable().GroupBy(od => od.CreatedAt.ToString("ddd"));
+            }
+            else if (dateDifference.TotalDays <= 14)
+            {
+                groupQuery = tinyQuery.AsEnumerable().GroupBy(od => od.CreatedAt.ToString("dd MMM"));
+            }
+            else if (dateDifference.TotalDays <= 3 * 7 * 4)
+            {
+                groupQuery = tinyQuery.AsEnumerable().GroupBy(od => $"Week {ToWeek(od.CreatedAt)}");
+            }
+            else if (dateDifference.TotalDays <= 20 * 30)
+            {
+                groupQuery = tinyQuery.AsEnumerable().GroupBy(od => od.CreatedAt.ToString("MMM yyyy"));
+            }
+            else
+            {
+                groupQuery = tinyQuery.AsEnumerable().GroupBy(od => od.CreatedAt.ToString("yyyy"));
+            }
+
+            var result = groupQuery.Select(group => new
+            {
+                At = group.Key,
+                Orders = group.Count(),
+                Revenue = group.Where(tod => tod.Status.Equals(OrderStatus.ODR_COML.ToString())).Sum(tod => tod.Revenue),
+                Profit = group.Where(tod => tod.Status.Equals(OrderStatus.ODR_COML.ToString())).Sum(tod => tod.Profit),
+            });
+
+            return result;
         }
 
-        public Task<object> GetOrders_Chart(SummaryFilter filter)
+        public async Task<object> GetOrders_Chart(SummaryFilter filter)
         {
-            throw new NotImplementedException();
+            IQueryable<Order> query = _orderRepository.GetQueryable();
+            IEnumerable<IGrouping<string, Order>> groupQuery;
+            TimeSpan dateDifference;
+
+            if (filter.BranchId != null)
+            {
+                query = query.Where(o => o.BranchId == filter.BranchId);
+            }
+
+            if (filter.StartDate != null)
+                query = query.Where(o => o.CreatedAt >= filter.StartDate);
+
+            if (filter.EndDate != null)
+                query = query.Where(o => o.CreatedAt <= filter.EndDate);
+
+
+            if (filter.StartDate != null && filter.EndDate == null)
+                dateDifference = DateTime.Now - filter.StartDate.Value;
+            else if (filter.StartDate == null && filter.EndDate != null)
+                dateDifference = filter.EndDate.Value - (new DateTime());
+            else if (filter.StartDate != null && filter.EndDate != null)
+                dateDifference = filter.EndDate.Value - filter.StartDate.Value;
+            else
+                dateDifference = DateTime.Now - (new DateTime());
+
+            if (dateDifference.TotalDays <= 7)
+            {
+                groupQuery = query.AsEnumerable().GroupBy(o => o.CreatedAt?.ToString("ddd"));
+            }
+            else if (dateDifference.TotalDays <= 14)
+            {
+                groupQuery = query.AsEnumerable().GroupBy(o => o.CreatedAt?.ToString("dd MMM"));
+            }
+            else if (dateDifference.TotalDays <= 3 * 7 * 4)
+            {
+                groupQuery = query.AsEnumerable().GroupBy(o => $"Week {ToWeek(o.CreatedAt ?? DateTime.Now)}");
+            }
+            else if (dateDifference.TotalDays <= 20 * 30)
+            {
+                groupQuery = query.AsEnumerable().GroupBy(o => o.CreatedAt?.ToString("MMM yyyy"));
+            }
+            else
+            {
+                groupQuery = query.AsEnumerable().GroupBy(o => o.CreatedAt?.ToString("yyyy"));
+            }
+
+            var result = groupQuery.Select(group => new
+            {
+                At = group.Key,
+                Init = group.Where(o => o.Status.Equals(OrderStatus.ODR_INIT.ToString())).Count(),
+                Comfirm = group.Where(o => o.Status.Equals(OrderStatus.ODR_COMF.ToString())).Count(),
+                Served = group.Where(o => o.Status.Equals(OrderStatus.ODR_SERV.ToString())).Count(),
+                Shipping = group.Where(o => o.Status.Equals(OrderStatus.ODR_SHIP.ToString())).Count(),
+                Shipped = group.Where(o => o.Status.Equals(OrderStatus.ODR_SHIPED.ToString())).Count(),
+                Completed = group.Where(o => o.Status.Equals(OrderStatus.ODR_COML.ToString())).Count(),
+                Canceled = group.Where(o => o.Status.Equals(OrderStatus.ODR_CANL.ToString())).Count(),
+                Failed = group.Where(o => o.Status.Equals(OrderStatus.ODR_FAIL.ToString())).Count(),
+            });
+
+            return result;
         }
 
-        public Task<object> GetRevenueAndProfit_Chart(SummaryFilter filter)
+        public async Task<object> GetRevenueAndProfit_Chart(SummaryFilter filter)
         {
-            throw new NotImplementedException();
+            IQueryable<Order> query = _orderRepository.GetQueryable().Where(o => o.Status.Equals(OrderStatus.ODR_COML.ToString()));
+            IQueryable<TinyOrder> tinyQuery;
+            IEnumerable<IGrouping<string, TinyOrder>> groupQuery;
+            TimeSpan dateDifference;
+
+
+            if (filter.BranchId != null)
+            {
+                query = query.Where(o => o.BranchId == filter.BranchId);
+            }
+
+
+            if (filter.StartDate != null)
+                query = query.Where(o => o.CreatedAt >= filter.StartDate);
+
+            if (filter.EndDate != null)
+                query = query.Where(o => o.CreatedAt <= filter.EndDate);
+
+
+            tinyQuery = query.Select(o => new TinyOrder
+            {
+                CreatedAt = o.CreatedAt ?? DateTime.Now,
+                Revenue = o.TotalPrice - (o.Discount ?? 0),
+                Profit = o.TotalPrice - (o.Discount ?? 0) - o.OrderDetails.Sum(od => od.TotalIngredientCost),
+            });
+
+
+            if (filter.StartDate != null && filter.EndDate == null)
+                dateDifference = DateTime.Now - filter.StartDate.Value;
+            else if (filter.StartDate == null && filter.EndDate != null)
+                dateDifference = filter.EndDate.Value - (new DateTime());
+            else if (filter.StartDate != null && filter.EndDate != null)
+                dateDifference = filter.EndDate.Value - filter.StartDate.Value;
+            else
+                dateDifference = DateTime.Now - (new DateTime());
+
+            if (dateDifference.TotalDays <= 7)
+            {
+                groupQuery = tinyQuery.AsEnumerable().GroupBy(od => od.CreatedAt.ToString("ddd"));
+            }
+            else if (dateDifference.TotalDays <= 14)
+            {
+                groupQuery = tinyQuery.AsEnumerable().GroupBy(od => od.CreatedAt.ToString("dd MMM"));
+            }
+            else if (dateDifference.TotalDays <= 3 * 7 * 4)
+            {
+                groupQuery = tinyQuery.AsEnumerable().GroupBy(od => $"Week {ToWeek(od.CreatedAt)}");
+            }
+            else if (dateDifference.TotalDays <= 20 * 30)
+            {
+                groupQuery = tinyQuery.AsEnumerable().GroupBy(od => od.CreatedAt.ToString("MMM yyyy"));
+            }
+            else
+            {
+                groupQuery = tinyQuery.AsEnumerable().GroupBy(od => od.CreatedAt.ToString("yyyy"));
+            }
+
+            var result = groupQuery.Select(group => new
+            {
+                At = group.Key,
+                Revenue = group.Sum(tod => tod.Revenue),
+                Profit = group.Sum(tod => tod.Profit),
+            });
+
+            return result;
         }
 
         private double CalculateGrowthPercentage(double lastWeekValue, double thisWeekValue)
@@ -285,5 +519,13 @@ namespace CoffeManagement.Services.SummaryService
             return CultureInfo.CurrentCulture.Calendar.GetWeekOfYear(d, CalendarWeekRule.FirstDay, DayOfWeek.Monday).ToString();
         }
 
+    }
+
+    internal class TinyOrder
+    {
+        public string Status { get; set; }
+        public double Revenue { get; set; }
+        public double Profit { get; set; }
+        public DateTime CreatedAt { get; set; }
     }
 }
