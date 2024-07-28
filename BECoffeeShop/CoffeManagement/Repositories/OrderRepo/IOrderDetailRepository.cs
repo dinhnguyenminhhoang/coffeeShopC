@@ -2,7 +2,7 @@
 
 namespace CoffeManagement.Repositories.OrderRepo
 {
-    public interface IOrderDetailRepository: IRepository<OrderDetail>
+    public interface IOrderDetailRepository: IRepository<OrderDetail>, IRepositoryQueryable<OrderDetail>
     {
     }
 }

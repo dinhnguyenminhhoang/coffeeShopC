@@ -309,7 +309,7 @@ namespace CoffeManagement.Services.OrderService
                     }
                 }
 
-                orderDetail.IngredientCost = orderDetail.DrinkSize.Ratio * ingredientCostStandard;
+                orderDetail.TotalIngredientCost = orderDetail.DrinkSize.Ratio * ingredientCostStandard;
             }
 
             existedOrder.Status = OrderStatus.ODR_COMF.ToString();

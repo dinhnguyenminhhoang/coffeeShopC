@@ -194,7 +194,7 @@ CREATE TABLE [OrderDetails] (
   [DrinkSizeId] INT NOT NULL,
   [Quantity] INT NOT NULL,
   [Price] FLOAT NOT NULL,
-  [IngredientCost] FLOAT NOT NULL,
+  [TotalIngredientCost] FLOAT NOT NULL,
   [Note] NVARCHAR(255),
   CONSTRAINT FK_OrderDetails_Orders FOREIGN KEY ([OrderId]) REFERENCES [Orders] ([Id]),
   CONSTRAINT FK_OrderDetails_Drinks FOREIGN KEY ([DrinkId]) REFERENCES [Drinks] ([Id]),

@@ -22,7 +22,7 @@ namespace CoffeManagement.DTO.Order
         public IEnumerable<StaffUpdateOrderDetail>? OrderDetails { get; set; } = new List<StaffUpdateOrderDetail>();
 
         [JsonIgnore]
-        public double TotalPrice { get => OrderDetails?.Sum(od => od.Price) ?? 0; }
+        public double TotalPrice { get => OrderDetails?.Sum(od => od.Price * od.Quantity) ?? 0; }
 
         [JsonIgnore]
         public DateTime UpdatedAt { get; set; } = DateTime.Now;

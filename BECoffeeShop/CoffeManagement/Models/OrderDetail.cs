@@ -19,7 +19,7 @@ public partial class OrderDetail
 
     public double Price { get; set; }
 
-    public double IngredientCost { get; set; }
+    public double TotalIngredientCost { get; set; }
 
     public string Note { get; set; }
 

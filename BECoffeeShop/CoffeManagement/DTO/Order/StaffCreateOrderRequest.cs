@@ -26,7 +26,7 @@ namespace CoffeManagement.DTO.Order
         public string Status { get; set; } = OrderStatus.ODR_INIT.ToString();
 
         [JsonIgnore]
-        public double TotalPrice { get => OrderDetails?.Sum(od => od.Price) ?? 0; }
+        public double TotalPrice { get => OrderDetails?.Sum(od => od.Price * od.Quantity) ?? 0; }
 
         [JsonIgnore]
         public DateTime OrderdAt { get; set; } = DateTime.Now;

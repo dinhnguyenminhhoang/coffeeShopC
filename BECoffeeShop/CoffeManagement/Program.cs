@@ -25,6 +25,7 @@ using CoffeManagement.Services.OrderService;
 using CoffeManagement.Services.PaymentStripeService;
 using CoffeManagement.Services.RatingService;
 using CoffeManagement.Services.StaffService;
+using CoffeManagement.Services.SummaryService;
 using CoffeManagement.Services.VoucherService;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -112,6 +113,7 @@ namespace CoffeManagement
             builder.Services.AddScoped<IRatingService, RatingService>();
             builder.Services.AddScoped<ICategoryService, CategoryService>();
             builder.Services.AddScoped<IVoucherService, VoucherService>();
+            builder.Services.AddScoped<ISummaryService, SummaryService>();
             builder.Services.AddScoped<IPaymentStripeService, PaymentStripeService>();
             builder.Services.AddSingleton<IEmailService, EmailService>();
 

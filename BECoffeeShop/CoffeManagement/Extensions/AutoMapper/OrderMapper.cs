@@ -69,7 +69,7 @@ namespace CoffeManagement.Extensions.AutoMapper
                     Image = src.Drink.Image,
                     Description = src.Drink.Description,
                     Size = src.DrinkSize.Size,
-                    Price = src.Price / src.Quantity,
+                    Price = src.Price,
                 }));
             CreateMap<Models.Customer, DTO.Order.StaffOrderDetail_Customer>();
             CreateMap<Models.Staff, DTO.Order.StaffOrderDetail_Staff>();
