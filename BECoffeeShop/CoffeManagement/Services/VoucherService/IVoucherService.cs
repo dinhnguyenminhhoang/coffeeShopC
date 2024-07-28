@@ -9,7 +9,7 @@ namespace CoffeManagement.Services.VoucherService
         Task<int> CreateVoucher(CreateVoucherRequest request);
         Task<int> UpdateVoucher(UpdateVoucherRequest request);
         Task<int> DeleteVoucher(int id);
-        Task<PagingListModel<VoucherResponse>> GetListVoucher(PagingDTO pagingDTO);
+        Task<PagingListModel<VoucherResponse>> GetListVoucher(PagingDTO pagingDTO, ListVoucherFilter filter);
         Task<VoucherDetailResponse> GetDetailVoucher(int id);
     }
 }

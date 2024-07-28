@@ -88,9 +88,17 @@ namespace CoffeManagement.Services.VoucherService
             return voucherDetail;
         }
 
-        public async Task<PagingListModel<VoucherResponse>> GetListVoucher(PagingDTO pagingDTO)
+        public async Task<PagingListModel<VoucherResponse>> GetListVoucher(PagingDTO pagingDTO, ListVoucherFilter filter)
         {
             var voucherQueryable = _voucherRepository.GetQueryable();
+
+            if(filter != null)
+            {
+                if (!string.IsNullOrEmpty(filter.Code))
+                {
+                    voucherQueryable = voucherQueryable.Where(v => v.Code == filter.Code);
+                }
+            }
 
             var pagingList = new PagingListModel<Voucher>(voucherQueryable, pagingDTO.PageIndex, pagingDTO.PageSize);
             var result = _mapper.Map<PagingListModel<VoucherResponse>>(pagingList);

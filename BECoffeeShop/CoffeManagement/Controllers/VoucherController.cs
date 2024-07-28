@@ -22,9 +22,9 @@ namespace CoffeManagement.Controllers
         [HttpGet]
         [AllowAnonymous]
         [SwaggerOperation(Summary = "Get List Voucher")]
-        public async Task<IActionResult> GetListVoucher([FromQuery] PagingDTO pagingDto)
+        public async Task<IActionResult> GetListVoucher([FromQuery] PagingDTO pagingDto, [FromQuery] ListVoucherFilter filter)
         {
-            var result = await _voucherService.GetListVoucher(pagingDto);
+            var result = await _voucherService.GetListVoucher(pagingDto, filter);
 
             return Ok(RenderSuccessResponse(result));
         }
