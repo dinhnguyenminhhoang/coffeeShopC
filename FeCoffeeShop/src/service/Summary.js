@@ -9,3 +9,4 @@ const headers = {
 const getSummaryParameters = () => {
     return instance.get(`/Summary/Parameters`, { headers });
 };
+export { getSummaryParameters };

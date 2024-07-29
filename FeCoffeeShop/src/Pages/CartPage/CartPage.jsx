@@ -256,14 +256,14 @@ const CartPage = () => {
             VoucherCode:
                 applyVoucherCode?.DrinksApply && applyVoucherCode?.Id
                     ? voucherCode
-                    : null,
+                    : undefined,
             PaymentMethod:
                 type === "online"
                     ? "PAY_CCARD"
                     : type === "cashier"
                     ? "PAY_CASH"
                     : null,
-            CustomerNote: customerNote,
+            CustomerNote: customerNote ? customerNote : "",
             OrderDetails: OrderDetails,
         };
         let response;
@@ -351,14 +351,16 @@ const CartPage = () => {
                         >
                             Gửi ghi chú
                         </Button>{" "}
-                        <Button
-                            className="h-10"
-                            type="primary"
-                            onClick={showAddressModal}
-                            icon={<FcFeedback />}
-                        >
-                            Thay đổi địa chỉ giao hàng
-                        </Button>
+                        {role === "staff" ? null : (
+                            <Button
+                                className="h-10"
+                                type="primary"
+                                onClick={showAddressModal}
+                                icon={<FcFeedback />}
+                            >
+                                Thay đổi địa chỉ giao hàng
+                            </Button>
+                        )}
                     </div>
                 </div>
                 <Table
@@ -369,9 +371,11 @@ const CartPage = () => {
                 <div className="flex justify-between items-center mt-8">
                     <div className="flex flex-col gap-2 items-start">
                         <div className="flex gap-2">
-                            <span className="text-secondary">
-                                Địa chỉ giao hàng : {customerAddress}
-                            </span>
+                            {role === "staff" ? null : (
+                                <span className="text-secondary">
+                                    Địa chỉ giao hàng : {customerAddress}
+                                </span>
+                            )}
                             {customerNote ? (
                                 <span className="text-secondary">
                                     - Ghi chú của bạn : {customerNote}
@@ -389,27 +393,21 @@ const CartPage = () => {
                         <Space>
                             <Button
                                 type="primary"
-                                className="bg-black text-white py-4"
+                                className="bg-black text-white py-4 disabled:bg-slate-400"
                                 onClick={() => showModal("cashier")}
-                                loading={loading}
+                                disabled={!cartInfo.length}
                             >
                                 Thanh toán tại quầy
-                            </Button>
-                            <Button
-                                type="primary"
-                                className="bg-black text-white py-4"
-                                onClick={() => showModal("online")}
-                                loading={loading}
-                            >
-                                Thanh toán online
                             </Button>
                         </Space>
                     ) : (
                         <Button
                             type="primary"
-                            className="bg-black text-white py-4"
+                            className="bg-black text-white py-4 disabled:bg-slate-400"
                             onClick={() => showModal("online")}
-                            loading={loading}
+                            disabled={
+                                !customerAddress.length || !cartInfo.length
+                            }
                         >
                             Thanh toán online
                         </Button>

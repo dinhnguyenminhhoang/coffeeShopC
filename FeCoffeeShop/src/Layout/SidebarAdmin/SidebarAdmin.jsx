@@ -52,6 +52,7 @@ const SidebarAdmin = () => {
         openNotification({ type: "info", description: "Đăng xuất thành công" });
     };
     const adminLinks = [
+        { path: "/manager-summary", label: "DASBOARD" },
         { path: "/manager-staffs", label: "MANAGER STAFF" },
         { path: "/manager-customers", label: "MANAGER CUSTOMER" },
         { path: "/manager-drinks", label: "MANAGER DRINKS" },
@@ -76,6 +77,7 @@ const SidebarAdmin = () => {
                 <div className="logo" />
                 <Menu theme="light" defaultSelectedKeys={["1"]} mode="inline">
                     <Menu.Item
+                        onClick={() => navigate("/")}
                         key="1"
                         style={{
                             height: "200px",

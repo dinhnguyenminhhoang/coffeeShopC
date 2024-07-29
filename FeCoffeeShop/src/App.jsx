@@ -31,6 +31,7 @@ import ManagerCategories from "./Pages/staff/ManagerCategories/ManagerCategories
 import ManagerOrder from "./Pages/staff/ManagerOrder/ManagerOrder";
 import ManagerOrderDetailPage from "./Pages/staff/ManagerOrderDetailPage/ManagerOrderDetailPage";
 import ManagerRating from "./Pages/staff/ManagerRating/ManagerRating";
+import Dashboard from "./Pages/admin/Dashboard/Dashboard";
 const App = () => {
     const token = Cookies.get("AccessToken");
     const userDecode = token?.length ? jwtDecode(token) : "";
@@ -69,6 +70,10 @@ const App = () => {
                             <Route
                                 path="/manager-ratings"
                                 element={<ManagerRating />}
+                            />
+                            <Route
+                                path="/manager-summary"
+                                element={<Dashboard />}
                             />
                             <Route
                                 path="/manager-staffs"

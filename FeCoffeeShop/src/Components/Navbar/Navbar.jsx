@@ -7,6 +7,7 @@ import { jwtDecode } from "jwt-decode";
 import React, { useEffect, useState } from "react";
 import { BiCartAdd, BiLogOut, BiUser } from "react-icons/bi";
 import { FaUserAlt } from "react-icons/fa";
+import { GrUserManager } from "react-icons/gr";
 import { PiCashRegister } from "react-icons/pi";
 import { TbMenuOrder } from "react-icons/tb";
 import { Link, useNavigate } from "react-router-dom";
@@ -72,13 +73,23 @@ const Navbar = () => {
     }, [localStorage]);
     const menu = (
         <Menu>
-            <Menu.Item
-                key="profile"
-                icon={<BiUser />}
-                onClick={() => navigator(`/profile`)}
-            >
-                Profile
-            </Menu.Item>
+            {userData?.role === "ROLE_CUSTOMER" ? (
+                <Menu.Item
+                    key="profile"
+                    icon={<BiUser />}
+                    onClick={() => navigator(`/profile`)}
+                >
+                    Profile
+                </Menu.Item>
+            ) : (
+                <Menu.Item
+                    key="manager"
+                    icon={<GrUserManager />}
+                    onClick={() => navigator(`/manager-drinks`)}
+                >
+                    Manager
+                </Menu.Item>
+            )}
             <Menu.Item
                 key="orders"
                 icon={<TbMenuOrder />}
