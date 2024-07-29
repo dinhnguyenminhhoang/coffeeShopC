@@ -13,16 +13,18 @@ import {
 } from "antd";
 import React, { useEffect, useState } from "react";
 import { FcFeedback } from "react-icons/fc";
+import { MdDiscount } from "react-icons/md";
 import { useNavigate, useParams } from "react-router-dom";
 import CheckoutForm from "../../Components/FormManager/CheckoutForm";
 import CustomerOrderAddressForm from "../../Components/FormManager/CustomerOrderAddressForm";
 import NoteForm from "../../Components/FormManager/NoteForm";
+import CustomerInfoModal from "../../Components/Modal/CustomerInfoForm";
 import useNotification from "../../hooks/NotiHook";
 import { CustomerCreateOrder } from "../../service/CustomerOrder";
 import { paymentsTripe } from "../../service/payment";
-import { formatVND, stripeKey } from "../../utils/resuableFuc";
-import CustomerInfoModal from "../../Components/Modal/CustomerInfoForm";
 import { staffCreateOrder } from "../../service/staffOrder";
+import { getListVouchers, getVouchersDetaiil } from "../../service/voucher";
+import { formatVND, stripeKey } from "../../utils/resuableFuc";
 
 const stripePromise = loadStripe(stripeKey);
 
@@ -36,6 +38,8 @@ const CartPage = () => {
     const [userOrderInfo, setUserOrderInfo] = useState("");
     const [customerNote, setCustomerNote] = useState("");
     const [customerAddress, setCustomerAddress] = useState("");
+    const [voucherCode, setVoucherCode] = useState("");
+    const [applyVoucherCode, setApplyVoucherCode] = useState();
     const [cartInfo, setCartInfo] = useState([]);
     const [branchInfo, setBranchInfo] = useState();
     const openNotification = useNotification();
@@ -112,7 +116,35 @@ const CartPage = () => {
             title: "Số tiền",
             dataIndex: "total",
             key: "total",
-            render: (text) => <span>{formatVND(text)}</span>,
+            render: (text, record) => {
+                if (
+                    voucherCode &&
+                    applyVoucherCode?.Remain > 0 &&
+                    applyVoucherCode?.DrinksApply?.length
+                ) {
+                    const check = applyVoucherCode?.DrinksApply?.filter(
+                        (voucherCode) => voucherCode.Id === record.Id
+                    );
+                    if (check.length) {
+                        return (
+                            <Space>
+                                <span className="line-through">
+                                    {formatVND(text)}
+                                </span>
+                                <span className="text-red-500 font-bold">
+                                    {formatVND(
+                                        text -
+                                            text *
+                                                (applyVoucherCode?.Discount /
+                                                    100)
+                                    )}
+                                </span>
+                            </Space>
+                        );
+                    } else return <span>{formatVND(text)}</span>;
+                }
+                return <span>{formatVND(text)}</span>;
+            },
         },
         {
             title: "Thao tác",
@@ -142,8 +174,23 @@ const CartPage = () => {
             ),
         },
     ];
-    console.log(cartInfo);
-    const totalAmount = cartInfo.reduce((sum, item) => sum + item.total, 0);
+    const totalAmount = cartInfo?.reduce((sum, item) => {
+        if (!applyVoucherCode && !voucherCode) {
+            return sum + item.total;
+        } else {
+            const check = applyVoucherCode?.DrinksApply?.filter(
+                (voucherCode) => voucherCode.Id === item.Id
+            );
+            if (check?.length) {
+                return (
+                    sum +
+                    item.total -
+                    (item.total * applyVoucherCode.Discount) / 100
+                );
+            }
+            return sum + item.total;
+        }
+    }, 0);
 
     const handlePayment = async (stripe, cardElement) => {
         const response = await paymentsTripe({
@@ -206,13 +253,17 @@ const CartPage = () => {
         const formData = {
             BranchId: branchInfo.Id,
             ShippingAddress: customerAddress,
+            VoucherCode:
+                applyVoucherCode?.DrinksApply && applyVoucherCode?.Id
+                    ? voucherCode
+                    : undefined,
             PaymentMethod:
                 type === "online"
                     ? "PAY_CCARD"
                     : type === "cashier"
                     ? "PAY_CASH"
                     : null,
-            CustomerNote: customerNote,
+            CustomerNote: customerNote ? customerNote : "",
             OrderDetails: OrderDetails,
         };
         let response;
@@ -252,17 +303,46 @@ const CartPage = () => {
     const handleAddressClose = () => {
         setIsAddressModalVisible(false);
     };
+    const handleCheckingVoucher = async () => {
+        const res = await getListVouchers({
+            PageIndex: 1,
+            PageSize: 1,
+            Code: voucherCode,
+        });
+        if (res.data?.Success && res.data?.ResultData?.List?.length) {
+            const resDetail = await getVouchersDetaiil({
+                Vouchersid: res.data?.ResultData?.List[0]?.Id,
+            });
+            if (resDetail.data?.Success && resDetail.data?.ResultData) {
+                setApplyVoucherCode(resDetail.data?.ResultData);
+            }
+        }
+    };
     return (
         <Elements stripe={stripePromise}>
             <div className="container max-w-[1200px] mx-auto p-4 my-8">
                 <h1 className="text-2xl font-bold mb-4">Giỏ hàng</h1>
                 <div className="flex items-center mb-4">
                     <div className="flex items-center justify-between flex-1 gap-2">
-                        <Input
-                            placeholder="Tìm kiếm sản phẩm"
-                            prefix={<SearchOutlined />}
-                            className="w-full py-2 flex-1"
-                        />
+                        <Space className="flex-1">
+                            <Input
+                                value={voucherCode}
+                                onChange={(e) => {
+                                    setVoucherCode(e.target.value);
+                                }}
+                                placeholder="Nhập mã giảm giá"
+                                prefix={<SearchOutlined />}
+                                className="w-full py-2 flex-1"
+                            />
+                            <Button
+                                className="h-10"
+                                type="dashed"
+                                onClick={handleCheckingVoucher}
+                                icon={<MdDiscount />}
+                            >
+                                Xác nhận
+                            </Button>{" "}
+                        </Space>
                         <Button
                             className="h-10"
                             type="primary"
@@ -271,14 +351,16 @@ const CartPage = () => {
                         >
                             Gửi ghi chú
                         </Button>{" "}
-                        <Button
-                            className="h-10"
-                            type="primary"
-                            onClick={showAddressModal}
-                            icon={<FcFeedback />}
-                        >
-                            Thay đổi địa chỉ giao hàng
-                        </Button>
+                        {role === "staff" ? null : (
+                            <Button
+                                className="h-10"
+                                type="primary"
+                                onClick={showAddressModal}
+                                icon={<FcFeedback />}
+                            >
+                                Thay đổi địa chỉ giao hàng
+                            </Button>
+                        )}
                     </div>
                 </div>
                 <Table
@@ -289,9 +371,11 @@ const CartPage = () => {
                 <div className="flex justify-between items-center mt-8">
                     <div className="flex flex-col gap-2 items-start">
                         <div className="flex gap-2">
-                            <span className="text-secondary">
-                                Địa chỉ giao hàng : {customerAddress}
-                            </span>
+                            {role === "staff" ? null : (
+                                <span className="text-secondary">
+                                    Địa chỉ giao hàng : {customerAddress}
+                                </span>
+                            )}
                             {customerNote ? (
                                 <span className="text-secondary">
                                     - Ghi chú của bạn : {customerNote}
@@ -309,27 +393,21 @@ const CartPage = () => {
                         <Space>
                             <Button
                                 type="primary"
-                                className="bg-black text-white py-4"
+                                className="bg-black text-white py-4 disabled:bg-slate-400"
                                 onClick={() => showModal("cashier")}
-                                loading={loading}
+                                disabled={!cartInfo.length}
                             >
                                 Thanh toán tại quầy
-                            </Button>
-                            <Button
-                                type="primary"
-                                className="bg-black text-white py-4"
-                                onClick={() => showModal("online")}
-                                loading={loading}
-                            >
-                                Thanh toán online
                             </Button>
                         </Space>
                     ) : (
                         <Button
                             type="primary"
-                            className="bg-black text-white py-4"
+                            className="bg-black text-white py-4 disabled:bg-slate-400"
                             onClick={() => showModal("online")}
-                            loading={loading}
+                            disabled={
+                                !customerAddress.length || !cartInfo.length
+                            }
                         >
                             Thanh toán online
                         </Button>

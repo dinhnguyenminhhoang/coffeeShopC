@@ -34,8 +34,8 @@ const Login = () => {
                     response.data.ResultData.AccessToken
                 );
                 if (param.pathname.startsWith("/admin")) {
-                    navigator("/manager-drinks");
-                } else navigator("/");
+                    window.location.replace("/manager-drinks");
+                } else window.location.replace("/");
             } else {
                 openNotification({
                     type: "error",

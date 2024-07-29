@@ -2,6 +2,9 @@ import FeedbackCForm from "@/Components/FormManager/FeedbackCForm";
 import useNotification from "@/hooks/NotiHook";
 import { Button, Modal, Popconfirm, Select, Space, Table } from "antd";
 import React, { useEffect, useState } from "react";
+import { BiFilterAlt } from "react-icons/bi";
+import { BsArrowRight } from "react-icons/bs";
+import { useNavigate } from "react-router-dom";
 import {
     staffComfirmOrder,
     staffCompleteOrder,
@@ -18,9 +21,6 @@ import {
     ORDERSTATUS,
     ORDERSTATUSARRAY,
 } from "../../../utils/resuableFuc";
-import { BiFilter, BiFilterAlt } from "react-icons/bi";
-import { BsArrowRight } from "react-icons/bs";
-import { useNavigate } from "react-router-dom";
 
 const ManagerOrder = () => {
     const [staffOrders, setStaffOrder] = useState([]);
