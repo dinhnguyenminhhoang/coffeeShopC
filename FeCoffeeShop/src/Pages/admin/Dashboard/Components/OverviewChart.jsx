@@ -83,7 +83,6 @@ const OverviewChart = ({ branchesData }) => {
                 break;
         }
     };
-    console.log("data", data);
     const handleDateRangeChange = (dateRange) => {
         const startDate = handleFomatDate(dateRange.startDate);
         const endDate = handleFomatDate(dateRange.endDate);
@@ -113,7 +112,7 @@ const OverviewChart = ({ branchesData }) => {
         }
         return null;
     };
-
+    console.log(activeCatalog, chartOrderData, data);
     return (
         <div className="rounded-md border-white border-2 p-3 bg-slate-600">
             <div className="mb-3 flex justify-between">
