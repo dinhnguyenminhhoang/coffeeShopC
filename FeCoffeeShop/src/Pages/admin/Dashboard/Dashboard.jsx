@@ -182,25 +182,6 @@ const Dashboard = () => {
                 <div>
                     <OverviewChart branchesData={branchesData} />
                 </div>
-                {/* 
-
-                <div className="grid grid-cols-2 gap-4">
-                    <div className="lg:col-span-1 md:col-span-2">
-                        <BestSellingProducts />
-                    </div>
-                    <div className="lg:col-span-1 md:col-span-2">
-                        <TopSellingEmployees />
-                    </div>
-                </div>
-
-                <div className="grid grid-cols-6 gap-4">
-                    <div className="lg:col-span-2 md:col-span-6">
-                        <CatalogSellingPercent />
-                    </div>
-                    <div className="lg:col-span-4 md:col-span-6">
-                        <RecentOrders />
-                    </div>
-                </div> */}
             </div>
         </div>
     );
