@@ -112,7 +112,7 @@ const OverviewChart = ({ branchesData }) => {
         }
         return null;
     };
-    console.log(activeCatalog, chartOrderData, data);
+    console.log(activeCatalog, data);
     return (
         <div className="rounded-md border-white border-2 p-3 bg-slate-600">
             <div className="mb-3 flex justify-between">

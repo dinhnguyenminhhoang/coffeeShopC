@@ -47,7 +47,7 @@ const DoubleBarChart = ({ data }) => {
             >
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis
-                    dataKey="at"
+                    dataKey="At"
                     label={{
                         value: "TIME",
                         position: "insideBottomRight",
@@ -72,8 +72,8 @@ const DoubleBarChart = ({ data }) => {
                         <span className="capitalize">{value}</span>
                     )}
                 />
-                <Bar dataKey="revenue" fill="#8884d8" />
-                <Bar dataKey="profit" fill="#82ca9d" />
+                <Bar dataKey="Revenue" fill="#8884d8" />
+                <Bar dataKey="Profit" fill="#82ca9d" />
             </BarChart>
         </ResponsiveContainer>
     );
