@@ -14,21 +14,20 @@ const toPercent = (decimal, fixed) => `${(decimal * 100).toFixed(fixed)}%`;
 
 const getPercent = (value, total) => {
     const ratio = total > 0 ? value / total : 0;
-
     return toPercent(ratio, 2);
 };
 
 const renderTooltipContent = (o) => {
     const { payload, label } = o;
     const total =
-        payload && payload?.reduce((result, entry) => result + entry.value, 0);
+        payload && payload.reduce((result, entry) => result + entry.value, 0);
 
     return (
         <div className="customized-tooltip-content bg-white p-2 rounded-md">
             <p className="total">{`${label} (Total: ${total})`}</p>
             <ul className="list">
                 {payload &&
-                    payload?.map((entry, index) => (
+                    payload.map((entry, index) => (
                         <li
                             key={`item-${index}`}
                             style={{ color: entry.color }}
@@ -49,8 +48,6 @@ const StackedBarChart = ({ data }) => {
     return (
         <ResponsiveContainer width="100%" height={500} className="text-sm">
             <BarChart
-                width={500}
-                height={300}
                 data={data}
                 margin={{
                     top: 20,
@@ -61,7 +58,7 @@ const StackedBarChart = ({ data }) => {
             >
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis
-                    dataKey="at"
+                    dataKey="At"
                     label={{
                         value: "TIME",
                         position: "insideBottomRight",
@@ -70,7 +67,7 @@ const StackedBarChart = ({ data }) => {
                 />
                 <YAxis
                     label={{
-                        value: "ORDER",
+                        value: "ORDER COUNT",
                         angle: -90,
                         position: "insideLeft",
                         offset: 0,
@@ -85,10 +82,14 @@ const StackedBarChart = ({ data }) => {
                         <span className="capitalize">{value}</span>
                     )}
                 />
-                <Bar dataKey="cancelled" stackId="1" fill="#ff6767" />
-                <Bar dataKey="shipped" stackId="1" fill="#82ca9d" />
-                <Bar dataKey="delivering" stackId="1" fill="#8884d8" />
-                <Bar dataKey="processing" stackId="1" fill="#ff7300" />
+                <Bar dataKey="Init" stackId="1" fill="#ff6767" />
+                <Bar dataKey="Confirm" stackId="1" fill="#82ca9d" />
+                <Bar dataKey="Served" stackId="1" fill="#8884d8" />
+                <Bar dataKey="Shipping" stackId="1" fill="#ff7300" />
+                <Bar dataKey="Shipped" stackId="1" fill="#ffb74d" />
+                <Bar dataKey="Completed" stackId="1" fill="#4caf50" />
+                <Bar dataKey="Canceled" stackId="1" fill="#f44336" />
+                <Bar dataKey="Failed" stackId="1" fill="#9e9e9e" />
             </BarChart>
         </ResponsiveContainer>
     );

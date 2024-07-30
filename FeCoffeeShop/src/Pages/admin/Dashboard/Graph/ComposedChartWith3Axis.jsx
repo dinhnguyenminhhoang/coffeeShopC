@@ -13,9 +13,24 @@ import {
 } from "recharts";
 import { formatNumberValue } from "../Common/Utils";
 
+// Dữ liệu giả
+const sampleData = [
+    { at: "2024-01-01", profit: 1000, revenue: 1500, orders: 200 },
+    { at: "2024-01-02", profit: 1200, revenue: 1700, orders: 220 },
+    { at: "2024-01-03", profit: 800, revenue: 1300, orders: 180 },
+    { at: "2024-01-04", profit: 1500, revenue: 2000, orders: 250 },
+    { at: "2024-01-05", profit: 1700, revenue: 2200, orders: 270 },
+];
+[
+    {
+        At: "2024",
+        Orders: 37,
+        Revenue: 2400000,
+        Profit: 2395660,
+    },
+];
 const renderTooltipContent = (o) => {
     const { payload, label } = o;
-
     return (
         <div className="customized-tooltip-content bg-white p-2 rounded-md">
             <p className="total">{label}</p>
@@ -27,8 +42,8 @@ const renderTooltipContent = (o) => {
                         className="capitalize"
                     >
                         {`${entry.name}: ${entry.value}`}
-                        {["revenu", "profit"].includes(
-                            entry.name.toLocaleLowerCase()
+                        {["revenue", "profit"].includes(
+                            entry.name.toLowerCase()
                         ) && " VND"}
                     </li>
                 ))}
@@ -41,8 +56,6 @@ const ComposedChartWith3Axis = ({ data }) => {
     return (
         <ResponsiveContainer width="100%" height={500} className="text-sm">
             <ComposedChart
-                width={500}
-                height={400}
                 data={data}
                 margin={{
                     top: 10,
@@ -53,7 +66,7 @@ const ComposedChartWith3Axis = ({ data }) => {
             >
                 <CartesianGrid stroke="#f5f5f5" />
                 <XAxis
-                    dataKey="at"
+                    dataKey="At"
                     label={{
                         value: "TIME",
                         position: "insideBottomRight",
@@ -87,14 +100,14 @@ const ComposedChartWith3Axis = ({ data }) => {
                     )}
                 />
                 <Area
-                    dataKey="profit"
+                    dataKey="Profit"
                     type="monotone"
                     fill="#82ca9d"
                     stroke="#82ca9d"
                 />
                 <Bar dataKey="revenue" barSize={20} fill="#413ea0" />
                 <Line
-                    dataKey="orders"
+                    dataKey="Orders"
                     type="monotone"
                     stroke="#ff7300"
                     yAxisId="right"

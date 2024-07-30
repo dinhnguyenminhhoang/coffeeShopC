@@ -15,6 +15,8 @@ import { MdOutlineCategory, MdOutlineLocalShipping } from "react-icons/md";
 
 import { useEffect, useState } from "react";
 import { getSummaryParameters } from "../../../service/Summary";
+import OverviewChart from "./Components/OverviewChart";
+import { getAllBranches } from "../../../service/branchs";
 const thisWeekColor = [
     {
         bg: "#0d9488",
@@ -70,12 +72,20 @@ const totalColor = [
 ];
 const Dashboard = () => {
     const [parametersData, setParametersData] = useState();
+    const [branchesData, setBranchesData] = useState();
     useEffect(() => {
         getSummaryParameters()
             .then((res) => res.data)
             .then((data) => {
                 if (data.Success) {
                     setParametersData(data?.ResultData);
+                }
+            });
+        getAllBranches({ listParam: { PageIndex: 1, PageSize: 1000 } })
+            .then((res) => res.data)
+            .then((data) => {
+                if (data.Success) {
+                    setBranchesData(data?.ResultData?.List);
                 }
             });
     }, []);
@@ -169,28 +179,9 @@ const Dashboard = () => {
                         </div>
                     ))}
                 </div>
-                {/* <div>
-                    <OverviewChart />
-                </div> */}
-                {/* 
-
-                <div className="grid grid-cols-2 gap-4">
-                    <div className="lg:col-span-1 md:col-span-2">
-                        <BestSellingProducts />
-                    </div>
-                    <div className="lg:col-span-1 md:col-span-2">
-                        <TopSellingEmployees />
-                    </div>
+                <div>
+                    <OverviewChart branchesData={branchesData} />
                 </div>
-
-                <div className="grid grid-cols-6 gap-4">
-                    <div className="lg:col-span-2 md:col-span-6">
-                        <CatalogSellingPercent />
-                    </div>
-                    <div className="lg:col-span-4 md:col-span-6">
-                        <RecentOrders />
-                    </div>
-                </div> */}
             </div>
         </div>
     );
