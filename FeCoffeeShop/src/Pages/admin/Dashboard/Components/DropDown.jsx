@@ -10,8 +10,7 @@ const DropDown = ({
     onChange: handleChange,
 }) => {
     const [isDropdownVisible, setDropdownVisible] = useState(false);
-    const [selectedOption, setSelectedOption] =
-        (useState < string) | null | (undefined > null);
+    const [selectedOption, setSelectedOption] = useState(null);
 
     useEffect(() => {
         setSelectedOption(defaultOption);
