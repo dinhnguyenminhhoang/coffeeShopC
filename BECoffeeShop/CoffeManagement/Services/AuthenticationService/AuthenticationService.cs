@@ -67,7 +67,7 @@ namespace CoffeManagement.Services.AccountService
         public async Task<int> CustomerRegister(CustomerRegisterRequest request)
         {
             // Check username, phone number or email already used?
-            var accountExits = await _accountRepository.GetAccountCustomerByUsername(request.Username);
+            var accountExits = await _accountRepository.GetAccountByUsername(request.Username);
             if (accountExits != null) throw new ConflictException("This username already used, please use another username.");
 
             var customerExits = await _customerRepository.GetByPhone(request.Phone);
