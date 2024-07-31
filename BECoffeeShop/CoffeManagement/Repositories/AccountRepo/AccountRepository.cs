@@ -1,7 +1,7 @@
 ﻿using CoffeManagement.Data;
 using CoffeManagement.Models;
 using CoffeManagement.Models.Enum;
-using CoffeManagement.Repositories.DrinksRepo;
+using CoffeManagement.Repositories.DrinkRepo;
 using Microsoft.EntityFrameworkCore;
 
 namespace CoffeManagement.Repositories.CustomerRepo
@@ -21,9 +21,15 @@ namespace CoffeManagement.Repositories.CustomerRepo
         {
             return _dbSet.Where(acc => acc.Type.Equals(AccountType.ACC_CUS.ToString()) && acc.Username == username).FirstOrDefaultAsync();
         }
+
         public Task<Account?> GetAccountStaffByUsername(string username)
         {
             return _dbSet.Where(acc => acc.Type.Equals(AccountType.ACC_STA.ToString()) && acc.Username == username).FirstOrDefaultAsync();
+        }
+
+        public Task<Account?> GetAccountByUsername(string username)
+        {
+            return _dbSet.Where(acc => acc.Username == username).FirstOrDefaultAsync();
         }
     }
 }

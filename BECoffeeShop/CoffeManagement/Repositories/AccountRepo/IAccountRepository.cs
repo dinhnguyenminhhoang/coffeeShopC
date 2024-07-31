@@ -6,5 +6,6 @@ namespace CoffeManagement.Repositories.CustomerRepo
     {
         Task<Account?> GetAccountCustomerByUsername(string username);
         Task<Account?> GetAccountStaffByUsername(string username);
+        Task<Account?> GetAccountByUsername(string username);
     }
 }

@@ -13,9 +13,13 @@ public partial class Branch
 
     public string Address { get; set; }
 
+    public bool? IsDeleted { get; set; }
+
     public DateTime? CreatedAt { get; set; }
 
     public DateTime? UpdatedAt { get; set; }
+
+    public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
 
     public virtual ICollection<Staff> Staff { get; set; } = new List<Staff>();
 }

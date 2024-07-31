@@ -7,8 +7,17 @@ namespace CoffeManagement.Extensions.AutoMapper
 
         public AutoMapperProfile()
         {
-            LoadDrinksMapperProfile();
-            LoadBrachesMapperProfile();
+            LoadDrinkMapperProfile();
+            LoadBrachMapperProfile();
+            LoadStaffMapperProfile();
+            LoadCustomerMapperProfile();
+            LoadAccountMapperProfile();
+            LoadRecipeMapperProfile();
+            LoadIngredientMapperProfile();
+            LoadOrderMapperProfile();
+            LoadRatingMapperProfile();
+            LoadCategoryMapperProfile();
+            LoadVoucherMapperProfile();
         }
     }
 }
