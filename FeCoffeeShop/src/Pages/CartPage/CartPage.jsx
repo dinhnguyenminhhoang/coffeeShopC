@@ -25,6 +25,7 @@ import { paymentsTripe } from "../../service/payment";
 import { staffCreateOrder } from "../../service/staffOrder";
 import { getListVouchers, getVouchersDetaiil } from "../../service/voucher";
 import { formatVND, stripeKey } from "../../utils/resuableFuc";
+import { RiCustomerService2Fill } from "react-icons/ri";
 
 const stripePromise = loadStripe(stripeKey);
 
@@ -210,7 +211,8 @@ const CartPage = () => {
 
         return { error, paymentIntent };
     };
-    const showModal = async (type) => {
+
+    const showModalCustomer = async () => {
         if (role === "staff") {
             if (!userOrderInfo.Id) {
                 openNotification({
@@ -222,6 +224,8 @@ const CartPage = () => {
                 return;
             }
         }
+    };
+    const showModal = async (type) => {
         if (!branchInfo?.Id) {
             openNotification({
                 type: "info",
@@ -271,7 +275,7 @@ const CartPage = () => {
             response = await staffCreateOrder({
                 formData: {
                     ...formData,
-                    CustomerId: userOrderInfo?.Id,
+                    CustomerId: userOrderInfo ? userOrderInfo?.Id : undefined,
                     StaffNote: `Đây là đơn hàng của khách ${userOrderInfo?.Email}`,
                 },
             });
@@ -351,7 +355,16 @@ const CartPage = () => {
                         >
                             Gửi ghi chú
                         </Button>{" "}
-                        {role === "staff" ? null : (
+                        {role === "staff" ? (
+                            <Button
+                                className="h-10"
+                                type="primary"
+                                onClick={() => showModalCustomer()}
+                                icon={<RiCustomerService2Fill />}
+                            >
+                                Thêm thông tin khách hàng
+                            </Button>
+                        ) : (
                             <Button
                                 className="h-10"
                                 type="primary"
