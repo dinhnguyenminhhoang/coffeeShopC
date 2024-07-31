@@ -7,12 +7,13 @@ import {
 } from "@/service/Ingredients";
 import { Button, Flex, Modal, Popconfirm, Space, Table } from "antd";
 import React, { useEffect, useState } from "react";
-import { BiAddToQueue, BiEdit } from "react-icons/bi";
+import { BiAddToQueue, BiDetail, BiEdit } from "react-icons/bi";
 import IngredientStockForm from "../../../Components/FormManager/IngredientStockForm";
 import {
     createIngredientStock,
     deleteIngredientById,
 } from "../../../service/Ingredients";
+import { useNavigate } from "react-router-dom";
 
 const AdminIngredientsPage = () => {
     const [ingredients, setIngredients] = useState([]);
@@ -23,7 +24,7 @@ const AdminIngredientsPage = () => {
     const [pageSize, setPageSize] = useState(10);
     const [totalCount, setTotalCount] = useState(0);
     const openNotification = useNotification();
-
+    const navigator = useNavigate();
     useEffect(() => {
         fetchIngredients(currentPage, pageSize);
     }, [currentPage, pageSize]);
@@ -157,6 +158,14 @@ const AdminIngredientsPage = () => {
                         icon={<BiAddToQueue />}
                     >
                         Add Stock
+                    </Button>
+                    <Button
+                        onClick={() =>
+                            navigator(`/manager-ingredients/${record?.Id}`)
+                        }
+                        icon={<BiDetail />}
+                    >
+                        Detail Stock
                     </Button>
                     <Popconfirm
                         title={`Confirm delete ingredient ${record.Name}?`}
