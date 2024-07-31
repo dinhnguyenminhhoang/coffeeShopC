@@ -32,6 +32,7 @@ import ManagerOrder from "./Pages/staff/ManagerOrder/ManagerOrder";
 import ManagerOrderDetailPage from "./Pages/staff/ManagerOrderDetailPage/ManagerOrderDetailPage";
 import ManagerRating from "./Pages/staff/ManagerRating/ManagerRating";
 import Dashboard from "./Pages/admin/Dashboard/Dashboard";
+import AdminDetailIngredientsPage from "./Pages/admin/AdminIngredientsPage/AdminDetailIngredientsPage";
 const App = () => {
     const token = Cookies.get("AccessToken");
     const userDecode = token?.length ? jwtDecode(token) : "";
@@ -102,6 +103,10 @@ const App = () => {
                             <Route
                                 path="/manager-ingredients"
                                 element={<AdminIngredientsPage />}
+                            />
+                            <Route
+                                path="/manager-ingredients/:id"
+                                element={<AdminDetailIngredientsPage />}
                             />
                             <Route
                                 path="/manager-categories"
